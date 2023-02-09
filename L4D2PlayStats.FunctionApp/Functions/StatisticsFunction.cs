@@ -13,21 +13,25 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class StatisticsFunction
 {
     private readonly IMapper _mapper;
+    private readonly IMemoryCache _memoryCache;
     private readonly IStatisticsRepository _statisticsRepository;
     private readonly IStatisticsService _statisticsService;
     private readonly IUserService _userService;
 
-    public StatisticsFunction(IMapper mapper,
+    public StatisticsFunction(IMemoryCache memoryCache,
+        IMapper mapper,
         IUserService userService,
         IStatisticsService statisticsService,
         IStatisticsRepository statisticsRepository)
     {
+        _memoryCache = memoryCache;
         _mapper = mapper;
         _userService = userService;
         _statisticsService = statisticsService;
@@ -40,10 +44,15 @@ public class StatisticsFunction
     {
         try
         {
-            var results = _statisticsRepository
-                .GetStatistics(server)
-                .Select(_mapper.Map<StatisticsSimplifiedResult>)
-                .ToList();
+            var results = _memoryCache.GetOrCreate($"statistics_{server}".ToLower(), factory =>
+            {
+                factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
+
+                return _statisticsRepository
+                    .GetStatistics(server)
+                    .Select(_mapper.Map<StatisticsSimplifiedResult>)
+                    .ToList();
+            });
 
             return new OkObjectResult(results);
         }
@@ -82,6 +91,8 @@ public class StatisticsFunction
             var command = await httpRequest.DeserializeBodyAsync<StatisticsCommand>();
             var statistic = await _statisticsService.AddOrUpdateAsync(user.Id, command);
             var result = new UploadResult(statistic);
+
+            _memoryCache.Remove($"statistics_{user.Id}".ToLower());
 
             return new OkObjectResult(result);
         }
