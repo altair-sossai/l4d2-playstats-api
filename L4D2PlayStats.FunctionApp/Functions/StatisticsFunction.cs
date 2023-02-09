@@ -42,7 +42,7 @@ public class StatisticsFunction
         {
             var results = _statisticsRepository
                 .GetStatistics(server)
-                .Select(_mapper.Map<StatisticsResult>)
+                .Select(_mapper.Map<StatisticsSimplifiedResult>)
                 .ToList();
 
             return new OkObjectResult(results);

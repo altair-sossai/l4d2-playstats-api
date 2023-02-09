@@ -6,6 +6,9 @@ namespace L4D2PlayStats.Core.Modules.Statistics;
 
 public class Statistics : ITableEntity
 {
+    private string? _content;
+    private L4D2PlayStats.Statistics? _statistic;
+
     public string Server
     {
         get => PartitionKey;
@@ -22,10 +25,19 @@ public class Statistics : ITableEntity
     public int TeamSize { get; set; }
     public string? ConfigurationName { get; set; }
     public string? MapName { get; set; }
-    public string? Content { get; set; }
+
+    public string? Content
+    {
+        get => _content;
+        set
+        {
+            _content = value;
+            _statistic = null;
+        }
+    }
 
     [IgnoreDataMember]
-    public L4D2PlayStats.Statistics? Statistic => L4D2PlayStats.Statistics.TryParse(Content!, out var statistic) ? statistic : null;
+    public L4D2PlayStats.Statistics? Statistic => _statistic ??= L4D2PlayStats.Statistics.TryParse(Content!, out var statistic) ? statistic : null;
 
     public string PartitionKey { get; set; } = default!;
     public string RowKey { get; set; } = default!;
