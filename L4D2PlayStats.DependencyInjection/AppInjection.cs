@@ -1,6 +1,6 @@
 using System.Reflection;
 using FluentValidation;
-using L4D2PlayStats.Contexts.Steam.DependencyInjection;
+using L4D2PlayStats.Core.Contexts.Steam.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace L4D2PlayStats.DependencyInjection;
@@ -11,7 +11,7 @@ public static class AppInjection
     {
         var assemblies = new[]
         {
-            Assembly.Load("L4D2PlayStats")
+            Assembly.Load("L4D2PlayStats.Core")
         };
 
         serviceCollection.AddAutoMapper(assemblies);

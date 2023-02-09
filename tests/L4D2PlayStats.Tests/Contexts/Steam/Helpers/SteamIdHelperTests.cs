@@ -1,5 +1,5 @@
 using FluentAssertions;
-using L4D2PlayStats.Contexts.Steam.Helpers;
+using L4D2PlayStats.Core.Contexts.Steam.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace L4D2PlayStats.Tests.Contexts.Steam.Helpers;

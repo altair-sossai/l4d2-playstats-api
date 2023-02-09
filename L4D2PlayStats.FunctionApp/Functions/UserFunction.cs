@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
+using L4D2PlayStats.Core.Modules.Auth.Users.Services;
 using L4D2PlayStats.FunctionApp.Errors;
 using L4D2PlayStats.FunctionApp.Extensions;
-using L4D2PlayStats.Modules.Auth.Users.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;

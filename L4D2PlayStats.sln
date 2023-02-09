@@ -1,9 +1,8 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "L4D2PlayStats", "L4D2PlayStats\L4D2PlayStats.csproj", "{27D79412-543B-4321-B878-25432C9D54AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "L4D2PlayStats.Core", "L4D2PlayStats.Core\L4D2PlayStats.Core.csproj", "{27D79412-543B-4321-B878-25432C9D54AF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "L4D2PlayStats.DependencyInjection", "L4D2PlayStats.DependencyInjection\L4D2PlayStats.DependencyInjection.csproj", "{384B3B3B-D219-47DC-89A0-477BDE20E747}"
 EndProject
@@ -16,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".devops", ".devops", "{F20D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A2394F98-7E7B-4597-84B1-2E55E9F53F89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L4D2PlayStats.Tests", "tests\L4D2PlayStats.Tests\L4D2PlayStats.Tests.csproj", "{92D70B82-4490-46ED-A620-7349A34AFF82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "L4D2PlayStats.Tests", "tests\L4D2PlayStats.Tests\L4D2PlayStats.Tests.csproj", "{92D70B82-4490-46ED-A620-7349A34AFF82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
 using System.Linq;
 using FluentValidation.Results;
-using L4D2PlayStats.Infrastructure.Extensions;
+using L4D2PlayStats.Core.Infrastructure.Extensions;
 
 namespace L4D2PlayStats.FunctionApp.Errors;
 
