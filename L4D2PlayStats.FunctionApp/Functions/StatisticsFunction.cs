@@ -81,7 +81,7 @@ public class StatisticsFunction
             var user = _userService.EnsureAuthentication(httpRequest.AuthorizationToken());
             var command = await httpRequest.DeserializeBodyAsync<StatisticsCommand>();
             var statistic = await _statisticsService.AddOrUpdateAsync(user.Id, command);
-            var result = _mapper.Map<StatisticsResult>(statistic);
+            var result = new UploadResult(statistic);
 
             return new OkObjectResult(result);
         }
