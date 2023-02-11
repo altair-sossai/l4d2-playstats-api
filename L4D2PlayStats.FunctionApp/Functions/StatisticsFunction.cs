@@ -45,15 +45,13 @@ public class StatisticsFunction
     {
         try
         {
-            var take = httpRequest.Query.Int32Value("take", 100);
-
-            var results = await _memoryCache.GetOrCreateAsync($"statistics_{server}_{take}".ToLower(), async factory =>
+            var results = await _memoryCache.GetOrCreateAsync($"statistics_{server}".ToLower(), async factory =>
             {
                 factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
                 var statistics = await _statisticsRepository
                     .GetStatisticsAsync(server)
-                    .Take(take)
+                    .Take(100)
                     .ToListAsync(CancellationToken.None);
 
                 return statistics.Select(_mapper.Map<StatisticsSimplifiedResult>).ToList();
