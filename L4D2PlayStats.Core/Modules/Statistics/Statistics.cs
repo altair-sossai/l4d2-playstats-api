@@ -1,12 +1,14 @@
 ﻿using System.Runtime.Serialization;
 using Azure;
 using Azure.Data.Tables;
+using L4D2PlayStats.Core.Modules.Statistics.Helpers;
 
 namespace L4D2PlayStats.Core.Modules.Statistics;
 
 public class Statistics : ITableEntity
 {
     private string? _content;
+    private string? _fileName;
     private L4D2PlayStats.Statistics? _statistic;
 
     public string Server
@@ -15,10 +17,14 @@ public class Statistics : ITableEntity
         set => PartitionKey = value;
     }
 
-    public string FileName
+    public string? FileName
     {
-        get => RowKey;
-        set => RowKey = value;
+        get => _fileName;
+        set
+        {
+            _fileName = value;
+            RowKey = StatisticsHelper.FileNameToRowKey(value)!;
+        }
     }
 
     public int Round { get; set; }

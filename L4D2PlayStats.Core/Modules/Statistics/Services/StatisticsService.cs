@@ -22,7 +22,7 @@ public class StatisticsService : IStatisticsService
 
     public async Task<Statistics> AddOrUpdateAsync(string server, StatisticsCommand command)
     {
-        var statistics = _statisticsRepository.GetStatistic(server, command.FileName!) ?? new Statistics { Server = server };
+        var statistics = await _statisticsRepository.GetStatisticAsync(server, command.FileName!) ?? new Statistics { Server = server };
 
         _mapper.Map(command, statistics);
 

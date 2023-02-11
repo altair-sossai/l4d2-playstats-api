@@ -41,18 +41,18 @@ public abstract class BaseTableStorageRepository<TEntity> : BaseTableStorageRepo
     {
     }
 
-    protected TEntity? Find(string partitionKey, string rowKey)
+    protected ValueTask<TEntity?> FindAsync(string partitionKey, string rowKey)
     {
-        return TableClient.Query<TEntity>(q => q.PartitionKey == partitionKey && q.RowKey == rowKey).FirstOrDefault();
+        return TableClient.QueryAsync<TEntity>(q => q.PartitionKey == partitionKey && q.RowKey == rowKey).FirstOrDefaultAsync();
     }
 
-    protected IEnumerable<TEntity> GetAll(string partitionKey)
+    protected IAsyncEnumerable<TEntity> GetAllAsync(string partitionKey)
     {
-        return TableClient.Query<TEntity>(q => q.PartitionKey == partitionKey);
+        return TableClient.QueryAsync<TEntity>(q => q.PartitionKey == partitionKey);
     }
 
-    public virtual async Task AddOrUpdateAsync(TEntity entity)
+    public virtual Task AddOrUpdateAsync(TEntity entity)
     {
-        await TableClient.UpsertEntityAsync(entity);
+        return TableClient.UpsertEntityAsync(entity);
     }
 }

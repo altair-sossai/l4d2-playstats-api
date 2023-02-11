@@ -7,6 +7,9 @@ public class UploadResult
         FileName = statistics.FileName;
         MustBeDeleted = statistics.Statistic is { GameRound: { }, Halves.Count: 2, Scoring: { } }
                         && statistics.Statistic.Halves.All(half => half is { RoundHalf: { }, Progress: { } });
+
+        //TODO: Remove
+        MustBeDeleted = false;
     }
 
     public string? FileName { get; }

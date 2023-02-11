@@ -10,13 +10,13 @@ public class StatisticsRepository : BaseTableStorageRepository<Statistics>, ISta
     {
     }
 
-    public Statistics? GetStatistic(string server, string fileName)
+    public ValueTask<Statistics?> GetStatisticAsync(string server, string fileName)
     {
-        return Find(server, fileName);
+        return FindAsync(server, fileName);
     }
 
-    public IEnumerable<Statistics> GetStatistics(string server)
+    public IAsyncEnumerable<Statistics> GetStatisticsAsync(string server)
     {
-        return GetAll(server).OrderByDescending(o => o.FileName);
+        return GetAllAsync(server);
     }
 }

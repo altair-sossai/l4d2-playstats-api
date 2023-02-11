@@ -2,7 +2,7 @@
 
 public interface IStatisticsRepository
 {
-    Statistics? GetStatistic(string server, string fileName);
-    IEnumerable<Statistics> GetStatistics(string server);
+    ValueTask<Statistics?> GetStatisticAsync(string server, string fileName);
+    IAsyncEnumerable<Statistics> GetStatisticsAsync(string server);
     Task AddOrUpdateAsync(Statistics statistics);
 }

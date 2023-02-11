@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using L4D2PlayStats.Core.Modules.Auth.Users.Services;
@@ -40,18 +41,20 @@ public class StatisticsFunction
 
     [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatistics))]
     public IActionResult GetStatistics([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}")] HttpRequest httpRequest,
-        string server)
+        string server, int take = 100)
     {
         try
         {
-            var results = _memoryCache.GetOrCreate($"statistics_{server}".ToLower(), factory =>
+            var results = _memoryCache.GetOrCreate($"statistics_{server}_{take}".ToLower(), async factory =>
             {
                 factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
-                return _statisticsRepository
-                    .GetStatistics(server)
-                    .Select(_mapper.Map<StatisticsSimplifiedResult>)
-                    .ToList();
+                var statistics = await _statisticsRepository
+                    .GetStatisticsAsync(server)
+                    .Take(take)
+                    .ToListAsync(CancellationToken.None);
+
+                return statistics.Select(_mapper.Map<StatisticsSimplifiedResult>).ToList();
             });
 
             return new OkObjectResult(results);
@@ -62,13 +65,13 @@ public class StatisticsFunction
         }
     }
 
-    [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatistic))]
-    public IActionResult GetStatistic([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}/{fileName}")] HttpRequest httpRequest,
+    [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
+    public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}/{fileName}")] HttpRequest httpRequest,
         string server, string fileName)
     {
         try
         {
-            var statistic = _statisticsRepository.GetStatistic(server, fileName);
+            var statistic = await _statisticsRepository.GetStatisticAsync(server, fileName);
             if (statistic == null)
                 return new NotFoundResult();
 
