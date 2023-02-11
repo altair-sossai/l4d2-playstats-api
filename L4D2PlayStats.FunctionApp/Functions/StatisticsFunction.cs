@@ -39,13 +39,15 @@ public class StatisticsFunction
         _statisticsRepository = statisticsRepository;
     }
 
-    [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatistics))]
-    public IActionResult GetStatistics([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}")] HttpRequest httpRequest,
-        string server, int take = 100)
+    [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsAsync))]
+    public async Task<IActionResult> GetStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}")] HttpRequest httpRequest,
+        string server)
     {
         try
         {
-            var results = _memoryCache.GetOrCreate($"statistics_{server}_{take}".ToLower(), async factory =>
+            var take = httpRequest.Query.Int32Value("take", 100);
+
+            var results = await _memoryCache.GetOrCreateAsync($"statistics_{server}_{take}".ToLower(), async factory =>
             {
                 factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
