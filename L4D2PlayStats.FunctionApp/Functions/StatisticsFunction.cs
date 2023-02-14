@@ -10,6 +10,7 @@ using L4D2PlayStats.Core.Modules.Statistics.Results;
 using L4D2PlayStats.Core.Modules.Statistics.Services;
 using L4D2PlayStats.FunctionApp.Errors;
 using L4D2PlayStats.FunctionApp.Extensions;
+using L4D2PlayStats.FunctionApp.Shared.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -59,7 +60,7 @@ public class StatisticsFunction
 				return statistics.Select(_mapper.Map<StatisticsSimplifiedResult>).ToList();
 			});
 
-			return new OkObjectResult(results);
+			return new JsonResult(results, JsonSettings.DefaultSettings);
 		}
 		catch (Exception exception)
 		{
@@ -79,7 +80,7 @@ public class StatisticsFunction
 
 			var result = _mapper.Map<StatisticsResult>(statistic);
 
-			return new OkObjectResult(result);
+			return new JsonResult(result, JsonSettings.DefaultSettings);
 		}
 		catch (Exception exception)
 		{
@@ -99,7 +100,7 @@ public class StatisticsFunction
 
 			_memoryCache.Remove($"statistics_{user.Id}".ToLower());
 
-			return new OkObjectResult(result);
+			return new JsonResult(result, JsonSettings.DefaultSettings);
 		}
 		catch (Exception exception)
 		{

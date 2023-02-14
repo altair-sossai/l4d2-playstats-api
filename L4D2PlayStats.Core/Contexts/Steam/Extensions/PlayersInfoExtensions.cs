@@ -4,8 +4,8 @@ namespace L4D2PlayStats.Core.Contexts.Steam.Extensions;
 
 public static class PlayersInfoExtensions
 {
-    public static PlayerInfo? FirstPlayerOrDefault(this PlayersInfo? playersInfo)
-    {
-        return playersInfo?.Players?.FirstOrDefault();
-    }
+	public static PlayerInfo? FirstPlayerOrDefault(this PlayersInfo? playersInfo)
+	{
+		return playersInfo?.Players?.FirstOrDefault();
+	}
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using L4D2PlayStats.Core.Modules.Matches.Services;
 using L4D2PlayStats.FunctionApp.Errors;
 using L4D2PlayStats.FunctionApp.Extensions;
+using L4D2PlayStats.FunctionApp.Shared.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -39,7 +40,7 @@ public class MatchesFunction
 				return matches;
 			});
 
-			return new OkObjectResult(results);
+			return new JsonResult(results, JsonSettings.DefaultSettings);
 		}
 		catch (Exception exception)
 		{

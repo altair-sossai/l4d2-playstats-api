@@ -18,7 +18,7 @@ public class MatchResult
 	public DateTime MatchDate { get; }
 	public string? Campaign { get; }
 
-	public List<TeamResult> Teams { get; } = new();
+	public List<TeamResult> Teams { get; }
 	public List<string> Statistics { get; } = new();
 
 	public class TeamResult

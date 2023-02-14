@@ -2,9 +2,9 @@
 
 public class StatisticsSimplifiedResult
 {
-    public string? Server { get; set; }
-    public string? FileName { get; set; }
-    public GameRound? GameRound { get; set; }
-    public Scoring? Scoring { get; set; }
-    public List<PlayerName>? PlayerNames { get; set; }
+	public string? Server { get; set; }
+	public string? FileName { get; set; }
+	public GameRound? GameRound { get; set; }
+	public Scoring? Scoring { get; set; }
+	public List<PlayerName>? PlayerNames { get; set; }
 }
