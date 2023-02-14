@@ -45,16 +45,16 @@ public class MatchService : IMatchService
 
 			var campaign = maps[mapName];
 
-			if (match == null || string.IsNullOrEmpty(lastMap) || !campaign.SequentialMaps(lastMap, mapName))
+			if (match == null || string.IsNullOrEmpty(lastMap) || !campaign.SequentialMaps(mapName, lastMap))
 			{
-				match = new MatchResult(gameRound, campaign);
+				var playersA = statistic.PlayerNames.Where(playerName => halfA.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
+				var playersB = statistic.PlayerNames.Where(playerName => halfB.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
+
+				match = new MatchResult(gameRound, campaign, teamA, playersA, teamB, playersB);
 				matches.Add(match);
 			}
 
-			var playersA = statistic.PlayerNames.Where(playerName => halfA.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
-			var playersB = statistic.PlayerNames.Where(playerName => halfB.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
-
-			match.Update(statistics.RowKey, teamA, playersA, teamB, playersB);
+			match.Statistics.Add(statistics.RowKey);
 
 			lastMap = mapName;
 		}
