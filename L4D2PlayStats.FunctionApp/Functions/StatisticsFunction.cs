@@ -43,12 +43,12 @@ public class StatisticsFunction
 	}
 
 	[FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
-	public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}/{fileName}")] HttpRequest httpRequest,
-		string server, string fileName)
+	public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}/{statisticId}")] HttpRequest httpRequest,
+		string server, string statisticId)
 	{
 		try
 		{
-			var statistic = await _statisticsRepository.GetStatisticAsync(server, fileName);
+			var statistic = await _statisticsRepository.GetStatisticAsync(server, statisticId);
 			if (statistic == null)
 				return new NotFoundResult();
 

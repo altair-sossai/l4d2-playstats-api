@@ -4,6 +4,7 @@ public class StatisticsSimplifiedResult
 {
 	public string? Server { get; set; }
 	public string? FileName { get; set; }
+	public string? StatisticId { get; set; }
 	public GameRound? GameRound { get; set; }
 	public Scoring? Scoring { get; set; }
 	public List<PlayerName>? PlayerNames { get; set; }
