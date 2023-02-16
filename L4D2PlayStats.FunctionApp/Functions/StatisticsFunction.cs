@@ -98,7 +98,9 @@ public class StatisticsFunction
 				.GetStatisticsBetweenAsync(server, start, end)
 				.ToListAsync(CancellationToken.None);
 
-			return new JsonResult(statistics, JsonSettings.DefaultSettings);
+			var result = statistics.Select(_mapper.Map<StatisticsResult>).ToList();
+
+			return new JsonResult(result, JsonSettings.DefaultSettings);
 		}
 		catch (Exception exception)
 		{
