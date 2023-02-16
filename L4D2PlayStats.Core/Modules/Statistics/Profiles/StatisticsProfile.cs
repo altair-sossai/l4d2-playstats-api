@@ -8,7 +8,9 @@ public class StatisticsProfile : Profile
 {
 	public StatisticsProfile()
 	{
-		CreateMap<Statistics, StatisticsResult>();
+		CreateMap<Statistics, StatisticsResult>()
+			.ForMember(dest => dest.StatisticId, opt => opt.MapFrom(src => src.RowKey));
+
 		CreateMap<Statistics, StatisticsSimplifiedResult>()
 			.ForMember(dest => dest.GameRound, opt => opt.MapFrom(src => src.Statistic!.GameRound))
 			.ForMember(dest => dest.Scoring, opt => opt.MapFrom(src => src.Statistic!.Scoring))
