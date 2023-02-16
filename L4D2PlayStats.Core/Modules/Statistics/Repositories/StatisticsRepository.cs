@@ -10,9 +10,9 @@ public class StatisticsRepository : BaseTableStorageRepository<Statistics>, ISta
 	{
 	}
 
-	public ValueTask<Statistics?> GetStatisticAsync(string server, string fileName)
+	public ValueTask<Statistics?> GetStatisticAsync(string server, string statisticId)
 	{
-		return FindAsync(server, fileName);
+		return FindAsync(server, statisticId);
 	}
 
 	public IAsyncEnumerable<Statistics> GetStatisticsAsync(string server)
