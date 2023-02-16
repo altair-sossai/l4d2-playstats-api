@@ -19,4 +19,11 @@ public class StatisticsRepository : BaseTableStorageRepository<Statistics>, ISta
 	{
 		return GetAllAsync(server);
 	}
+
+	public IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string server, string start, string end)
+	{
+		var filter = $@"PartitionKey eq '{server}' and RowKey ge '{start}' and RowKey le '{end}'";
+
+		return TableClient.QueryAsync<Statistics>(filter);
+	}
 }

@@ -42,6 +42,26 @@ public class StatisticsFunction
 		_statisticsRepository = statisticsRepository;
 	}
 
+	[FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
+	public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}/{fileName}")] HttpRequest httpRequest,
+		string server, string fileName)
+	{
+		try
+		{
+			var statistic = await _statisticsRepository.GetStatisticAsync(server, fileName);
+			if (statistic == null)
+				return new NotFoundResult();
+
+			var result = _mapper.Map<StatisticsResult>(statistic);
+
+			return new JsonResult(result, JsonSettings.DefaultSettings);
+		}
+		catch (Exception exception)
+		{
+			return ErrorResult.Build(exception).ResponseMessageResult();
+		}
+	}
+
 	[FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsAsync))]
 	public async Task<IActionResult> GetStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}")] HttpRequest httpRequest,
 		string server)
@@ -68,19 +88,17 @@ public class StatisticsFunction
 		}
 	}
 
-	[FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
-	public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}/{fileName}")] HttpRequest httpRequest,
-		string server, string fileName)
+	[FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsBetweenAsync))]
+	public async Task<IActionResult> GetStatisticsBetweenAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}/between/{start}/and/{end}")] HttpRequest httpRequest,
+		string server, string start, string end)
 	{
 		try
 		{
-			var statistic = await _statisticsRepository.GetStatisticAsync(server, fileName);
-			if (statistic == null)
-				return new NotFoundResult();
+			var statistics = await _statisticsRepository
+				.GetStatisticsBetweenAsync(server, start, end)
+				.ToListAsync(CancellationToken.None);
 
-			var result = _mapper.Map<StatisticsResult>(statistic);
-
-			return new JsonResult(result, JsonSettings.DefaultSettings);
+			return new JsonResult(statistics, JsonSettings.DefaultSettings);
 		}
 		catch (Exception exception)
 		{
