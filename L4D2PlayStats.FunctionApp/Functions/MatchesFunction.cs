@@ -47,4 +47,20 @@ public class MatchesFunction
 			return ErrorResult.Build(exception).ResponseMessageResult();
 		}
 	}
+
+	[FunctionName(nameof(MatchesFunction) + "_" + nameof(GetMatchesBetweenAsync))]
+	public async Task<IActionResult> GetMatchesBetweenAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{server}/between/{start}/and/{end}")] HttpRequest httpRequest,
+		string server, string start, string end)
+	{
+		try
+		{
+			var matches = await _matchService.GetMatchesBetweenAsync(server, start, end);
+
+			return new JsonResult(matches, JsonSettings.DefaultSettings);
+		}
+		catch (Exception exception)
+		{
+			return ErrorResult.Build(exception).ResponseMessageResult();
+		}
+	}
 }

@@ -1,6 +1,6 @@
-﻿using L4D2PlayStats.Core.Modules.Campaigns.Extensions;
-using L4D2PlayStats.Core.Modules.Campaigns.Repositories;
+﻿using L4D2PlayStats.Core.Modules.Campaigns.Repositories;
 using L4D2PlayStats.Core.Modules.Matches.Results;
+using L4D2PlayStats.Core.Modules.Statistics.Extensions;
 using L4D2PlayStats.Core.Modules.Statistics.Repositories;
 
 namespace L4D2PlayStats.Core.Modules.Matches.Services;
@@ -20,44 +20,15 @@ public class MatchService : IMatchService
 	public async Task<List<MatchResult>> GetMatchesAsync(string server, int statisticsCount)
 	{
 		var campaigns = _campaignRepository.GetCampaigns();
-		var maps = campaigns.Maps();
-		var matches = new List<MatchResult>();
+		var matches = await _statisticsRepository.GetStatisticsAsync(server).Take(statisticsCount).ToMatchesAsync(campaigns);
 
-		MatchResult? match = null;
-		string? lastMap = null;
+		return matches;
+	}
 
-		await foreach (var statistics in _statisticsRepository.GetStatisticsAsync(server).Take(statisticsCount))
-		{
-			var statistic = statistics.Statistic;
-			if (statistic == null)
-				continue;
-
-			var gameRound = statistic.GameRound;
-			var mapName = gameRound?.MapName;
-			var scoring = statistic.Scoring;
-			var teamA = scoring?.TeamA;
-			var teamB = scoring?.TeamB;
-			var halfA = statistic.Halves.FirstOrDefault(half => half.RoundHalf?.Team == 'A');
-			var halfB = statistic.Halves.FirstOrDefault(half => half.RoundHalf?.Team == 'B');
-
-			if (gameRound == null || mapName == null || teamA == null || teamB == null || halfA == null || halfB == null || !maps.ContainsKey(mapName))
-				continue;
-
-			var campaign = maps[mapName];
-
-			if (match == null || string.IsNullOrEmpty(lastMap) || !campaign.SequentialMaps(mapName, lastMap))
-			{
-				var playersA = statistic.PlayerNames.Where(playerName => halfA.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
-				var playersB = statistic.PlayerNames.Where(playerName => halfB.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
-
-				match = new MatchResult(gameRound, campaign, teamA, playersA, teamB, playersB);
-				matches.Add(match);
-			}
-
-			match.Statistics.Add(statistics.RowKey);
-
-			lastMap = mapName;
-		}
+	public async Task<List<MatchResult>> GetMatchesBetweenAsync(string server, string start, string end)
+	{
+		var campaigns = _campaignRepository.GetCampaigns();
+		var matches = await _statisticsRepository.GetStatisticsBetweenAsync(server, start, end).ToMatchesAsync(campaigns);
 
 		return matches;
 	}
