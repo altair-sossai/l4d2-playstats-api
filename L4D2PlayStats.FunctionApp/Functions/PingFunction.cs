@@ -9,17 +9,17 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class PingFunction
 {
-	private static readonly Guid InstanceId = Guid.NewGuid();
+    private static readonly Guid InstanceId = Guid.NewGuid();
 
-	[FunctionName(nameof(PingFunction) + "_" + nameof(Get))]
-	public IActionResult Get([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ping")] HttpRequest httpRequest)
-	{
-		var result = new
-		{
-			InstanceId,
-			DateTime.Now
-		};
+    [FunctionName(nameof(PingFunction) + "_" + nameof(Get))]
+    public IActionResult Get([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ping")] HttpRequest httpRequest)
+    {
+        var result = new
+        {
+            InstanceId,
+            DateTime.Now
+        };
 
-		return new JsonResult(result, JsonSettings.DefaultSettings);
-	}
+        return new JsonResult(result, JsonSettings.DefaultSettings);
+    }
 }

@@ -10,10 +10,10 @@ namespace L4D2PlayStats.FunctionApp;
 
 public class Startup : FunctionsStartup
 {
-	public override void Configure(IFunctionsHostBuilder builder)
-	{
-		JsonConvert.DefaultSettings = () => JsonSettings.DefaultSettings;
+    public override void Configure(IFunctionsHostBuilder builder)
+    {
+        JsonConvert.DefaultSettings = () => JsonSettings.DefaultSettings;
 
-		builder.Services.AddApp();
-	}
+        builder.Services.AddApp();
+    }
 }

@@ -4,5 +4,5 @@ namespace L4D2PlayStats.Core.Contexts.AzureTableStorage;
 
 public interface IAzureTableStorageContext
 {
-	Task<TableClient> GetTableClientAsync(string tableName);
+    Task<TableClient> GetTableClientAsync(string tableName);
 }

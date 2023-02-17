@@ -5,28 +5,28 @@ namespace L4D2PlayStats.Core.Contexts.AzureTableStorage;
 
 public class AzureTableStorageContext : IAzureTableStorageContext
 {
-	private static readonly HashSet<string> CreatedTables = new();
-	private readonly IConfiguration _configuration;
-	private TableServiceClient? _tableServiceClient;
+    private static readonly HashSet<string> CreatedTables = new();
+    private readonly IConfiguration _configuration;
+    private TableServiceClient? _tableServiceClient;
 
-	public AzureTableStorageContext(IConfiguration configuration)
-	{
-		_configuration = configuration;
-	}
+    public AzureTableStorageContext(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 
-	private string ConnectionString => _configuration.GetValue<string>("AzureWebJobsStorage")!;
-	private TableServiceClient TableServiceClient => _tableServiceClient ??= new TableServiceClient(ConnectionString);
+    private string ConnectionString => _configuration.GetValue<string>("AzureWebJobsStorage")!;
+    private TableServiceClient TableServiceClient => _tableServiceClient ??= new TableServiceClient(ConnectionString);
 
-	public async Task<TableClient> GetTableClientAsync(string tableName)
-	{
-		var tableClient = TableServiceClient.GetTableClient(tableName);
+    public async Task<TableClient> GetTableClientAsync(string tableName)
+    {
+        var tableClient = TableServiceClient.GetTableClient(tableName);
 
-		if (CreatedTables.Contains(tableName))
-			return tableClient;
+        if (CreatedTables.Contains(tableName))
+            return tableClient;
 
-		await tableClient.CreateIfNotExistsAsync();
-		CreatedTables.Add(tableName);
+        await tableClient.CreateIfNotExistsAsync();
+        CreatedTables.Add(tableName);
 
-		return tableClient;
-	}
+        return tableClient;
+    }
 }

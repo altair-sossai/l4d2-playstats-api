@@ -2,6 +2,6 @@
 
 public class Campaign
 {
-	public string? Name { get; set; }
-	public List<string> Maps { get; set; } = new();
+    public string? Name { get; set; }
+    public List<string> Maps { get; set; } = new();
 }
