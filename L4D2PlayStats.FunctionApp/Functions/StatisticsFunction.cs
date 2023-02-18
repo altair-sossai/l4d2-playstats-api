@@ -98,7 +98,10 @@ public class StatisticsFunction
                 .GetStatisticsBetweenAsync(server, start, end)
                 .ToListAsync(CancellationToken.None);
 
-            var result = statistics.Select(_mapper.Map<StatisticsResult>).ToList();
+            var result = statistics
+                .OrderByDescending(o => o.RowKey)
+                .Select(_mapper.Map<StatisticsResult>)
+                .ToList();
 
             return new JsonResult(result, JsonSettings.DefaultSettings);
         }
