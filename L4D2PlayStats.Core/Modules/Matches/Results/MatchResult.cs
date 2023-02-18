@@ -4,9 +4,8 @@ namespace L4D2PlayStats.Core.Modules.Matches.Results;
 
 public class MatchResult
 {
-    public MatchResult(GameRound gameRound, Campaign campaign, Scoring.Team teamA, List<PlayerName> playersA, Scoring.Team teamB, List<PlayerName> playersB)
+    public MatchResult(Campaign campaign, Scoring.Team teamA, List<PlayerName> playersA, Scoring.Team teamB, List<PlayerName> playersB)
     {
-        MatchDate = gameRound.When;
         Campaign = campaign.Name;
 
         Teams = new List<TeamResult>
@@ -15,7 +14,7 @@ public class MatchResult
         };
     }
 
-    public DateTime MatchDate { get; }
+    public DateTime MatchDate { get; internal set; }
     public string? Campaign { get; }
 
     public List<TeamResult> Teams { get; }

@@ -38,10 +38,11 @@ public static class StatisticsExtensions
                 var playersA = stats.PlayerNames.Where(playerName => halfA.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
                 var playersB = stats.PlayerNames.Where(playerName => halfB.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
 
-                match = new MatchResult(gameRound, campaign, teamA, playersA, teamB, playersB);
+                match = new MatchResult(campaign, teamA, playersA, teamB, playersB);
                 matches.Add(match);
             }
 
+            match.MatchDate = gameRound.When;
             match.Statistics.Add(statistic.RowKey);
 
             lastMap = mapName;
