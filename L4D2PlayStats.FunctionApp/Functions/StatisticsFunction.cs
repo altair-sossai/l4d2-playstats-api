@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using L4D2PlayStats.Core.Modules.Auth.Users.Services;
+using L4D2PlayStats.Core.Modules.Server.Services;
 using L4D2PlayStats.Core.Modules.Statistics.Commands;
 using L4D2PlayStats.Core.Modules.Statistics.Repositories;
 using L4D2PlayStats.Core.Modules.Statistics.Results;
@@ -25,19 +25,19 @@ public class StatisticsFunction
 
     private readonly IMapper _mapper;
     private readonly IMemoryCache _memoryCache;
+    private readonly IServerService _serverService;
     private readonly IStatisticsRepository _statisticsRepository;
     private readonly IStatisticsService _statisticsService;
-    private readonly IUserService _userService;
 
     public StatisticsFunction(IMemoryCache memoryCache,
         IMapper mapper,
-        IUserService userService,
+        IServerService serverService,
         IStatisticsService statisticsService,
         IStatisticsRepository statisticsRepository)
     {
         _memoryCache = memoryCache;
         _mapper = mapper;
-        _userService = userService;
+        _serverService = serverService;
         _statisticsService = statisticsService;
         _statisticsRepository = statisticsRepository;
     }
@@ -116,12 +116,12 @@ public class StatisticsFunction
     {
         try
         {
-            var user = _userService.EnsureAuthentication(httpRequest.AuthorizationToken());
+            var server = _serverService.EnsureAuthentication(httpRequest.AuthorizationToken());
             var command = await httpRequest.DeserializeBodyAsync<StatisticsCommand>();
-            var statistic = await _statisticsService.AddOrUpdateAsync(user.Id, command);
+            var statistic = await _statisticsService.AddOrUpdateAsync(server.Id, command);
             var result = new UploadResult(statistic);
 
-            _memoryCache.Remove($"statistics_{user.Id}".ToLower());
+            _memoryCache.Remove($"statistics_{server.Id}".ToLower());
 
             return new JsonResult(result, JsonSettings.DefaultSettings);
         }

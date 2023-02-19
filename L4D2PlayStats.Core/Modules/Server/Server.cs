@@ -1,10 +1,9 @@
 using Azure;
 using Azure.Data.Tables;
-using L4D2PlayStats.Core.Modules.Auth.Users.ValueObjects;
 
-namespace L4D2PlayStats.Core.Modules.Auth.Users;
+namespace L4D2PlayStats.Core.Modules.Server;
 
-public class User : ITableEntity
+public class Server : ITableEntity
 {
     public string Id
     {
@@ -12,17 +11,10 @@ public class User : ITableEntity
         set => RowKey = value;
     }
 
+    public string? DisplayName { get; set; }
     public string? Secret { get; set; }
     public string PartitionKey { get; set; } = "shared";
     public string RowKey { get; set; } = default!;
     public DateTimeOffset? Timestamp { get; set; }
     public ETag ETag { get; set; }
-
-    public UserInfo Info()
-    {
-        return new UserInfo
-        {
-            Id = Id
-        };
-    }
 }
