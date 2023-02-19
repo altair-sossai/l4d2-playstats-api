@@ -38,11 +38,18 @@ public static class StatisticsExtensions
                 var playersA = stats.PlayerNames.Where(playerName => halfA.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
                 var playersB = stats.PlayerNames.Where(playerName => halfB.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
 
-                match = new MatchResult(campaign, teamA, playersA, teamB, playersB);
+                var roundHalfA = halfA.RoundHalf;
+                var roundHalfB = halfB.RoundHalf;
+
+                match = new MatchResult(campaign, teamA, playersA, teamB, playersB)
+                {
+                    MatchEnd = roundHalfA?.EndTime > roundHalfB?.EndTime ? roundHalfA.EndTime : roundHalfB?.EndTime
+                };
+
                 matches.Add(match);
             }
 
-            match.MatchDate = gameRound.When;
+            match.MatchStart = gameRound.When;
             match.Statistics.Add(statistic.RowKey);
 
             lastMap = mapName;

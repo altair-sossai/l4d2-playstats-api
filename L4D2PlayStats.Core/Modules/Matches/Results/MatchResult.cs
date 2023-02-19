@@ -14,7 +14,9 @@ public class MatchResult
         };
     }
 
-    public DateTime MatchDate { get; internal set; }
+    public DateTime MatchStart { get; internal set; }
+    public DateTime? MatchEnd { get; internal init; }
+    public TimeSpan? MatchElapsed => MatchEnd - MatchStart;
     public string? Campaign { get; }
 
     public List<TeamResult> Teams { get; }
