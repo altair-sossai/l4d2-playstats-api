@@ -8,7 +8,9 @@ public class StatisticsSimplifiedResult
     public GameRound? GameRound { get; set; }
     public Scoring? Scoring { get; set; }
     public List<PlayerName>? PlayerNames { get; set; }
-    public DateTime? MapStart { get; set; }
+    public List<PlayerName>? TeamA { get; set; }
+    public List<PlayerName>? TeamB { get; set; }
+	public DateTime? MapStart { get; set; }
     public DateTime? MapEnd { get; set; }
     public TimeSpan? MapElapsed { get; set; }
 }
