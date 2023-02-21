@@ -4,7 +4,7 @@ namespace L4D2PlayStats.Core.Modules.Statistics.Validations;
 
 public class StatisticsValidator : AbstractValidator<Statistics>
 {
-    public StatisticsValidator()
+    public StatisticsValidator(IValidator<global::L4D2PlayStats.Statistics> statisticsValidator)
     {
         RuleFor(r => r.Server)
             .NotNull()
@@ -31,6 +31,10 @@ public class StatisticsValidator : AbstractValidator<Statistics>
         RuleFor(r => r.Content)
             .NotNull()
             .NotEmpty();
+
+        RuleFor(r => r.Statistic)
+            .NotNull()
+            .SetValidator(statisticsValidator!);
 
         RuleFor(r => r.PartitionKey)
             .NotNull()
