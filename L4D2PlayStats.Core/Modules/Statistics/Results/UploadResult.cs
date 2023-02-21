@@ -5,13 +5,20 @@ public class UploadResult
     public UploadResult(Statistics statistics)
     {
         FileName = statistics.FileName;
-        MustBeDeleted = statistics.Statistic is { GameRound: { }, Halves.Count: 2, Scoring: { } }
-                        && statistics.Statistic.Halves.All(half => half is { RoundHalf: { }, Progress: { } });
+        MustBeDeleted = statistics.Statistic != null;
+    }
 
-        //TODO: Remove
-        MustBeDeleted = false;
+    private UploadResult(string? fileName, bool mustBeDeleted)
+    {
+        FileName = fileName;
+        MustBeDeleted = mustBeDeleted;
     }
 
     public string? FileName { get; }
     public bool MustBeDeleted { get; }
+
+    public static UploadResult DeleteFile(string? fileName)
+    {
+        return new UploadResult(fileName, true);
+    }
 }

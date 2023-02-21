@@ -22,6 +22,12 @@ public class StatisticsService : IStatisticsService
 
     public async Task<Statistics> AddOrUpdateAsync(string server, StatisticsCommand command)
     {
+        if (string.IsNullOrEmpty(command.FileName))
+            throw new Exception("Invalid filename");
+
+        if (string.IsNullOrEmpty(command.Content) || !L4D2PlayStats.Statistics.TryParse(command.Content, out _))
+            throw new Exception("Invalid content");
+
         var statistics = await _statisticsRepository.GetStatisticAsync(server, command.FileName!) ?? new Statistics { Server = server };
 
         _mapper.Map(command, statistics);

@@ -7,7 +7,7 @@ public static class StatisticsHelper
     private const string Pattern = @"^(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})_(\d{4})_.+\.txt$";
     private static readonly Regex Regex = new(Pattern);
 
-    public static string? FileNameToRowKey(string? fileName)
+    public static DateTime? FileNameToDateTime(string? fileName)
     {
         if (string.IsNullOrEmpty(fileName))
             return null;
@@ -25,6 +25,13 @@ public static class StatisticsHelper
 
         var dateTime = new DateTime(year, month, day, hour, minute, 0, sequence, DateTimeKind.Utc);
 
-        return $"{long.MaxValue - dateTime.Ticks}";
+        return dateTime;
+    }
+
+	public static string? FileNameToRowKey(string? fileName)
+    {
+        var dateTime = FileNameToDateTime(fileName);
+
+        return dateTime == null ? null : $"{long.MaxValue - dateTime.Value.Ticks}";
     }
 }

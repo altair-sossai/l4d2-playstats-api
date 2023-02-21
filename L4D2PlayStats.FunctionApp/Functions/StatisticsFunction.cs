@@ -3,8 +3,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
 using L4D2PlayStats.Core.Modules.Server.Services;
 using L4D2PlayStats.Core.Modules.Statistics.Commands;
+using L4D2PlayStats.Core.Modules.Statistics.Helpers;
 using L4D2PlayStats.Core.Modules.Statistics.Repositories;
 using L4D2PlayStats.Core.Modules.Statistics.Results;
 using L4D2PlayStats.Core.Modules.Statistics.Services;
@@ -118,12 +120,27 @@ public class StatisticsFunction
         {
             var server = _serverService.EnsureAuthentication(httpRequest.AuthorizationToken());
             var command = await httpRequest.DeserializeBodyAsync<StatisticsCommand>();
-            var statistic = await _statisticsService.AddOrUpdateAsync(server.Id, command);
-            var result = new UploadResult(statistic);
 
-            _memoryCache.Remove($"statistics_{server.Id}".ToLower());
+            try
+            {
+                var statistic = await _statisticsService.AddOrUpdateAsync(server.Id, command);
+                var result = new UploadResult(statistic);
 
-            return new JsonResult(result, JsonSettings.DefaultSettings);
+                _memoryCache.Remove($"statistics_{server.Id}".ToLower());
+
+                return new JsonResult(result, JsonSettings.DefaultSettings);
+            }
+            catch (ValidationException)
+            {
+                var date = StatisticsHelper.FileNameToDateTime(command.FileName);
+                var limit = DateTime.UtcNow.AddHours(-12);
+                var oldFile = limit > date;
+
+                if (date != null && !oldFile)
+                    throw;
+
+                return new JsonResult(UploadResult.DeleteFile(command.FileName), JsonSettings.DefaultSettings);
+            }
         }
         catch (Exception exception)
         {
