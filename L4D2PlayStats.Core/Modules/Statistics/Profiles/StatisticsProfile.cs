@@ -15,9 +15,9 @@ public class StatisticsProfile : Profile
             .ForMember(dest => dest.StatisticId, opt => opt.MapFrom(src => src.RowKey))
             .ForMember(dest => dest.GameRound, opt => opt.MapFrom(src => src.Statistic!.GameRound))
             .ForMember(dest => dest.Scoring, opt => opt.MapFrom(src => src.Statistic!.Scoring))
-			.ForMember(dest => dest.PlayerNames, opt => opt.MapFrom(src => src.Statistic!.PlayerNames))
-			.ForMember(dest => dest.TeamA, opt => opt.MapFrom(src => src.Statistic!.TeamA))
-			.ForMember(dest => dest.TeamB, opt => opt.MapFrom(src => src.Statistic!.TeamB))
+            .ForMember(dest => dest.PlayerNames, opt => opt.MapFrom(src => src.Statistic!.PlayerNames))
+            .ForMember(dest => dest.TeamA, opt => opt.MapFrom(src => src.Statistic!.TeamA))
+            .ForMember(dest => dest.TeamB, opt => opt.MapFrom(src => src.Statistic!.TeamB))
             .ForMember(dest => dest.MapStart, opt => opt.MapFrom(src => src.Statistic!.MapStart))
             .ForMember(dest => dest.MapEnd, opt => opt.MapFrom(src => src.Statistic!.MapEnd))
             .ForMember(dest => dest.MapElapsed, opt => opt.MapFrom(src => src.Statistic!.MapElapsed));
