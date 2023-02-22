@@ -8,14 +8,15 @@ public static class PlayerExtensions
     {
         var percentages = new[]
         {
-            player.Common(players),
-            player.SiKilled(players),
-            player.SiDamage(players),
-            player.TankDamage(players),
-            player.WitchDamage(players)
+            player.Common(players) * 0.15m,
+            player.SiKilled(players) * 0.15m,
+            player.SiDamage(players) * 0.3m,
+            player.TankDamage(players) * 0.15m,
+            player.WitchDamage(players) * 0.1m,
+            player.Clears(players) * 0.15m
         };
 
-        var pointsPerMetric = points / percentages.Length;
+        var pointsPerMetric = points / 1m;
         var sum = percentages.Select(p => p * pointsPerMetric).Sum();
 
         var matchPoints = new MatchPoints
@@ -69,6 +70,15 @@ public static class PlayerExtensions
         var witchDamage = (decimal)player.WitchDamage;
         var sum = players.Sum(s => s.WitchDamage);
         var percentage = sum == 0 ? 0 : witchDamage / sum;
+
+        return percentage;
+    }
+
+    private static decimal Clears(this Player player, IEnumerable<Player> players)
+    {
+        var clears = (decimal)player.Clears;
+        var sum = players.Sum(s => s.Clears);
+        var percentage = sum == 0 ? 0 : clears / sum;
 
         return percentage;
     }

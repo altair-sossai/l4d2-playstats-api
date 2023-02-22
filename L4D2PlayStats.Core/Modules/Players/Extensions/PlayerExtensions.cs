@@ -17,9 +17,7 @@ public static class PlayerExtensions
     public static IEnumerable<Player> RankPlayers(this IEnumerable<Player> players)
     {
         return players
-            .OrderByDescending(o => o.Wins)
-            .ThenBy(o => o.Loss)
-            .ThenByDescending(o => o.Points)
+            .OrderByDescending(o => o.Points)
             .UpdatePosition();
     }
 
