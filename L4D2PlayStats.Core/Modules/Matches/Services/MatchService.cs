@@ -1,5 +1,4 @@
 ﻿using L4D2PlayStats.Core.Modules.Campaigns.Repositories;
-using L4D2PlayStats.Core.Modules.Matches.Results;
 using L4D2PlayStats.Core.Modules.Statistics.Extensions;
 using L4D2PlayStats.Core.Modules.Statistics.Repositories;
 
@@ -17,7 +16,7 @@ public class MatchService : IMatchService
         _campaignRepository = campaignRepository;
     }
 
-    public async Task<List<MatchResult>> GetMatchesAsync(string server, int statisticsCount)
+    public async Task<List<Match>> GetMatchesAsync(string server, int statisticsCount)
     {
         var campaigns = _campaignRepository.GetCampaigns();
         var matches = await _statisticsRepository.GetStatisticsAsync(server).Take(statisticsCount).ToMatchesAsync(campaigns);
@@ -25,7 +24,7 @@ public class MatchService : IMatchService
         return matches;
     }
 
-    public async Task<List<MatchResult>> GetMatchesBetweenAsync(string server, string start, string end)
+    public async Task<List<Match>> GetMatchesBetweenAsync(string server, string start, string end)
     {
         var campaigns = _campaignRepository.GetCampaigns();
         var matches = await _statisticsRepository.GetStatisticsBetweenAsync(server, start, end).ToMatchesAsync(campaigns);

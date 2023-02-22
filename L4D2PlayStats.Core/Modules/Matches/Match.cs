@@ -1,14 +1,14 @@
 ﻿using L4D2PlayStats.Core.Modules.Campaigns;
 
-namespace L4D2PlayStats.Core.Modules.Matches.Results;
+namespace L4D2PlayStats.Core.Modules.Matches;
 
-public class MatchResult
+public class Match
 {
-    public MatchResult(Campaign campaign, Scoring.Team teamA, List<PlayerName> playersA, Scoring.Team teamB, List<PlayerName> playersB)
+    public Match(Campaign campaign, Scoring.Team teamA, List<PlayerName> playersA, Scoring.Team teamB, List<PlayerName> playersB)
     {
         Campaign = campaign.Name;
 
-        Teams = new List<TeamResult>
+        Teams = new List<Team>
         {
             new(teamA, playersA), new(teamB, playersB)
         };
@@ -19,14 +19,14 @@ public class MatchResult
     public TimeSpan? MatchElapsed => MatchEnd - MatchStart;
     public string? Campaign { get; }
 
-    public List<TeamResult> Teams { get; }
+    public List<Team> Teams { get; }
     public List<string> Statistics { get; } = new();
 
-    public class TeamResult
+    public class Team
     {
         private readonly Scoring.Team _team;
 
-        public TeamResult(Scoring.Team team, List<PlayerName> players)
+        public Team(Scoring.Team team, List<PlayerName> players)
         {
             _team = team;
             Players = players;

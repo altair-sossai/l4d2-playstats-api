@@ -1,17 +1,17 @@
 ﻿using L4D2PlayStats.Core.Modules.Campaigns;
 using L4D2PlayStats.Core.Modules.Campaigns.Extensions;
-using L4D2PlayStats.Core.Modules.Matches.Results;
+using L4D2PlayStats.Core.Modules.Matches;
 
 namespace L4D2PlayStats.Core.Modules.Statistics.Extensions;
 
 public static class StatisticsExtensions
 {
-    public static async Task<List<MatchResult>> ToMatchesAsync(this IAsyncEnumerable<Statistics> statistics, IEnumerable<Campaign> campaigns)
+    public static async Task<List<Match>> ToMatchesAsync(this IAsyncEnumerable<Statistics> statistics, IEnumerable<Campaign> campaigns)
     {
         var maps = campaigns.Maps();
-        var matches = new List<MatchResult>();
+        var matches = new List<Match>();
 
-        MatchResult? match = null;
+        Match? match = null;
         string? lastMap = null;
 
         await foreach (var statistic in statistics)
@@ -38,7 +38,7 @@ public static class StatisticsExtensions
                 var playersA = stats.PlayerNames.Where(playerName => halfA.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
                 var playersB = stats.PlayerNames.Where(playerName => halfB.Players.Any(p => p.CommunityId == playerName.CommunityId)).ToList();
 
-                match = new MatchResult(campaign, teamA, playersA, teamB, playersB)
+                match = new Match(campaign, teamA, playersA, teamB, playersB)
                 {
                     MatchEnd = stats.MapEnd
                 };
