@@ -47,7 +47,7 @@ public static class StatisticsExtensions
             }
 
             match.MatchStart = gameRound.When;
-            match.Statistics.Add(statistic.RowKey);
+            match.Add(statistic);
 
             lastMap = mapName;
         }

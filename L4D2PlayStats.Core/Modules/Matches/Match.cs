@@ -1,4 +1,5 @@
-﻿using L4D2PlayStats.Core.Modules.Campaigns;
+﻿using System.Runtime.Serialization;
+using L4D2PlayStats.Core.Modules.Campaigns;
 
 namespace L4D2PlayStats.Core.Modules.Matches;
 
@@ -21,6 +22,15 @@ public class Match
 
     public List<Team> Teams { get; }
     public List<string> Statistics { get; } = new();
+
+    [IgnoreDataMember]
+    public List<Statistics.Statistics> Maps { get; } = new();
+
+    public void Add(Statistics.Statistics statistic)
+    {
+        Statistics.Add(statistic.RowKey);
+        Maps.Add(statistic);
+    }
 
     public class Team
     {

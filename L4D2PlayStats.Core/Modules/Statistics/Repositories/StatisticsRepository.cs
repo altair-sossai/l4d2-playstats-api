@@ -20,6 +20,14 @@ public class StatisticsRepository : BaseTableStorageRepository<Statistics>, ISta
         return GetAllAsync(server);
     }
 
+    public IAsyncEnumerable<Statistics> GetStatisticsAsync(string server, DateTime after)
+    {
+        var rowKey = $"{long.MaxValue - after.Ticks}";
+        var filter = $@"PartitionKey eq '{server}' and RowKey le '{rowKey}'";
+
+        return TableClient.QueryAsync<Statistics>(filter);
+    }
+
     public IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string server, string start, string end)
     {
         var filter = $@"PartitionKey eq '{server}' and RowKey ge '{start}' and RowKey le '{end}'";
