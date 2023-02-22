@@ -6,7 +6,7 @@ namespace L4D2PlayStats.Core.Modules.Matches.Extensions;
 
 public static class MatchExtensions
 {
-    public static IEnumerable<Players.Player> Ranking(this IEnumerable<Match> matches)
+    public static IEnumerable<Players.Player> Ranking(this IReadOnlyCollection<Match> matches)
     {
         var players = new Dictionary<string, Players.Player>();
 
@@ -15,6 +15,34 @@ public static class MatchExtensions
         {
             players.AddIfNotExist(point);
             players[point.CommunityId].Points += point.Points;
+        }
+
+        foreach (var match in matches)
+        {
+            var lastMap = match.Maps.First();
+            var statistic = lastMap.Statistic;
+            if (statistic == null)
+                continue;
+
+            if (statistic.Draw())
+            {
+                foreach (var playerName in statistic.TeamA.Where(p => players.ContainsKey(p.CommunityId!)))
+                    players[playerName.CommunityId!].Draw++;
+
+                foreach (var playerName in statistic.TeamB.Where(p => players.ContainsKey(p.CommunityId!)))
+                    players[playerName.CommunityId!].Draw++;
+
+                continue;
+            }
+
+            var winners = statistic.Winners().ToHashSet();
+            var losers = statistic.Losers().ToHashSet();
+
+            foreach (var communityId in winners.Where(communityId => players.ContainsKey(communityId)))
+                players[communityId].Wins++;
+
+            foreach (var communityId in losers.Where(communityId => players.ContainsKey(communityId)))
+                players[communityId].Loss++;
         }
 
         return players.Values.RankPlayers();

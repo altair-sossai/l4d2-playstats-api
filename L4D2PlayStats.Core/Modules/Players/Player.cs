@@ -26,6 +26,9 @@ public class Player : ITableEntity
     public int Position { get; set; }
     public string? Name { get; set; }
     public decimal Points { get; set; }
+    public int Draw { get; set; }
+    public int Wins { get; set; }
+    public int Loss { get; set; }
 
     public string PartitionKey { get; set; } = default!;
 
