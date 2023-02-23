@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using L4D2PlayStats.Core.Modules.Matches.Extensions;
@@ -32,16 +33,7 @@ public class RankingFunction
     {
         try
         {
-            var players = await _memoryCache.GetOrCreateAsync($"ranking_{server}".ToLower(), async factory =>
-            {
-                factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
-
-                var after = DateTime.UtcNow.AddDays(-30);
-                var matches = await _matchService.GetMatchesAsync(server, after);
-                var players = matches.Ranking().ToList();
-
-                return players;
-            });
+            var players = await RankingAsync(server);
 
             return new JsonResult(players, JsonSettings.DefaultSettings);
         }
@@ -49,5 +41,41 @@ public class RankingFunction
         {
             return ErrorResult.Build(exception).ResponseMessageResult();
         }
+    }
+
+    [FunctionName(nameof(RankingFunction) + "_" + nameof(PlaceAsync))]
+    public async Task<IActionResult> PlaceAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{server}/place/{communityId:long}")] HttpRequest httpRequest,
+        string server, long communityId)
+    {
+        try
+        {
+            var players = await RankingAsync(server);
+            var top3 = players.Take(3).ToList();
+            var me = players.FirstOrDefault(f => f.CommunityId == communityId);
+
+            return new JsonResult(new
+            {
+                top3,
+                me
+            }, JsonSettings.DefaultSettings);
+        }
+        catch (Exception exception)
+        {
+            return ErrorResult.Build(exception).ResponseMessageResult();
+        }
+    }
+
+    private async Task<List<Core.Modules.Players.Player>> RankingAsync(string server)
+    {
+        return await _memoryCache.GetOrCreateAsync($"ranking_{server}".ToLower(), async factory =>
+        {
+            factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+            var after = DateTime.UtcNow.AddDays(-30);
+            var matches = await _matchService.GetMatchesAsync(server, after);
+            var players = matches.Ranking().ToList();
+
+            return players;
+        });
     }
 }
