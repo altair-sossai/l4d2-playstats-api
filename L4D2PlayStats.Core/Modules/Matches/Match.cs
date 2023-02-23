@@ -15,6 +15,7 @@ public class Match
         };
     }
 
+    public int TeamSize { get; internal init; }
     public DateTime MatchStart { get; internal set; }
     public DateTime? MatchEnd { get; internal init; }
     public TimeSpan? MatchElapsed => MatchEnd - MatchStart;
@@ -25,6 +26,8 @@ public class Match
 
     [IgnoreDataMember]
     public List<Statistics.Statistics> Maps { get; } = new();
+
+    public bool Competitive => Maps.Count >= 4 && TeamSize >= 4;
 
     public void Add(Statistics.Statistics statistic)
     {

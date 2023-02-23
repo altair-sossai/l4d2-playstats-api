@@ -40,6 +40,7 @@ public static class StatisticsExtensions
 
                 match = new Match(campaign, teamA, playersA, teamB, playersB)
                 {
+                    TeamSize = gameRound.TeamSize,
                     MatchEnd = stats.MapEnd
                 };
 
@@ -53,7 +54,7 @@ public static class StatisticsExtensions
         }
 
         return matches
-            .Where(w => w.Maps.Count >= 4)
+            .Where(w => w.Competitive)
             .ToList();
     }
 }
