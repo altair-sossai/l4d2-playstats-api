@@ -52,6 +52,8 @@ public static class StatisticsExtensions
             lastMap = mapName;
         }
 
-        return matches;
+        return matches
+            .Where(w => w.Maps.Count >= 4)
+            .ToList();
     }
 }
