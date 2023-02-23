@@ -10,15 +10,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class RankingFunction
 {
     private readonly IMatchService _matchService;
+    private readonly IMemoryCache _memoryCache;
 
-    public RankingFunction(IMatchService matchService)
+    public RankingFunction(IMemoryCache memoryCache,
+        IMatchService matchService)
     {
+        _memoryCache = memoryCache;
         _matchService = matchService;
     }
 
@@ -28,9 +32,16 @@ public class RankingFunction
     {
         try
         {
-            var after = DateTime.UtcNow.AddDays(-30);
-            var matches = await _matchService.GetMatchesAsync(server, after);
-            var players = matches.Ranking().ToList();
+            var players = await _memoryCache.GetOrCreateAsync($"ranking_{server}".ToLower(), async factory =>
+            {
+                factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+                var after = DateTime.UtcNow.AddDays(-30);
+                var matches = await _matchService.GetMatchesAsync(server, after);
+                var players = matches.Ranking().ToList();
+
+                return players;
+            });
 
             return new JsonResult(players, JsonSettings.DefaultSettings);
         }
