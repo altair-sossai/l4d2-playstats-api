@@ -2,9 +2,9 @@
 
 public class MatchPoints
 {
-    public string CommunityId { get; set; }
-    public string Name { get; set; }
-    public decimal Points { get; set; }
+    public string CommunityId { get; init; } = default!;
+    public string Name { get; init; } = default!;
+    public decimal Points { get; init; }
 
     public Players.Player ToPlayer()
     {
