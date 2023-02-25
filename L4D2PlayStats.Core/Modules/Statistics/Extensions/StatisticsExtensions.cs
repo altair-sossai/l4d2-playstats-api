@@ -22,13 +22,20 @@ public static class StatisticsExtensions
 
             var gameRound = stats.GameRound;
             var mapName = gameRound?.MapName;
+            if (lastMap == mapName)
+                continue;
+
             var scoring = stats.Scoring;
             var teamA = scoring?.TeamA;
             var teamB = scoring?.TeamB;
+
             var halfA = stats.Halves.FirstOrDefault(half => half.RoundHalf?.Team == 'A');
             var halfB = stats.Halves.FirstOrDefault(half => half.RoundHalf?.Team == 'B');
 
             if (gameRound == null || mapName == null || teamA == null || teamB == null || halfA == null || halfB == null || !maps.ContainsKey(mapName))
+                continue;
+
+            if (teamA.Score == 0 && teamB.Score == 0)
                 continue;
 
             var campaign = maps[mapName];
