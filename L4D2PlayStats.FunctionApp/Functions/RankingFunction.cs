@@ -43,6 +43,35 @@ public class RankingFunction
         }
     }
 
+    [FunctionName(nameof(RankingFunction) + "_" + nameof(LastMatchAsync))]
+    public async Task<IActionResult> LastMatchAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{server}/last-match")] HttpRequest httpRequest,
+        string server)
+    {
+        try
+        {
+            var match = await _memoryCache.GetOrCreateAsync($"ranking_last_match_{server}".ToLower(), async factory =>
+            {
+                factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+
+                var match = await _matchService.LastMatchAsync(server);
+
+                return match;
+            });
+
+            if (match == null)
+                return new NotFoundResult();
+
+            var players = match.Ranking().ToList();
+            var result = new { match, players };
+
+            return new JsonResult(result, JsonSettings.DefaultSettings);
+        }
+        catch (Exception exception)
+        {
+            return ErrorResult.Build(exception).ResponseMessageResult();
+        }
+    }
+
     [FunctionName(nameof(RankingFunction) + "_" + nameof(PlaceAsync))]
     public async Task<IActionResult> PlaceAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{server}/place/{communityId:long}")] HttpRequest httpRequest,
         string server, long communityId)

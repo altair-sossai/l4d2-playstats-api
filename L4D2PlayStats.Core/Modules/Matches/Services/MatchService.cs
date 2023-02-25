@@ -16,6 +16,14 @@ public class MatchService : IMatchService
         _campaignRepository = campaignRepository;
     }
 
+    public async Task<Match?> LastMatchAsync(string server)
+    {
+        var matches = await GetMatchesAsync(server);
+        var match = matches.FirstOrDefault();
+
+        return match;
+    }
+
     public async Task<List<Match>> GetMatchesAsync(string server)
     {
         var campaigns = _campaignRepository.GetCampaigns();

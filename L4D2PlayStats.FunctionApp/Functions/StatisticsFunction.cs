@@ -124,7 +124,9 @@ public class StatisticsFunction
                 var result = new UploadResult(statistic);
 
                 _memoryCache.Remove($"statistics_{server.Id}".ToLower());
+                _memoryCache.Remove($"matches_{server.Id}".ToLower());
                 _memoryCache.Remove($"ranking_{server.Id}".ToLower());
+                _memoryCache.Remove($"ranking_last_match_{server.Id}".ToLower());
 
                 return new JsonResult(result, JsonSettings.DefaultSettings);
             }

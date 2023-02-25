@@ -6,6 +6,13 @@ namespace L4D2PlayStats.Core.Modules.Matches.Extensions;
 
 public static class MatchExtensions
 {
+    public static IEnumerable<Players.Player> Ranking(this Match match)
+    {
+        var matches = new[] { match };
+
+        return matches.Ranking();
+    }
+
     public static IEnumerable<Players.Player> Ranking(this IReadOnlyCollection<Match> matches)
     {
         var players = new Dictionary<string, Players.Player>();

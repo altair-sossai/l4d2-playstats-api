@@ -23,13 +23,13 @@ public class MatchesFunction
         _matchService = matchService;
     }
 
-    [FunctionName(nameof(MatchesFunction) + "_" + nameof(GetMatchesAsync))]
-    public async Task<IActionResult> GetMatchesAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{server}")] HttpRequest httpRequest,
+    [FunctionName(nameof(MatchesFunction) + "_" + nameof(MatchesAsync))]
+    public async Task<IActionResult> MatchesAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{server}")] HttpRequest httpRequest,
         string server)
     {
         try
         {
-            var results = await _memoryCache.GetOrCreateAsync($"matches_{server}".ToLower(), async factory =>
+            var matches = await _memoryCache.GetOrCreateAsync($"matches_{server}".ToLower(), async factory =>
             {
                 factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
@@ -38,7 +38,7 @@ public class MatchesFunction
                 return matches;
             });
 
-            return new JsonResult(results, JsonSettings.DefaultSettings);
+            return new JsonResult(matches, JsonSettings.DefaultSettings);
         }
         catch (Exception exception)
         {
@@ -46,8 +46,8 @@ public class MatchesFunction
         }
     }
 
-    [FunctionName(nameof(MatchesFunction) + "_" + nameof(GetMatchesBetweenAsync))]
-    public async Task<IActionResult> GetMatchesBetweenAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{server}/between/{start}/and/{end}")] HttpRequest httpRequest,
+    [FunctionName(nameof(MatchesFunction) + "_" + nameof(MatchesBetweenAsync))]
+    public async Task<IActionResult> MatchesBetweenAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{server}/between/{start}/and/{end}")] HttpRequest httpRequest,
         string server, string start, string end)
     {
         try
