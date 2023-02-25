@@ -23,8 +23,6 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class StatisticsFunction
 {
-    private const int StatisticsCount = 250;
-
     private readonly IMapper _mapper;
     private readonly IMemoryCache _memoryCache;
     private readonly IServerService _serverService;
@@ -76,7 +74,6 @@ public class StatisticsFunction
 
                 var statistics = await _statisticsRepository
                     .GetStatisticsAsync(server)
-                    .Take(StatisticsCount)
                     .ToListAsync(CancellationToken.None);
 
                 return statistics.Select(_mapper.Map<StatisticsSimplifiedResult>).ToList();

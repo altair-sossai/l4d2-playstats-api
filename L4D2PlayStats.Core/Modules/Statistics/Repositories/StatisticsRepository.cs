@@ -17,11 +17,7 @@ public class StatisticsRepository : BaseTableStorageRepository<Statistics>, ISta
 
     public IAsyncEnumerable<Statistics> GetStatisticsAsync(string server)
     {
-        return GetAllAsync(server);
-    }
-
-    public IAsyncEnumerable<Statistics> GetStatisticsAsync(string server, DateTime after)
-    {
+        var after = DateTime.UtcNow.AddDays(-90);
         var rowKey = $"{long.MaxValue - after.Ticks}";
         var filter = $@"PartitionKey eq '{server}' and RowKey le '{rowKey}'";
 

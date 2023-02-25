@@ -14,8 +14,6 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class MatchesFunction
 {
-    private const int StatisticsCount = 250;
-
     private readonly IMatchService _matchService;
     private readonly IMemoryCache _memoryCache;
 
@@ -35,7 +33,7 @@ public class MatchesFunction
             {
                 factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
-                var matches = await _matchService.GetMatchesAsync(server, StatisticsCount);
+                var matches = await _matchService.GetMatchesAsync(server);
 
                 return matches;
             });

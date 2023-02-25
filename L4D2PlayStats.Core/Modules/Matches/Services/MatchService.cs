@@ -16,18 +16,10 @@ public class MatchService : IMatchService
         _campaignRepository = campaignRepository;
     }
 
-    public async Task<List<Match>> GetMatchesAsync(string server, int statisticsCount)
+    public async Task<List<Match>> GetMatchesAsync(string server)
     {
         var campaigns = _campaignRepository.GetCampaigns();
-        var matches = await _statisticsRepository.GetStatisticsAsync(server).Take(statisticsCount).ToMatchesAsync(campaigns);
-
-        return matches;
-    }
-
-    public async Task<List<Match>> GetMatchesAsync(string server, DateTime after)
-    {
-        var campaigns = _campaignRepository.GetCampaigns();
-        var matches = await _statisticsRepository.GetStatisticsAsync(server, after).ToMatchesAsync(campaigns);
+        var matches = await _statisticsRepository.GetStatisticsAsync(server).ToMatchesAsync(campaigns);
 
         return matches;
     }

@@ -4,7 +4,6 @@ public interface IStatisticsRepository
 {
     ValueTask<Statistics?> GetStatisticAsync(string server, string statisticId);
     IAsyncEnumerable<Statistics> GetStatisticsAsync(string server);
-    IAsyncEnumerable<Statistics> GetStatisticsAsync(string server, DateTime after);
-	IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string server, string start, string end);
+    IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string server, string start, string end);
     Task AddOrUpdateAsync(Statistics statistics);
 }

@@ -28,7 +28,7 @@ public static class StatisticsHelper
         return dateTime;
     }
 
-	public static string? FileNameToRowKey(string? fileName)
+    public static string? FileNameToRowKey(string? fileName)
     {
         var dateTime = FileNameToDateTime(fileName);
 

@@ -52,12 +52,9 @@ public class RankingFunction
             var players = await RankingAsync(server);
             var top3 = players.Take(3).ToList();
             var me = players.FirstOrDefault(f => f.CommunityId == communityId);
+            var result = new { top3, me };
 
-            return new JsonResult(new
-            {
-                top3,
-                me
-            }, JsonSettings.DefaultSettings);
+            return new JsonResult(result, JsonSettings.DefaultSettings);
         }
         catch (Exception exception)
         {
@@ -71,8 +68,7 @@ public class RankingFunction
         {
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
-            var after = DateTime.UtcNow.AddDays(-30);
-            var matches = await _matchService.GetMatchesAsync(server, after);
+            var matches = await _matchService.GetMatchesAsync(server);
             var players = matches.Ranking().ToList();
 
             return players;
