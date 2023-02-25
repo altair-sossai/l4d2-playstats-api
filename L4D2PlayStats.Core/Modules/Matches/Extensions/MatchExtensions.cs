@@ -9,12 +9,20 @@ public static class MatchExtensions
     public static IEnumerable<Players.Player> Ranking(this IReadOnlyCollection<Match> matches)
     {
         var players = new Dictionary<string, Players.Player>();
+        var lastMatch = true;
 
         foreach (var match in matches)
-        foreach (var point in match.Points())
         {
-            players.AddIfNotExist(point);
-            players[point.CommunityId].Points += point.Points;
+            foreach (var point in match.Points())
+            {
+                players.AddIfNotExist(point);
+                players[point.CommunityId].Points += point.Points;
+
+                if (lastMatch)
+                    players[point.CommunityId].LastMatchPoints += point.Points;
+            }
+
+            lastMatch = false;
         }
 
         foreach (var match in matches)
