@@ -7,7 +7,6 @@ public class StatisticsSimplifiedResult
     public string? StatisticId { get; set; }
     public GameRound? GameRound { get; set; }
     public Scoring? Scoring { get; set; }
-    public List<PlayerName>? PlayerNames { get; set; }
     public List<PlayerName>? TeamA { get; set; }
     public List<PlayerName>? TeamB { get; set; }
     public DateTime? MapStart { get; set; }
