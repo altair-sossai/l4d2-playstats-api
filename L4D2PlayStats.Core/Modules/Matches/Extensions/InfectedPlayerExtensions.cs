@@ -8,10 +8,9 @@ public static class InfectedPlayerExtensions
     {
         var weights = new PointWeights
         (
-            new PointWeight(infectedPlayer.DmgUpright, infectedPlayers.Select(p => p.DmgUpright), 3m),
-            new PointWeight(infectedPlayer.HunterDpDmg, infectedPlayers.Select(p => p.HunterDpDmg)),
-            new PointWeight(infectedPlayer.DeathCharges, infectedPlayers.Select(p => p.DeathCharges), 5m),
-            new PointWeight(infectedPlayer.Booms, infectedPlayers.Select(p => p.Booms))
+            new PointWeight(infectedPlayer.DmgTotal, infectedPlayers.Select(p => p.DmgTotal)),
+            new PointWeight(infectedPlayer.DmgUpright, infectedPlayers.Select(p => p.DmgUpright), 2m),
+            new PointWeight(infectedPlayer.DeathCharges, infectedPlayers.Select(p => p.DeathCharges), 2m)
         );
 
         var calculatedPoints = weights.CalculatePoints(points);
