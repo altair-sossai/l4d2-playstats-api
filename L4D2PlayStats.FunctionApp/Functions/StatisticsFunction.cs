@@ -74,6 +74,7 @@ public class StatisticsFunction
 
                 var statistics = await _statisticsRepository
                     .GetStatisticsAsync(server)
+                    .Take(200)
                     .ToListAsync(CancellationToken.None);
 
                 return statistics.Select(_mapper.Map<StatisticsSimplifiedResult>).ToList();

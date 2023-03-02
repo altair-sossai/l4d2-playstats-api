@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using L4D2PlayStats.Core.Modules.Matches.Services;
 using L4D2PlayStats.FunctionApp.Errors;
@@ -35,7 +36,7 @@ public class MatchesFunction
 
                 var matches = await _matchService.GetMatchesAsync(server);
 
-                return matches;
+                return matches.Take(200).ToList();
             });
 
             return new JsonResult(matches, JsonSettings.DefaultSettings);
