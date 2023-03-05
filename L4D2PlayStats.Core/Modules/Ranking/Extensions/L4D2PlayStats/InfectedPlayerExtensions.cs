@@ -1,6 +1,6 @@
 ﻿using L4D2PlayStats.Core.Modules.Matches.Structures;
 
-namespace L4D2PlayStats.Core.Modules.Matches.Extensions;
+namespace L4D2PlayStats.Core.Modules.Ranking.Extensions.L4D2PlayStats;
 
 public static class InfectedPlayerExtensions
 {

@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using L4D2PlayStats.Core.Modules.Matches.Extensions;
 using L4D2PlayStats.Core.Modules.Matches.Services;
+using L4D2PlayStats.Core.Modules.Ranking.Extensions;
 using L4D2PlayStats.Core.Modules.Ranking.Services;
 using L4D2PlayStats.FunctionApp.Errors;
 using L4D2PlayStats.FunctionApp.Extensions;

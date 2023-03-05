@@ -1,21 +1,22 @@
-﻿using L4D2PlayStats.Core.Modules.Matches.Structures;
-using L4D2PlayStats.Core.Modules.Ranking.Extensions;
+﻿using L4D2PlayStats.Core.Modules.Matches;
+using L4D2PlayStats.Core.Modules.Matches.Structures;
+using L4D2PlayStats.Core.Modules.Ranking.Extensions.L4D2PlayStats;
 using L4D2PlayStats.Core.Modules.Statistics.Extensions.L4D2PlayStats;
 
-namespace L4D2PlayStats.Core.Modules.Matches.Extensions;
+namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
 
 public static class MatchExtensions
 {
-    public static IEnumerable<Ranking.Player> Ranking(this Match match)
+    public static IEnumerable<Player> Ranking(this Match match)
     {
         var matches = new[] { match };
 
         return matches.Ranking();
     }
 
-    public static IEnumerable<Ranking.Player> Ranking(this IReadOnlyCollection<Match> matches)
+    public static IEnumerable<Player> Ranking(this IReadOnlyCollection<Match> matches)
     {
-        var players = new Dictionary<string, Ranking.Player>();
+        var players = new Dictionary<string, Player>();
         var lastMatch = true;
 
         foreach (var match in matches)

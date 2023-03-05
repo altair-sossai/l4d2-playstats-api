@@ -1,10 +1,10 @@
 ﻿using L4D2PlayStats.Core.Modules.Matches.Structures;
 
-namespace L4D2PlayStats.Core.Modules.Matches.Extensions;
+namespace L4D2PlayStats.Core.Modules.Ranking.Extensions.L4D2PlayStats;
 
 public static class PlayerExtensions
 {
-    public static MatchPoints Points(this Player player, List<Player> players, decimal points)
+    public static MatchPoints Points(this global::L4D2PlayStats.Player player, List<global::L4D2PlayStats.Player> players, decimal points)
     {
         var weights = new PointWeights
         (

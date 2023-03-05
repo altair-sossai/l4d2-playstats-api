@@ -1,6 +1,7 @@
 ﻿using L4D2PlayStats.Core.Contexts.Steam.Structures;
+using L4D2PlayStats.Core.Modules.PlayerStatistics.Structures;
 
-namespace L4D2PlayStats.Core.Modules.Ranking;
+namespace L4D2PlayStats.Core.Modules.PlayerStatistics;
 
 public class Player
 {
@@ -21,11 +22,8 @@ public class Player
     public string? Steam3 => _steamIdentifiers.Steam3;
     public string? ProfileUrl => _steamIdentifiers.ProfileUrl;
 
-    public int Position { get; set; }
     public string? Name { get; set; }
-    public decimal Points { get; set; }
-    public decimal LastMatchPoints { get; set; }
-    public int Draw { get; set; }
-    public int Wins { get; set; }
-    public int Loss { get; set; }
+
+    public SurvivorStats SurvivorStats { get; } = new();
+    public InfectedStats InfectedStats { get; } = new();
 }

@@ -67,5 +67,6 @@ public class StatisticsService : IStatisticsService
         _memoryCache.Remove($"matches_{server}".ToLower());
         _memoryCache.Remove($"ranking_{server}".ToLower());
         _memoryCache.Remove($"ranking_last_match_{server}".ToLower());
+        _memoryCache.Remove($"player_statistics_{server}".ToLower());
     }
 }
