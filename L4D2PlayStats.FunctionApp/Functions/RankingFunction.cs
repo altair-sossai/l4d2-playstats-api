@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using L4D2PlayStats.Core.Modules.Matches.Extensions;
 using L4D2PlayStats.Core.Modules.Matches.Services;
+using L4D2PlayStats.Core.Modules.Ranking.Services;
 using L4D2PlayStats.FunctionApp.Errors;
 using L4D2PlayStats.FunctionApp.Extensions;
 using L4D2PlayStats.FunctionApp.Shared.Json;
@@ -11,19 +11,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class RankingFunction
 {
     private readonly IMatchService _matchService;
-    private readonly IMemoryCache _memoryCache;
+    private readonly IRankingService _rankingService;
 
-    public RankingFunction(IMemoryCache memoryCache,
+    public RankingFunction(IRankingService rankingService,
         IMatchService matchService)
     {
-        _memoryCache = memoryCache;
+        _rankingService = rankingService;
         _matchService = matchService;
     }
 
@@ -33,7 +32,7 @@ public class RankingFunction
     {
         try
         {
-            var players = await RankingAsync(server);
+            var players = await _rankingService.RankingAsync(server);
 
             return new JsonResult(players, JsonSettings.DefaultSettings);
         }
@@ -49,15 +48,7 @@ public class RankingFunction
     {
         try
         {
-            var match = await _memoryCache.GetOrCreateAsync($"ranking_last_match_{server}".ToLower(), async factory =>
-            {
-                factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
-
-                var match = await _matchService.LastMatchAsync(server);
-
-                return match;
-            });
-
+            var match = await _matchService.LastMatchAsync(server);
             if (match == null)
                 return new NotFoundResult();
 
@@ -78,7 +69,7 @@ public class RankingFunction
     {
         try
         {
-            var players = await RankingAsync(server);
+            var players = await _rankingService.RankingAsync(server);
             var top3 = players.Take(3).ToList();
             var me = players.FirstOrDefault(f => f.CommunityId == communityId);
             var result = new { top3, me };
@@ -89,18 +80,5 @@ public class RankingFunction
         {
             return ErrorResult.Build(exception).ResponseMessageResult();
         }
-    }
-
-    private async Task<List<Core.Modules.Players.Player>> RankingAsync(string server)
-    {
-        return await _memoryCache.GetOrCreateAsync($"ranking_{server}".ToLower(), async factory =>
-        {
-            factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
-
-            var matches = await _matchService.GetMatchesAsync(server);
-            var players = matches.Ranking().ToList();
-
-            return players;
-        });
     }
 }

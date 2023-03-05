@@ -1,6 +1,6 @@
 ﻿using L4D2PlayStats.Core.Modules.Matches.Structures;
 
-namespace L4D2PlayStats.Core.Modules.Players.Extensions;
+namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
 
 public static class PlayerExtensions
 {

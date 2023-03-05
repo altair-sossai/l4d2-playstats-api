@@ -20,7 +20,7 @@ public class ServerService : IServerService
 
     private TableClient ServerTable => _serverTable ??= _context.GetTableClientAsync("Servers").Result;
 
-    private List<Server> Servers => _memoryCache.GetOrCreate(nameof(Servers), factory =>
+    private IEnumerable<Server> Servers => _memoryCache.GetOrCreate("servers", factory =>
     {
         factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
 

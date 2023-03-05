@@ -6,9 +6,9 @@ public class MatchPoints
     public string Name { get; init; } = default!;
     public decimal Points { get; init; }
 
-    public Players.Player ToPlayer()
+    public Ranking.Player ToPlayer()
     {
-        return new Players.Player
+        return new Ranking.Player
         {
             CommunityId = long.Parse(CommunityId),
             Name = Name

@@ -2,7 +2,7 @@
 using Azure.Data.Tables;
 using L4D2PlayStats.Core.Contexts.Steam.Structures;
 
-namespace L4D2PlayStats.Core.Modules.Players;
+namespace L4D2PlayStats.Core.Modules.Ranking;
 
 public class Player : ITableEntity
 {

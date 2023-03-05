@@ -9,18 +9,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class MatchesFunction
 {
     private readonly IMatchService _matchService;
-    private readonly IMemoryCache _memoryCache;
 
-    public MatchesFunction(IMemoryCache memoryCache, IMatchService matchService)
+    public MatchesFunction(IMatchService matchService)
     {
-        _memoryCache = memoryCache;
         _matchService = matchService;
     }
 
@@ -30,14 +27,7 @@ public class MatchesFunction
     {
         try
         {
-            var matches = await _memoryCache.GetOrCreateAsync($"matches_{server}".ToLower(), async factory =>
-            {
-                factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
-
-                var matches = await _matchService.GetMatchesAsync(server);
-
-                return matches.Take(200).ToList();
-            });
+            var matches = (await _matchService.GetMatchesAsync(server)).Take(200).ToList();
 
             return new JsonResult(matches, JsonSettings.DefaultSettings);
         }

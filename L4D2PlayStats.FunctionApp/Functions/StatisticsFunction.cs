@@ -17,25 +17,21 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class StatisticsFunction
 {
     private readonly IMapper _mapper;
-    private readonly IMemoryCache _memoryCache;
     private readonly IServerService _serverService;
     private readonly IStatisticsRepository _statisticsRepository;
     private readonly IStatisticsService _statisticsService;
 
-    public StatisticsFunction(IMemoryCache memoryCache,
-        IMapper mapper,
+    public StatisticsFunction(IMapper mapper,
         IServerService serverService,
         IStatisticsService statisticsService,
         IStatisticsRepository statisticsRepository)
     {
-        _memoryCache = memoryCache;
         _mapper = mapper;
         _serverService = serverService;
         _statisticsService = statisticsService;
@@ -68,19 +64,9 @@ public class StatisticsFunction
     {
         try
         {
-            var results = await _memoryCache.GetOrCreateAsync($"statistics_{server}".ToLower(), async factory =>
-            {
-                factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
+            var statistics = (await _statisticsService.GetStatistics(server)).Take(200).ToList();
 
-                var statistics = await _statisticsRepository
-                    .GetStatisticsAsync(server)
-                    .Take(200)
-                    .ToListAsync(CancellationToken.None);
-
-                return statistics.Select(_mapper.Map<StatisticsSimplifiedResult>).ToList();
-            });
-
-            return new JsonResult(results, JsonSettings.DefaultSettings);
+            return new JsonResult(statistics, JsonSettings.DefaultSettings);
         }
         catch (Exception exception)
         {
@@ -123,11 +109,6 @@ public class StatisticsFunction
             {
                 var statistic = await _statisticsService.AddOrUpdateAsync(server.Id, command);
                 var result = new UploadResult(statistic);
-
-                _memoryCache.Remove($"statistics_{server.Id}".ToLower());
-                _memoryCache.Remove($"matches_{server.Id}".ToLower());
-                _memoryCache.Remove($"ranking_{server.Id}".ToLower());
-                _memoryCache.Remove($"ranking_last_match_{server.Id}".ToLower());
 
                 return new JsonResult(result, JsonSettings.DefaultSettings);
             }
