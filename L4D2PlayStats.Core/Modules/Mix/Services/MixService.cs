@@ -24,7 +24,8 @@ public class MixService : IMixService
         var ranking = await _rankingService.RankingAsync(server);
         var players = ranking.ToDictionary(k => k.CommunityId.ToString(), v => v);
         var availables = command.All
-            .OrderBy(communityId => players.ContainsKey(communityId))
+            .Where(communityId => players.ContainsKey(communityId))
+            .OrderBy(communityId => players[communityId].Position)
             .ToList();
 
         if (availables.Count != 8)
