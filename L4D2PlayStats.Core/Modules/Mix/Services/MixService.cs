@@ -29,7 +29,7 @@ public class MixService : IMixService
             .ToList();
 
         if (availables.Count != 8)
-            throw new Exception("It was not possible to generate the mix based on the data entered");
+            throw new ValidationException("One or more players are not present in the ranking");
 
         var result = new MixResult(availables, players);
 
