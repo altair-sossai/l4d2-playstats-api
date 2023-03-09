@@ -2,7 +2,7 @@
 
 public interface IMatchService
 {
-    Task<Match?> LastMatchAsync(string server);
-    Task<List<Match>> GetMatchesAsync(string server);
-    Task<List<Match>> GetMatchesBetweenAsync(string server, string start, string end);
+    Task<Match?> LastMatchAsync(string serverId);
+    Task<List<Match>> GetMatchesAsync(string serverId);
+    Task<List<Match>> GetMatchesBetweenAsync(string serverId, string start, string end);
 }

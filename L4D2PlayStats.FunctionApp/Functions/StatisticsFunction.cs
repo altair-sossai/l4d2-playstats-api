@@ -39,12 +39,12 @@ public class StatisticsFunction
     }
 
     [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
-    public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}/{statisticId}")] HttpRequest httpRequest,
-        string server, string statisticId)
+    public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}/{statisticId}")] HttpRequest httpRequest,
+        string serverId, string statisticId)
     {
         try
         {
-            var statistic = await _statisticsRepository.GetStatisticAsync(server, statisticId);
+            var statistic = await _statisticsRepository.GetStatisticAsync(serverId, statisticId);
             if (statistic == null)
                 return new NotFoundResult();
 
@@ -59,12 +59,12 @@ public class StatisticsFunction
     }
 
     [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsAsync))]
-    public async Task<IActionResult> GetStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}")] HttpRequest httpRequest,
-        string server)
+    public async Task<IActionResult> GetStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}")] HttpRequest httpRequest,
+        string serverId)
     {
         try
         {
-            var statistics = (await _statisticsService.GetStatistics(server)).Take(200).ToList();
+            var statistics = (await _statisticsService.GetStatistics(serverId)).Take(200).ToList();
 
             return new JsonResult(statistics, JsonSettings.DefaultSettings);
         }
@@ -75,13 +75,13 @@ public class StatisticsFunction
     }
 
     [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsBetweenAsync))]
-    public async Task<IActionResult> GetStatisticsBetweenAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{server}/between/{start}/and/{end}")] HttpRequest httpRequest,
-        string server, string start, string end)
+    public async Task<IActionResult> GetStatisticsBetweenAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}/between/{start}/and/{end}")] HttpRequest httpRequest,
+        string serverId, string start, string end)
     {
         try
         {
             var statistics = await _statisticsRepository
-                .GetStatisticsBetweenAsync(server, start, end)
+                .GetStatisticsBetweenAsync(serverId, start, end)
                 .ToListAsync(CancellationToken.None);
 
             var result = statistics

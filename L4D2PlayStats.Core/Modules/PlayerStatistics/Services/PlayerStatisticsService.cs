@@ -16,13 +16,13 @@ public class PlayerStatisticsService : IPlayerStatisticsService
         _matchService = matchService;
     }
 
-    public async Task<List<Player>> PlayerStatisticsAsync(string server)
+    public async Task<List<Player>> PlayerStatisticsAsync(string serverId)
     {
-        return await _memoryCache.GetOrCreateAsync($"player_statistics_{server}".ToLower(), async factory =>
+        return await _memoryCache.GetOrCreateAsync($"player_statistics_{serverId}".ToLower(), async factory =>
         {
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
-            var matches = await _matchService.GetMatchesAsync(server);
+            var matches = await _matchService.GetMatchesAsync(serverId);
             var players = matches.PlayerStatistics().ToList();
 
             return players;

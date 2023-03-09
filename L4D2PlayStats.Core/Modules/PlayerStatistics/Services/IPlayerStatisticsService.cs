@@ -2,5 +2,5 @@
 
 public interface IPlayerStatisticsService
 {
-    Task<List<Player>> PlayerStatisticsAsync(string server);
+    Task<List<Player>> PlayerStatisticsAsync(string serverId);
 }

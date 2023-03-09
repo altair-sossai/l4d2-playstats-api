@@ -16,13 +16,13 @@ public class RankingService : IRankingService
         _matchService = matchService;
     }
 
-    public async Task<List<Player>> RankingAsync(string server)
+    public async Task<List<Player>> RankingAsync(string serverId)
     {
-        return await _memoryCache.GetOrCreateAsync($"ranking_{server}".ToLower(), async factory =>
+        return await _memoryCache.GetOrCreateAsync($"ranking_{serverId}".ToLower(), async factory =>
         {
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
-            var matches = await _matchService.GetMatchesAsync(server);
+            var matches = await _matchService.GetMatchesAsync(serverId);
             var players = matches.Ranking().ToList();
 
             return players;

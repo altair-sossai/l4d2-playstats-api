@@ -10,23 +10,23 @@ public class StatisticsRepository : BaseTableStorageRepository<Statistics>, ISta
     {
     }
 
-    public ValueTask<Statistics?> GetStatisticAsync(string server, string statisticId)
+    public ValueTask<Statistics?> GetStatisticAsync(string serverId, string statisticId)
     {
-        return FindAsync(server, statisticId);
+        return FindAsync(serverId, statisticId);
     }
 
-    public IAsyncEnumerable<Statistics> GetStatisticsAsync(string server)
+    public IAsyncEnumerable<Statistics> GetStatisticsAsync(string serverId)
     {
         var after = DateTime.UtcNow.AddDays(-90);
         var rowKey = $"{long.MaxValue - after.Ticks}";
-        var filter = $@"PartitionKey eq '{server}' and RowKey le '{rowKey}'";
+        var filter = $@"PartitionKey eq '{serverId}' and RowKey le '{rowKey}'";
 
         return TableClient.QueryAsync<Statistics>(filter);
     }
 
-    public IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string server, string start, string end)
+    public IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string serverId, string start, string end)
     {
-        var filter = $@"PartitionKey eq '{server}' and RowKey ge '{start}' and RowKey le '{end}'";
+        var filter = $@"PartitionKey eq '{serverId}' and RowKey ge '{start}' and RowKey le '{end}'";
 
         return TableClient.QueryAsync<Statistics>(filter);
     }

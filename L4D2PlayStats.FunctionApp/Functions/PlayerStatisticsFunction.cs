@@ -21,12 +21,12 @@ public class PlayerStatisticsFunction
     }
 
     [FunctionName(nameof(PlayerStatisticsFunction) + "_" + nameof(PlayerStatisticsAsync))]
-    public async Task<IActionResult> PlayerStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "player-statistics/{server}")] HttpRequest httpRequest,
-        string server)
+    public async Task<IActionResult> PlayerStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "player-statistics/{serverId}")] HttpRequest httpRequest,
+        string serverId)
     {
         try
         {
-            var players = await _playerstatisticsService.PlayerStatisticsAsync(server);
+            var players = await _playerstatisticsService.PlayerStatisticsAsync(serverId);
 
             return new JsonResult(players, JsonSettings.DefaultSettings);
         }

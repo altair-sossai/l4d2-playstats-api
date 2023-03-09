@@ -17,11 +17,11 @@ public class MixService : IMixService
         _validator = validator;
     }
 
-    public async Task<MixResult> MixAsync(string server, MixCommand command)
+    public async Task<MixResult> MixAsync(string serverId, MixCommand command)
     {
         await _validator.ValidateAndThrowAsync(command);
 
-        var ranking = await _rankingService.RankingAsync(server);
+        var ranking = await _rankingService.RankingAsync(serverId);
         var players = ranking.ToDictionary(k => k.CommunityId.ToString(), v => v);
         var availables = command.All
             .Where(communityId => players.ContainsKey(communityId))

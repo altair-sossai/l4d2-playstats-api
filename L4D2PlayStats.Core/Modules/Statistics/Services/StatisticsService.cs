@@ -25,7 +25,7 @@ public class StatisticsService : IStatisticsService
         _validator = validator;
     }
 
-    public async Task<Statistics> AddOrUpdateAsync(string server, StatisticsCommand command)
+    public async Task<Statistics> AddOrUpdateAsync(string serverId, StatisticsCommand command)
     {
         if (string.IsNullOrEmpty(command.FileName))
             throw new Exception("Invalid filename");
@@ -33,26 +33,26 @@ public class StatisticsService : IStatisticsService
         if (string.IsNullOrEmpty(command.Content) || !L4D2PlayStats.Statistics.TryParse(command.Content, out _))
             throw new Exception("Invalid content");
 
-        var statistics = await _statisticsRepository.GetStatisticAsync(server, command.FileName!) ?? new Statistics { Server = server };
+        var statistics = await _statisticsRepository.GetStatisticAsync(serverId, command.FileName!) ?? new Statistics { Server = serverId };
 
         _mapper.Map(command, statistics);
 
         await _validator.ValidateAndThrowAsync(statistics);
         await _statisticsRepository.AddOrUpdateAsync(statistics);
 
-        ClearMemoryCache(server);
+        ClearMemoryCache(serverId);
 
         return statistics;
     }
 
-    public async Task<List<StatisticsSimplifiedResult>> GetStatistics(string server)
+    public async Task<List<StatisticsSimplifiedResult>> GetStatistics(string serverId)
     {
-        var statistics = await _memoryCache.GetOrCreateAsync($"statistics_{server}".ToLower(), async factory =>
+        var statistics = await _memoryCache.GetOrCreateAsync($"statistics_{serverId}".ToLower(), async factory =>
         {
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
             var statistics = await _statisticsRepository
-                .GetStatisticsAsync(server)
+                .GetStatisticsAsync(serverId)
                 .ToListAsync(CancellationToken.None);
 
             return statistics.Select(_mapper.Map<StatisticsSimplifiedResult>).ToList();
@@ -61,12 +61,12 @@ public class StatisticsService : IStatisticsService
         return statistics;
     }
 
-    private void ClearMemoryCache(string server)
+    private void ClearMemoryCache(string serverId)
     {
-        _memoryCache.Remove($"statistics_{server}".ToLower());
-        _memoryCache.Remove($"matches_{server}".ToLower());
-        _memoryCache.Remove($"ranking_{server}".ToLower());
-        _memoryCache.Remove($"ranking_last_match_{server}".ToLower());
-        _memoryCache.Remove($"player_statistics_{server}".ToLower());
+        _memoryCache.Remove($"statistics_{serverId}".ToLower());
+        _memoryCache.Remove($"matches_{serverId}".ToLower());
+        _memoryCache.Remove($"ranking_{serverId}".ToLower());
+        _memoryCache.Remove($"ranking_last_match_{serverId}".ToLower());
+        _memoryCache.Remove($"player_statistics_{serverId}".ToLower());
     }
 }
