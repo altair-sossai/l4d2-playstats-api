@@ -7,8 +7,8 @@ public static class PlayerExtensions
         if (string.IsNullOrEmpty(playerStats.CommunityId))
             return null;
 
-        if (players.ContainsKey(playerStats.CommunityId))
-            return players[playerStats.CommunityId];
+        if (players.TryGetValue(playerStats.CommunityId, out var value))
+            return value;
 
         var player = new Player
         {
@@ -26,8 +26,8 @@ public static class PlayerExtensions
         if (string.IsNullOrEmpty(infectedPlayerStats.CommunityId))
             return null;
 
-        if (players.ContainsKey(infectedPlayerStats.CommunityId))
-            return players[infectedPlayerStats.CommunityId];
+        if (players.TryGetValue(infectedPlayerStats.CommunityId, out var value))
+            return value;
 
         var player = new Player
         {
