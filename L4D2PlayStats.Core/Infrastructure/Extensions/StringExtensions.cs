@@ -4,12 +4,12 @@ namespace L4D2PlayStats.Core.Infrastructure.Extensions;
 
 public static class StringExtensions
 {
-    public static string FirstLetterToLower(this string s)
+    public static string FirstLetterToLower(this string input)
     {
-        if (string.IsNullOrEmpty(s))
+        if (string.IsNullOrEmpty(input))
             return string.Empty;
 
-        return s.Length == 1 ? s.ToLower() : $"{char.ToLower(s[0])}{s[1..]}";
+        return input.Length == 1 ? input.ToLower() : $"{char.ToLower(input[0])}{input[1..]}";
     }
 
     public static string? MatchValue(this string input, IEnumerable<string> patterns)

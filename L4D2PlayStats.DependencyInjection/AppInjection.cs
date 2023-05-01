@@ -1,6 +1,5 @@
 using System.Reflection;
 using FluentValidation;
-using L4D2PlayStats.Core.Contexts.Steam.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace L4D2PlayStats.DependencyInjection;
@@ -22,7 +21,5 @@ public static class AppInjection
             .FromAssemblies(assemblies)
             .AddClasses()
             .AsImplementedInterfaces(type => assemblies.Contains(type.Assembly)));
-
-        serviceCollection.AddSteamContext();
     }
 }

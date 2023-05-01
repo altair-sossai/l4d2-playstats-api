@@ -46,11 +46,6 @@ public abstract class BaseTableStorageRepository<TEntity> : BaseTableStorageRepo
         return TableClient.QueryAsync<TEntity>(q => q.PartitionKey == partitionKey && q.RowKey == rowKey).FirstOrDefaultAsync();
     }
 
-    protected IAsyncEnumerable<TEntity> GetAllAsync(string partitionKey)
-    {
-        return TableClient.QueryAsync<TEntity>(q => q.PartitionKey == partitionKey);
-    }
-
     public virtual Task AddOrUpdateAsync(TEntity entity)
     {
         return TableClient.UpsertEntityAsync(entity);
