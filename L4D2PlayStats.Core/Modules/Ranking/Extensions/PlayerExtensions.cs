@@ -42,6 +42,10 @@ public static class PlayerExtensions
     {
         return players
             .OrderByDescending(o => o.Points)
+            .ThenByDescending(o => o.Wins)
+            .ThenBy(o => o.Loss)
+            .ThenBy(o => o.Draw)
+            .ThenBy(o => o.Rage)
             .UpdatePosition();
     }
 
