@@ -27,7 +27,7 @@ public class MatchesFunction
     {
         try
         {
-            var matches = (await _matchService.GetMatchesAsync(serverId)).Take(200).ToList();
+            var matches = (await _matchService.GetMatchesAsync(serverId)).Take(10).ToList();
 
             return new JsonResult(matches, JsonSettings.DefaultSettings);
         }

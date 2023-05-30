@@ -12,7 +12,7 @@ public static class PlayerPointsExtensions
             return;
 
         points.TryAdd(communityId, player);
-        
+
         points[communityId].Name = player.Name;
     }
 }

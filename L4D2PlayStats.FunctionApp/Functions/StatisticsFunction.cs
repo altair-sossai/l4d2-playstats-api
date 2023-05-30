@@ -64,7 +64,7 @@ public class StatisticsFunction
     {
         try
         {
-            var statistics = (await _statisticsService.GetStatistics(serverId)).Take(200).ToList();
+            var statistics = (await _statisticsService.GetStatistics(serverId)).Take(40).ToList();
 
             return new JsonResult(statistics, JsonSettings.DefaultSettings);
         }
