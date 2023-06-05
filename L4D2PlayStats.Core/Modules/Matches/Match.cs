@@ -57,6 +57,7 @@ public class Match
         public int Common => Players.Select(p => p.Common).DefaultIfEmpty(0).Sum();
         public int SiKilled => Players.Select(p => p.SiKilled).DefaultIfEmpty(0).Sum();
         public int SiDamage => Players.Select(p => p.SiDamage).DefaultIfEmpty(0).Sum();
+        public int DmgTotal => Players.Select(p => p.DmgTotal).DefaultIfEmpty(0).Sum();
         public int DmgTank => Players.Select(p => p.DmgTank).DefaultIfEmpty(0).Sum();
 
         public void UpdateStats(Statistics.Statistics statistic)
@@ -81,7 +82,7 @@ public class Match
 
                 foreach (var infectedPlayer in half.InfectedPlayers.Where(w => w.CommunityId == currentPlayer.CommunityId))
                 {
-                    currentPlayer.Common += infectedPlayer.DmgTotal;
+                    currentPlayer.DmgTotal += infectedPlayer.DmgTotal;
                     currentPlayer.DmgTank += infectedPlayer.DmgTank;
                 }
             }
@@ -105,12 +106,18 @@ public class Match
         public string? ProfileUrl => _playerName.ProfileUrl;
         public int Index => _playerName.Index;
         public string? Name => _playerName.Name;
+
+        /* Survivor */
         public int Common { get; set; }
         public decimal CommonPercentage => SafeDivision(Common, _team.Common);
         public int SiKilled { get; set; }
         public decimal SiKilledPercentage => SafeDivision(SiKilled, _team.SiKilled);
         public int SiDamage { get; set; }
         public decimal SiDamagePercentage => SafeDivision(SiDamage, _team.SiDamage);
+
+        /* Infected */
+        public int DmgTotal { get; set; }
+        public decimal DmgTotalPercentage => SafeDivision(DmgTotal, _team.DmgTotal);
         public int DmgTank { get; set; }
         public decimal DmgTankPercentage => SafeDivision(DmgTank, _team.DmgTank);
 
