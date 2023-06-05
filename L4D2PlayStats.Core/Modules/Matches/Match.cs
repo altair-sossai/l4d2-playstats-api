@@ -33,19 +33,93 @@ public class Match
     {
         Statistics.Add(statistic.RowKey);
         Maps.Add(statistic);
+        UpdateTeamStats(statistic);
+    }
+
+    private void UpdateTeamStats(Statistics.Statistics statistic)
+    {
+        foreach (var team in Teams)
+            team.UpdateStats(statistic);
     }
 
     public class Team
     {
         private readonly Scoring.Team _team;
 
-        public Team(Scoring.Team team, List<PlayerName> players)
+        public Team(Scoring.Team team, IEnumerable<PlayerName> players)
         {
             _team = team;
-            Players = players;
+            Players = players.Select(playerName => new Player(playerName, this)).ToList();
         }
 
         public int Score => _team.Score;
-        public List<PlayerName> Players { get; }
+        public List<Player> Players { get; }
+        public int Common => Players.Select(p => p.Common).DefaultIfEmpty(0).Sum();
+        public int SiKilled => Players.Select(p => p.SiKilled).DefaultIfEmpty(0).Sum();
+        public int SiDamage => Players.Select(p => p.SiDamage).DefaultIfEmpty(0).Sum();
+        public int DmgTank => Players.Select(p => p.DmgTank).DefaultIfEmpty(0).Sum();
+
+        public void UpdateStats(Statistics.Statistics statistic)
+        {
+            if (statistic.Statistic == null)
+                return;
+
+            UpdateStats(statistic.Statistic);
+        }
+
+        private void UpdateStats(L4D2PlayStats.Statistics statistic)
+        {
+            foreach (var currentPlayer in Players)
+            foreach (var half in statistic.Halves)
+            {
+                foreach (var player in half.Players.Where(w => w.CommunityId == currentPlayer.CommunityId))
+                {
+                    currentPlayer.Common += player.Common;
+                    currentPlayer.SiKilled += player.SiKilled;
+                    currentPlayer.SiDamage += player.SiDamage;
+                }
+
+                foreach (var infectedPlayer in half.InfectedPlayers.Where(w => w.CommunityId == currentPlayer.CommunityId))
+                {
+                    currentPlayer.Common += infectedPlayer.DmgTotal;
+                    currentPlayer.DmgTank += infectedPlayer.DmgTank;
+                }
+            }
+        }
+    }
+
+    public class Player
+    {
+        private readonly PlayerName _playerName;
+        private readonly Team _team;
+
+        public Player(PlayerName playerName, Team team)
+        {
+            _playerName = playerName;
+            _team = team;
+        }
+
+        public string? SteamId => _playerName.SteamId;
+        public string? CommunityId => _playerName.CommunityId;
+        public string? Steam3 => _playerName.Steam3;
+        public string? ProfileUrl => _playerName.ProfileUrl;
+        public int Index => _playerName.Index;
+        public string? Name => _playerName.Name;
+        public int Common { get; set; }
+        public decimal CommonPercentage => SafeDivision(Common, _team.Common);
+        public int SiKilled { get; set; }
+        public decimal SiKilledPercentage => SafeDivision(SiKilled, _team.SiKilled);
+        public int SiDamage { get; set; }
+        public decimal SiDamagePercentage => SafeDivision(SiDamage, _team.SiDamage);
+        public int DmgTank { get; set; }
+        public decimal DmgTankPercentage => SafeDivision(DmgTank, _team.DmgTank);
+
+        private static decimal SafeDivision(decimal dividend, decimal divisor)
+        {
+            if (divisor == 0)
+                return 0;
+
+            return dividend / divisor;
+        }
     }
 }
