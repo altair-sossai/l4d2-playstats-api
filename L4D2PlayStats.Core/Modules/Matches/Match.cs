@@ -5,7 +5,7 @@ namespace L4D2PlayStats.Core.Modules.Matches;
 
 public class Match
 {
-    public Match(Campaign campaign, Scoring.Team teamA, List<PlayerName> playersA, Scoring.Team teamB, List<PlayerName> playersB)
+    public Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName> playersA, Scoring.Team teamB, IEnumerable<PlayerName> playersB)
     {
         Campaign = campaign.Name;
 
@@ -76,6 +76,11 @@ public class Match
         public int DmgSpit => Players.Select(p => p.DmgSpit).DefaultIfEmpty(0).Sum();
         public int HunterDpDmg => Players.Select(p => p.HunterDpDmg).DefaultIfEmpty(0).Sum();
 
+        /* MVP and LVP */
+        public int MvpSiDamage => Players.Select(p => p.MvpSiDamage).DefaultIfEmpty(0).Sum();
+        public int MvpCommon => Players.Select(p => p.MvpCommon).DefaultIfEmpty(0).Sum();
+        public int LvpFfGiven => Players.Select(p => p.LvpFfGiven).DefaultIfEmpty(0).Sum();
+
         public void UpdateStats(Statistics.Statistics statistic)
         {
             if (statistic.Statistic == null)
@@ -89,6 +94,10 @@ public class Match
             foreach (var currentPlayer in Players)
             foreach (var half in statistic.Halves)
             {
+                var mvpSiDamage = half.MvpSiDamage;
+                var mvpCommon = half.MvpCommon;
+                var lvpFfGiven = half.LvpFfGiven;
+
                 foreach (var player in half.Players.Where(w => w.CommunityId == currentPlayer.CommunityId))
                 {
                     currentPlayer.Died += player.Died;
@@ -104,6 +113,15 @@ public class Match
                     currentPlayer.Levels += player.Levels;
                     currentPlayer.Crowns += player.Crowns;
                     currentPlayer.FfGiven += player.FfGiven;
+
+                    if (mvpSiDamage != null && player.CommunityId == mvpSiDamage.CommunityId)
+                        currentPlayer.MvpSiDamage++;
+
+                    if (mvpCommon != null && player.CommunityId == mvpCommon.CommunityId)
+                        currentPlayer.MvpCommon++;
+
+                    if (lvpFfGiven != null && player.CommunityId == lvpFfGiven.CommunityId)
+                        currentPlayer.LvpFfGiven++;
                 }
 
                 foreach (var infectedPlayer in half.InfectedPlayers.Where(w => w.CommunityId == currentPlayer.CommunityId))
@@ -172,6 +190,14 @@ public class Match
         public decimal DmgSpitPercentage => SafeDivision(DmgSpit, _team.DmgSpit);
         public int HunterDpDmg { get; set; }
         public decimal HunterDpDmgPercentage => SafeDivision(HunterDpDmg, _team.HunterDpDmg);
+
+        /* MVP and LVP */
+        public int MvpSiDamage { get; set; }
+        public decimal MvpSiDamagePercentage => SafeDivision(MvpSiDamage, _team.MvpSiDamage);
+        public int MvpCommon { get; set; }
+        public decimal MvpCommonPercentage => SafeDivision(MvpCommon, _team.MvpCommon);
+        public int LvpFfGiven { get; set; }
+        public decimal LvpFfGivenPercentage => SafeDivision(LvpFfGiven, _team.LvpFfGiven);
 
         private static decimal SafeDivision(decimal dividend, decimal divisor)
         {
