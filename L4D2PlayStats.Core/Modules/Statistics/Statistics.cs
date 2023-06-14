@@ -27,6 +27,8 @@ public class Statistics : ITableEntity
         }
     }
 
+    public string? Ip { get; set; }
+    public int? Port { get; set; }
     public int Round { get; set; }
     public int TeamSize { get; set; }
     public string? ConfigurationName { get; set; }

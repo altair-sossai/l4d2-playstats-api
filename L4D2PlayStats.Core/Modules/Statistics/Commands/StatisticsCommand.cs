@@ -6,6 +6,8 @@ public class StatisticsCommand
     private L4D2PlayStats.Statistics? _statistics;
 
     public string? FileName { get; set; }
+    public string? Ip { get; set; }
+    public int? Port { get; set; }
 
     public string? Content
     {
