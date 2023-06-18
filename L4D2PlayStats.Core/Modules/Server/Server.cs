@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Azure;
 using Azure.Data.Tables;
 
@@ -6,7 +7,7 @@ namespace L4D2PlayStats.Core.Modules.Server;
 public class Server : ITableEntity
 {
     private string? _configurationName;
-    private HashSet<string>? _configurationNames;
+    private Regex? _configurationNameRegex;
 
     public string Id
     {
@@ -23,7 +24,9 @@ public class Server : ITableEntity
         set
         {
             _configurationName = value;
-            _configurationNames = value?.Split(';').ToHashSet();
+
+            if (!string.IsNullOrEmpty(_configurationName))
+                _configurationNameRegex = new Regex(_configurationName);
         }
     }
 
@@ -35,8 +38,7 @@ public class Server : ITableEntity
     public bool RankingConfiguration(string? configurationName)
     {
         return !string.IsNullOrEmpty(configurationName)
-               && _configurationNames != null
-               && _configurationNames.Count != 0
-               && _configurationNames.Contains(configurationName);
+               && _configurationNameRegex != null
+               && _configurationNameRegex.IsMatch(configurationName);
     }
 }
