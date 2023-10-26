@@ -134,15 +134,15 @@ public class Match
 
                     var currentPlayerMvpSiDamage = mvpsSiDamage.FirstOrDefault(f => f.CommunityId == currentPlayer.CommunityId);
                     if (currentPlayerMvpSiDamage != null)
-                        currentPlayer.PointsMvpSiDamage += mvpsSiDamage.Count - mvpsSiDamage.IndexOf(currentPlayerMvpSiDamage);
+                        currentPlayer.PointsMvpSiDamage += Points(mvpsSiDamage.IndexOf(currentPlayerMvpSiDamage));
 
                     var currentPlayerMvpCommon = mvpsCommon.FirstOrDefault(f => f.CommunityId == currentPlayer.CommunityId);
                     if (currentPlayerMvpCommon != null)
-                        currentPlayer.PointsMvpCommon += mvpsCommon.Count - mvpsCommon.IndexOf(currentPlayerMvpCommon);
+                        currentPlayer.PointsMvpCommon += Points(mvpsCommon.IndexOf(currentPlayerMvpCommon));
 
                     var currentPlayerLvpFfGiven = lvpsFfGiven.FirstOrDefault(f => f.CommunityId == currentPlayer.CommunityId);
                     if (currentPlayerLvpFfGiven != null)
-                        currentPlayer.PointsLvpFfGiven += lvpsFfGiven.Count - lvpsFfGiven.IndexOf(currentPlayerLvpFfGiven);
+                        currentPlayer.PointsLvpFfGiven += Points(lvpsFfGiven.IndexOf(currentPlayerLvpFfGiven));
                 }
 
                 foreach (var infectedPlayer in half.InfectedPlayers.Where(w => w.CommunityId == currentPlayer.CommunityId))
@@ -153,6 +153,18 @@ public class Match
                     currentPlayer.HunterDpDmg += infectedPlayer.HunterDpDmg;
                 }
             }
+        }
+
+        private static int Points(int indexOf)
+        {
+            return indexOf switch
+            {
+                0 => 8,
+                1 => 4,
+                2 => 2,
+                3 => 1,
+                _ => 0
+            };
         }
     }
 
