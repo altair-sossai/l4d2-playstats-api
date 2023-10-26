@@ -81,6 +81,11 @@ public class Match
         public int MvpCommon => Players.Select(p => p.MvpCommon).DefaultIfEmpty(0).Sum();
         public int LvpFfGiven => Players.Select(p => p.LvpFfGiven).DefaultIfEmpty(0).Sum();
 
+        /* MVP and LVP */
+        public int PointsMvpSiDamage => Players.Select(p => p.PointsMvpSiDamage).DefaultIfEmpty(0).Sum();
+        public int PointsMvpCommon => Players.Select(p => p.PointsMvpCommon).DefaultIfEmpty(0).Sum();
+        public int PointsLvpFfGiven => Players.Select(p => p.PointsLvpFfGiven).DefaultIfEmpty(0).Sum();
+
         public void UpdateStats(Statistics.Statistics statistic)
         {
             if (statistic.Statistic == null)
@@ -97,6 +102,10 @@ public class Match
                 var mvpSiDamage = half.MvpSiDamage;
                 var mvpCommon = half.MvpCommon;
                 var lvpFfGiven = half.LvpFfGiven;
+
+                var mvpsSiDamage = half.MvpsSiDamage.ToList();
+                var mvpsCommon = half.MvpsCommon.ToList();
+                var lvpsFfGiven = half.LvpsFfGiven.ToList();
 
                 foreach (var player in half.Players.Where(w => w.CommunityId == currentPlayer.CommunityId))
                 {
@@ -122,6 +131,18 @@ public class Match
 
                     if (lvpFfGiven != null && player.CommunityId == lvpFfGiven.CommunityId)
                         currentPlayer.LvpFfGiven++;
+
+                    var currentPlayerMvpSiDamage = mvpsSiDamage.FirstOrDefault(f => f.CommunityId == currentPlayer.CommunityId);
+                    if (currentPlayerMvpSiDamage != null)
+                        currentPlayer.PointsMvpSiDamage += mvpsSiDamage.Count - mvpsSiDamage.IndexOf(currentPlayerMvpSiDamage);
+
+                    var currentPlayerMvpCommon = mvpsCommon.FirstOrDefault(f => f.CommunityId == currentPlayer.CommunityId);
+                    if (currentPlayerMvpCommon != null)
+                        currentPlayer.PointsMvpCommon += mvpsCommon.Count - mvpsCommon.IndexOf(currentPlayerMvpCommon);
+
+                    var currentPlayerLvpFfGiven = lvpsFfGiven.FirstOrDefault(f => f.CommunityId == currentPlayer.CommunityId);
+                    if (currentPlayerLvpFfGiven != null)
+                        currentPlayer.PointsLvpFfGiven += lvpsFfGiven.Count - lvpsFfGiven.IndexOf(currentPlayerLvpFfGiven);
                 }
 
                 foreach (var infectedPlayer in half.InfectedPlayers.Where(w => w.CommunityId == currentPlayer.CommunityId))
@@ -198,6 +219,11 @@ public class Match
         public decimal MvpCommonPercentage => SafeDivision(MvpCommon, _team.MvpCommon);
         public int LvpFfGiven { get; set; }
         public decimal LvpFfGivenPercentage => SafeDivision(LvpFfGiven, _team.LvpFfGiven);
+
+        /* MVP and LVP Points */
+        public int PointsMvpSiDamage { get; set; }
+        public int PointsMvpCommon { get; set; }
+        public int PointsLvpFfGiven { get; set; }
 
         private static decimal SafeDivision(decimal dividend, decimal divisor)
         {
