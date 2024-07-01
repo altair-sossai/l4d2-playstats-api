@@ -2,13 +2,10 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <AzureFunctionsVersion>v4</AzureFunctionsVersion>
-        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
         <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
         <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.4.0" />
         <PackageReference Include="System.Linq.Async" Version="6.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.6" />
