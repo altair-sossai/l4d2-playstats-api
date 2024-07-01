@@ -12,11 +12,9 @@ using L4D2PlayStats.Core.Modules.Statistics.Results;
 using L4D2PlayStats.Core.Modules.Statistics.Services;
 using L4D2PlayStats.FunctionApp.Errors;
 using L4D2PlayStats.FunctionApp.Extensions;
-using L4D2PlayStats.FunctionApp.Shared.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
@@ -26,7 +24,7 @@ public class StatisticsFunction(
     IStatisticsService statisticsService,
     IStatisticsRepository statisticsRepository)
 {
-    [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
+    [Function(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
     public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}/{statisticId}")] HttpRequest httpRequest,
         string serverId, string statisticId)
     {
@@ -38,7 +36,7 @@ public class StatisticsFunction(
 
             var result = mapper.Map<StatisticsResult>(statistic);
 
-            return new JsonResult(result, JsonSettings.DefaultSettings);
+            return new JsonResult(result);
         }
         catch (Exception exception)
         {
@@ -46,7 +44,7 @@ public class StatisticsFunction(
         }
     }
 
-    [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsAsync))]
+    [Function(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsAsync))]
     public async Task<IActionResult> GetStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {
@@ -54,7 +52,7 @@ public class StatisticsFunction(
         {
             var statistics = (await statisticsService.GetStatistics(serverId)).Take(40).ToList();
 
-            return new JsonResult(statistics, JsonSettings.DefaultSettings);
+            return new JsonResult(statistics);
         }
         catch (Exception exception)
         {
@@ -62,7 +60,7 @@ public class StatisticsFunction(
         }
     }
 
-    [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsBetweenAsync))]
+    [Function(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsBetweenAsync))]
     public async Task<IActionResult> GetStatisticsBetweenAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}/between/{start}/and/{end}")] HttpRequest httpRequest,
         string serverId, string start, string end)
     {
@@ -77,7 +75,7 @@ public class StatisticsFunction(
                 .Select(mapper.Map<StatisticsResult>)
                 .ToList();
 
-            return new JsonResult(result, JsonSettings.DefaultSettings);
+            return new JsonResult(result);
         }
         catch (Exception exception)
         {
@@ -85,7 +83,7 @@ public class StatisticsFunction(
         }
     }
 
-    [FunctionName(nameof(StatisticsFunction) + "_" + nameof(AddOrUpdate))]
+    [Function(nameof(StatisticsFunction) + "_" + nameof(AddOrUpdate))]
     public async Task<IActionResult> AddOrUpdate([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "statistics")] HttpRequest httpRequest)
     {
         try
@@ -98,7 +96,7 @@ public class StatisticsFunction(
                 var statistic = await statisticsService.AddOrUpdateAsync(server.Id, command);
                 var result = new UploadResult(statistic);
 
-                return new JsonResult(result, JsonSettings.DefaultSettings);
+                return new JsonResult(result);
             }
             catch (ValidationException)
             {
@@ -109,7 +107,7 @@ public class StatisticsFunction(
                 if (date != null && !oldFile)
                     throw;
 
-                return new JsonResult(UploadResult.DeleteFile(command.FileName), JsonSettings.DefaultSettings);
+                return new JsonResult(UploadResult.DeleteFile(command.FileName));
             }
         }
         catch (Exception exception)

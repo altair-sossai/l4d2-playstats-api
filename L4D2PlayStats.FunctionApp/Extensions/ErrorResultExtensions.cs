@@ -1,5 +1,4 @@
 using System.Net;
-using System.Web.Http;
 using L4D2PlayStats.FunctionApp.Errors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +12,7 @@ public static class ErrorResultExtensions
         {
             HttpStatusCode.BadRequest => new BadRequestObjectResult(errorResult),
             HttpStatusCode.Unauthorized => new UnauthorizedObjectResult(errorResult),
-            _ => new InternalServerErrorResult()
+            _ => new BadRequestResult()
         };
     }
 }

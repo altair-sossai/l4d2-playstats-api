@@ -5,11 +5,9 @@ using L4D2PlayStats.Core.Modules.Server.Results;
 using L4D2PlayStats.Core.Modules.Server.Services;
 using L4D2PlayStats.FunctionApp.Errors;
 using L4D2PlayStats.FunctionApp.Extensions;
-using L4D2PlayStats.FunctionApp.Shared.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
@@ -17,7 +15,7 @@ public class ServerFunction(
     IMapper mapper,
     IServerService serverService)
 {
-    [FunctionName(nameof(ServerFunction) + "_" + nameof(Servers))]
+    [Function(nameof(ServerFunction) + "_" + nameof(Servers))]
     public IActionResult Servers([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "servers")] HttpRequest httpRequest)
     {
         try
@@ -25,7 +23,7 @@ public class ServerFunction(
             var servers = serverService.GetServers();
             var result = servers.Select(mapper.Map<ServerResult>).ToList();
 
-            return new JsonResult(result, JsonSettings.DefaultSettings);
+            return new JsonResult(result);
         }
         catch (Exception exception)
         {
@@ -33,7 +31,7 @@ public class ServerFunction(
         }
     }
 
-    [FunctionName(nameof(ServerFunction) + "_" + nameof(Server))]
+    [Function(nameof(ServerFunction) + "_" + nameof(Server))]
     public IActionResult Server([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "servers/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {
@@ -45,7 +43,7 @@ public class ServerFunction(
 
             var result = mapper.Map<ServerResult>(server);
 
-            return new JsonResult(result, JsonSettings.DefaultSettings);
+            return new JsonResult(result);
         }
         catch (Exception exception)
         {
