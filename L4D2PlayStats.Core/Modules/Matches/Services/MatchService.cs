@@ -6,27 +6,16 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.Core.Modules.Matches.Services;
 
-public class MatchService : IMatchService
+public class MatchService(
+    IMemoryCache memoryCache,
+    IServerService serverService,
+    IStatisticsRepository statisticsRepository,
+    ICampaignRepository campaignRepository)
+    : IMatchService
 {
-    private readonly ICampaignRepository _campaignRepository;
-    private readonly IMemoryCache _memoryCache;
-    private readonly IServerService _serverService;
-    private readonly IStatisticsRepository _statisticsRepository;
-
-    public MatchService(IMemoryCache memoryCache,
-        IServerService serverService,
-        IStatisticsRepository statisticsRepository,
-        ICampaignRepository campaignRepository)
-    {
-        _memoryCache = memoryCache;
-        _serverService = serverService;
-        _statisticsRepository = statisticsRepository;
-        _campaignRepository = campaignRepository;
-    }
-
     public async Task<Match?> LastMatchAsync(string serverId)
     {
-        var match = await _memoryCache.GetOrCreateAsync($"ranking_last_match_{serverId}".ToLower(), async factory =>
+        var match = await memoryCache.GetOrCreateAsync($"ranking_last_match_{serverId}".ToLower(), async factory =>
         {
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
@@ -41,16 +30,16 @@ public class MatchService : IMatchService
 
     public async Task<List<Match>> GetMatchesAsync(string serverId)
     {
-        var matches = await _memoryCache.GetOrCreateAsync($"matches_{serverId}".ToLower(), async factory =>
+        var matches = await memoryCache.GetOrCreateAsync($"matches_{serverId}".ToLower(), async factory =>
         {
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
-            var server = _serverService.GetServer(serverId);
+            var server = serverService.GetServer(serverId);
             if (server == null)
-                return new List<Match>();
+                return [];
 
-            var campaigns = _campaignRepository.GetCampaigns();
-            var matches = await _statisticsRepository
+            var campaigns = campaignRepository.GetCampaigns();
+            var matches = await statisticsRepository
                 .GetStatisticsAsync(serverId)
                 .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
                 .ToMatchesAsync(campaigns);
@@ -58,17 +47,17 @@ public class MatchService : IMatchService
             return matches;
         });
 
-        return matches;
+        return matches!;
     }
 
     public async Task<List<Match>> GetMatchesBetweenAsync(string serverId, string start, string end)
     {
-        var server = _serverService.GetServer(serverId);
+        var server = serverService.GetServer(serverId);
         if (server == null)
-            return new List<Match>();
+            return [];
 
-        var campaigns = _campaignRepository.GetCampaigns();
-        var matches = await _statisticsRepository
+        var campaigns = campaignRepository.GetCampaigns();
+        var matches = await statisticsRepository
             .GetStatisticsBetweenAsync(serverId, start, end)
             .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
             .ToMatchesAsync(campaigns);

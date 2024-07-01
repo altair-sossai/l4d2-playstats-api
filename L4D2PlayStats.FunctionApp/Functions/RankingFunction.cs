@@ -14,25 +14,17 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class RankingFunction
+public class RankingFunction(
+    IRankingService rankingService,
+    IMatchService matchService)
 {
-    private readonly IMatchService _matchService;
-    private readonly IRankingService _rankingService;
-
-    public RankingFunction(IRankingService rankingService,
-        IMatchService matchService)
-    {
-        _rankingService = rankingService;
-        _matchService = matchService;
-    }
-
     [FunctionName(nameof(RankingFunction) + "_" + nameof(RankingAsync))]
     public async Task<IActionResult> RankingAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {
         try
         {
-            var players = await _rankingService.RankingAsync(serverId);
+            var players = await rankingService.RankingAsync(serverId);
 
             return new JsonResult(players, JsonSettings.DefaultSettings);
         }
@@ -48,7 +40,7 @@ public class RankingFunction
     {
         try
         {
-            var match = await _matchService.LastMatchAsync(serverId);
+            var match = await matchService.LastMatchAsync(serverId);
             if (match == null)
                 return new NotFoundResult();
 
@@ -69,7 +61,7 @@ public class RankingFunction
     {
         try
         {
-            var players = await _rankingService.RankingAsync(serverId);
+            var players = await rankingService.RankingAsync(serverId);
             var top3 = players.Take(3).ToList();
             var me = players.FirstOrDefault(f => f.CommunityId == communityId);
             var result = new { top3, me };

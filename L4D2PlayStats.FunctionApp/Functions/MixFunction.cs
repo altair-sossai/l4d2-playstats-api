@@ -13,26 +13,18 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class MixFunction
+public class MixFunction(
+    IServerService serverService,
+    IMixService mixService)
 {
-    private readonly IMixService _mixService;
-    private readonly IServerService _serverService;
-
-    public MixFunction(IServerService serverService,
-        IMixService mixService)
-    {
-        _serverService = serverService;
-        _mixService = mixService;
-    }
-
     [FunctionName(nameof(MixFunction) + "_" + nameof(MixAsync))]
     public async Task<IActionResult> MixAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "mix")] HttpRequest httpRequest)
     {
         try
         {
-            var server = _serverService.EnsureAuthentication(httpRequest.AuthorizationToken());
+            var server = serverService.EnsureAuthentication(httpRequest.AuthorizationToken());
             var command = await httpRequest.DeserializeBodyAsync<MixCommand>();
-            var result = await _mixService.MixAsync(server.Id, command);
+            var result = await mixService.MixAsync(server.Id, command);
 
             return new JsonResult(result, JsonSettings.DefaultSettings);
         }

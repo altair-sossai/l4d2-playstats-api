@@ -29,7 +29,7 @@ public class ErrorResult
 
     public HttpStatusCode StatusCode { get; }
     public string Message { get; }
-    public List<Error> Errors { get; } = new();
+    public List<Error> Errors { get; } = [];
 
     public static ErrorResult Build(Exception exception)
     {

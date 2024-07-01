@@ -20,35 +20,23 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class StatisticsFunction
+public class StatisticsFunction(
+    IMapper mapper,
+    IServerService serverService,
+    IStatisticsService statisticsService,
+    IStatisticsRepository statisticsRepository)
 {
-    private readonly IMapper _mapper;
-    private readonly IServerService _serverService;
-    private readonly IStatisticsRepository _statisticsRepository;
-    private readonly IStatisticsService _statisticsService;
-
-    public StatisticsFunction(IMapper mapper,
-        IServerService serverService,
-        IStatisticsService statisticsService,
-        IStatisticsRepository statisticsRepository)
-    {
-        _mapper = mapper;
-        _serverService = serverService;
-        _statisticsService = statisticsService;
-        _statisticsRepository = statisticsRepository;
-    }
-
     [FunctionName(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
     public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}/{statisticId}")] HttpRequest httpRequest,
         string serverId, string statisticId)
     {
         try
         {
-            var statistic = await _statisticsRepository.GetStatisticAsync(serverId, statisticId);
+            var statistic = await statisticsRepository.GetStatisticAsync(serverId, statisticId);
             if (statistic == null)
                 return new NotFoundResult();
 
-            var result = _mapper.Map<StatisticsResult>(statistic);
+            var result = mapper.Map<StatisticsResult>(statistic);
 
             return new JsonResult(result, JsonSettings.DefaultSettings);
         }
@@ -64,7 +52,7 @@ public class StatisticsFunction
     {
         try
         {
-            var statistics = (await _statisticsService.GetStatistics(serverId)).Take(40).ToList();
+            var statistics = (await statisticsService.GetStatistics(serverId)).Take(40).ToList();
 
             return new JsonResult(statistics, JsonSettings.DefaultSettings);
         }
@@ -80,13 +68,13 @@ public class StatisticsFunction
     {
         try
         {
-            var statistics = await _statisticsRepository
+            var statistics = await statisticsRepository
                 .GetStatisticsBetweenAsync(serverId, start, end)
                 .ToListAsync(CancellationToken.None);
 
             var result = statistics
                 .OrderByDescending(o => o.RowKey)
-                .Select(_mapper.Map<StatisticsResult>)
+                .Select(mapper.Map<StatisticsResult>)
                 .ToList();
 
             return new JsonResult(result, JsonSettings.DefaultSettings);
@@ -102,12 +90,12 @@ public class StatisticsFunction
     {
         try
         {
-            var server = _serverService.EnsureAuthentication(httpRequest.AuthorizationToken());
+            var server = serverService.EnsureAuthentication(httpRequest.AuthorizationToken());
             var command = await httpRequest.DeserializeBodyAsync<StatisticsCommand>();
 
             try
             {
-                var statistic = await _statisticsService.AddOrUpdateAsync(server.Id, command);
+                var statistic = await statisticsService.AddOrUpdateAsync(server.Id, command);
                 var result = new UploadResult(statistic);
 
                 return new JsonResult(result, JsonSettings.DefaultSettings);

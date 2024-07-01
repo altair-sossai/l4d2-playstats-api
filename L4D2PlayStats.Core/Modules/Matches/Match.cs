@@ -3,29 +3,20 @@ using L4D2PlayStats.Core.Modules.Campaigns;
 
 namespace L4D2PlayStats.Core.Modules.Matches;
 
-public class Match
+public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName> playersA, Scoring.Team teamB, IEnumerable<PlayerName> playersB)
 {
-    public Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName> playersA, Scoring.Team teamB, IEnumerable<PlayerName> playersB)
-    {
-        Campaign = campaign.Name;
-
-        Teams = new List<Team>
-        {
-            new(teamA, playersA), new(teamB, playersB)
-        };
-    }
-
     public int TeamSize { get; internal init; }
     public DateTime MatchStart { get; internal set; }
     public DateTime? MatchEnd { get; internal init; }
     public TimeSpan? MatchElapsed => MatchEnd - MatchStart;
-    public string? Campaign { get; }
+    public string? Campaign { get; } = campaign.Name;
 
-    public List<Team> Teams { get; }
-    public List<string> Statistics { get; } = new();
+    public List<Team> Teams { get; } = [new Team(teamA, playersA), new Team(teamB, playersB)];
+
+    public List<string> Statistics { get; } = [];
 
     [IgnoreDataMember]
-    public List<Statistics.Statistics> Maps { get; } = new();
+    public List<Statistics.Statistics> Maps { get; } = [];
 
     public bool Competitive => Maps.Count >= 4 && TeamSize == 4;
 
@@ -168,69 +159,60 @@ public class Match
         }
     }
 
-    public class Player
+    public class Player(PlayerName playerName, Team team)
     {
-        private readonly PlayerName _playerName;
-        private readonly Team _team;
-
-        public Player(PlayerName playerName, Team team)
-        {
-            _playerName = playerName;
-            _team = team;
-        }
-
-        public string? SteamId => _playerName.SteamId;
-        public string? CommunityId => _playerName.CommunityId;
-        public string? Steam3 => _playerName.Steam3;
-        public string? ProfileUrl => _playerName.ProfileUrl;
-        public int Index => _playerName.Index;
-        public string? Name => _playerName.Name;
+        public string? SteamId => playerName.SteamId;
+        public string? CommunityId => playerName.CommunityId;
+        public string? Steam3 => playerName.Steam3;
+        public string? ProfileUrl => playerName.ProfileUrl;
+        public int Index => playerName.Index;
+        public string? Name => playerName.Name;
 
         /* Survivor */
         public int Died { get; set; }
-        public decimal DiedPercentage => SafeDivision(Died, _team.Died);
+        public decimal DiedPercentage => SafeDivision(Died, team.Died);
         public int Incaps { get; set; }
-        public decimal IncapsPercentage => SafeDivision(Incaps, _team.Incaps);
+        public decimal IncapsPercentage => SafeDivision(Incaps, team.Incaps);
         public int DmgTaken { get; set; }
-        public decimal DmgTakenPercentage => SafeDivision(DmgTaken, _team.DmgTaken);
+        public decimal DmgTakenPercentage => SafeDivision(DmgTaken, team.DmgTaken);
         public int Common { get; set; }
-        public decimal CommonPercentage => SafeDivision(Common, _team.Common);
+        public decimal CommonPercentage => SafeDivision(Common, team.Common);
         public int SiKilled { get; set; }
-        public decimal SiKilledPercentage => SafeDivision(SiKilled, _team.SiKilled);
+        public decimal SiKilledPercentage => SafeDivision(SiKilled, team.SiKilled);
         public int SiDamage { get; set; }
-        public decimal SiDamagePercentage => SafeDivision(SiDamage, _team.SiDamage);
+        public decimal SiDamagePercentage => SafeDivision(SiDamage, team.SiDamage);
         public int TankDamage { get; set; }
-        public decimal TankDamagePercentage => SafeDivision(TankDamage, _team.TankDamage);
+        public decimal TankDamagePercentage => SafeDivision(TankDamage, team.TankDamage);
         public int RockEats { get; set; }
-        public decimal RockEatsPercentage => SafeDivision(RockEats, _team.RockEats);
+        public decimal RockEatsPercentage => SafeDivision(RockEats, team.RockEats);
         public int WitchDamage { get; set; }
-        public decimal WitchDamagePercentage => SafeDivision(WitchDamage, _team.WitchDamage);
+        public decimal WitchDamagePercentage => SafeDivision(WitchDamage, team.WitchDamage);
         public int Skeets { get; set; }
-        public decimal SkeetsPercentage => SafeDivision(Skeets, _team.Skeets);
+        public decimal SkeetsPercentage => SafeDivision(Skeets, team.Skeets);
         public int Levels { get; set; }
-        public decimal LevelsPercentage => SafeDivision(Levels, _team.Levels);
+        public decimal LevelsPercentage => SafeDivision(Levels, team.Levels);
         public int Crowns { get; set; }
-        public decimal CrownsPercentage => SafeDivision(Crowns, _team.Crowns);
+        public decimal CrownsPercentage => SafeDivision(Crowns, team.Crowns);
         public int FfGiven { get; set; }
-        public decimal FfGivenPercentage => SafeDivision(FfGiven, _team.FfGiven);
+        public decimal FfGivenPercentage => SafeDivision(FfGiven, team.FfGiven);
 
         /* Infected */
         public int DmgTotal { get; set; }
-        public decimal DmgTotalPercentage => SafeDivision(DmgTotal, _team.DmgTotal);
+        public decimal DmgTotalPercentage => SafeDivision(DmgTotal, team.DmgTotal);
         public int DmgTank { get; set; }
-        public decimal DmgTankPercentage => SafeDivision(DmgTank, _team.DmgTank);
+        public decimal DmgTankPercentage => SafeDivision(DmgTank, team.DmgTank);
         public int DmgSpit { get; set; }
-        public decimal DmgSpitPercentage => SafeDivision(DmgSpit, _team.DmgSpit);
+        public decimal DmgSpitPercentage => SafeDivision(DmgSpit, team.DmgSpit);
         public int HunterDpDmg { get; set; }
-        public decimal HunterDpDmgPercentage => SafeDivision(HunterDpDmg, _team.HunterDpDmg);
+        public decimal HunterDpDmgPercentage => SafeDivision(HunterDpDmg, team.HunterDpDmg);
 
         /* MVP and LVP */
         public int MvpSiDamage { get; set; }
-        public decimal MvpSiDamagePercentage => SafeDivision(MvpSiDamage, _team.MvpSiDamage);
+        public decimal MvpSiDamagePercentage => SafeDivision(MvpSiDamage, team.MvpSiDamage);
         public int MvpCommon { get; set; }
-        public decimal MvpCommonPercentage => SafeDivision(MvpCommon, _team.MvpCommon);
+        public decimal MvpCommonPercentage => SafeDivision(MvpCommon, team.MvpCommon);
         public int LvpFfGiven { get; set; }
-        public decimal LvpFfGivenPercentage => SafeDivision(LvpFfGiven, _team.LvpFfGiven);
+        public decimal LvpFfGivenPercentage => SafeDivision(LvpFfGiven, team.LvpFfGiven);
 
         /* MVP and LVP Points */
         public int PointsMvpSiDamage { get; set; }

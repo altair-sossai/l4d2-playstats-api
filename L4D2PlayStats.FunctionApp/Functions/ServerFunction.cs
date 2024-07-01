@@ -13,25 +13,17 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class ServerFunction
+public class ServerFunction(
+    IMapper mapper,
+    IServerService serverService)
 {
-    private readonly IMapper _mapper;
-    private readonly IServerService _serverService;
-
-    public ServerFunction(IMapper mapper,
-        IServerService serverService)
-    {
-        _mapper = mapper;
-        _serverService = serverService;
-    }
-
     [FunctionName(nameof(ServerFunction) + "_" + nameof(Servers))]
     public IActionResult Servers([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "servers")] HttpRequest httpRequest)
     {
         try
         {
-            var servers = _serverService.GetServers();
-            var result = servers.Select(_mapper.Map<ServerResult>).ToList();
+            var servers = serverService.GetServers();
+            var result = servers.Select(mapper.Map<ServerResult>).ToList();
 
             return new JsonResult(result, JsonSettings.DefaultSettings);
         }
@@ -47,11 +39,11 @@ public class ServerFunction
     {
         try
         {
-            var server = _serverService.GetServer(serverId);
+            var server = serverService.GetServer(serverId);
             if (server == null)
                 return new NotFoundResult();
 
-            var result = _mapper.Map<ServerResult>(server);
+            var result = mapper.Map<ServerResult>(server);
 
             return new JsonResult(result, JsonSettings.DefaultSettings);
         }

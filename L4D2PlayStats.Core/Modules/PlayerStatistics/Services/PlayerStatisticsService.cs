@@ -4,28 +4,21 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.Core.Modules.PlayerStatistics.Services;
 
-public class PlayerStatisticsService : IPlayerStatisticsService
+public class PlayerStatisticsService(
+    IMemoryCache memoryCache,
+    IMatchService matchService)
+    : IPlayerStatisticsService
 {
-    private readonly IMatchService _matchService;
-    private readonly IMemoryCache _memoryCache;
-
-    public PlayerStatisticsService(IMemoryCache memoryCache,
-        IMatchService matchService)
+    public Task<List<Player>> PlayerStatisticsAsync(string serverId)
     {
-        _memoryCache = memoryCache;
-        _matchService = matchService;
-    }
-
-    public async Task<List<Player>> PlayerStatisticsAsync(string serverId)
-    {
-        return await _memoryCache.GetOrCreateAsync($"player_statistics_{serverId}".ToLower(), async factory =>
+        return memoryCache.GetOrCreateAsync($"player_statistics_{serverId}".ToLower(), async factory =>
         {
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
-            var matches = await _matchService.GetMatchesAsync(serverId);
+            var matches = await matchService.GetMatchesAsync(serverId);
             var players = matches.PlayerStatistics().ToList();
 
             return players;
-        });
+        })!;
     }
 }

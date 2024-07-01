@@ -5,27 +5,21 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.Core.Modules.Server.Services;
 
-public class ServerService : IServerService
+public class ServerService(
+    IAzureTableStorageContext context,
+    IMemoryCache memoryCache)
+    : IServerService
 {
-    private readonly IAzureTableStorageContext _context;
-    private readonly IMemoryCache _memoryCache;
     private TableClient? _serverTable;
 
-    public ServerService(IAzureTableStorageContext context,
-        IMemoryCache memoryCache)
-    {
-        _context = context;
-        _memoryCache = memoryCache;
-    }
+    private TableClient ServerTable => _serverTable ??= context.GetTableClientAsync("Servers").Result;
 
-    private TableClient ServerTable => _serverTable ??= _context.GetTableClientAsync("Servers").Result;
-
-    private IEnumerable<Server> Servers => _memoryCache.GetOrCreate("servers", factory =>
+    private IEnumerable<Server> Servers => memoryCache.GetOrCreate("servers", factory =>
     {
         factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
 
         return ServerTable.Query<Server>().ToList();
-    });
+    })!;
 
     public Server EnsureAuthentication(string token)
     {

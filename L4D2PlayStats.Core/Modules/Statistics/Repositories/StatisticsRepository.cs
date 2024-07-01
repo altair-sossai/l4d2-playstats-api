@@ -3,13 +3,9 @@ using L4D2PlayStats.Core.Contexts.AzureTableStorage.Repositories;
 
 namespace L4D2PlayStats.Core.Modules.Statistics.Repositories;
 
-public class StatisticsRepository : BaseTableStorageRepository<Statistics>, IStatisticsRepository
+public class StatisticsRepository(IAzureTableStorageContext tableContext)
+    : BaseTableStorageRepository<Statistics>("Statistics", tableContext), IStatisticsRepository
 {
-    public StatisticsRepository(IAzureTableStorageContext tableContext)
-        : base("Statistics", tableContext)
-    {
-    }
-
     public ValueTask<Statistics?> GetStatisticAsync(string serverId, string statisticId)
     {
         return FindAsync(serverId, statisticId);

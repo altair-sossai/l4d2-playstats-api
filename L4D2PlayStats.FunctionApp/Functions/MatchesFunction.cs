@@ -12,22 +12,15 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class MatchesFunction
+public class MatchesFunction(IMatchService matchService)
 {
-    private readonly IMatchService _matchService;
-
-    public MatchesFunction(IMatchService matchService)
-    {
-        _matchService = matchService;
-    }
-
     [FunctionName(nameof(MatchesFunction) + "_" + nameof(MatchesAsync))]
     public async Task<IActionResult> MatchesAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {
         try
         {
-            var matches = (await _matchService.GetMatchesAsync(serverId)).Take(10).ToList();
+            var matches = (await matchService.GetMatchesAsync(serverId)).Take(10).ToList();
 
             return new JsonResult(matches, JsonSettings.DefaultSettings);
         }
@@ -43,7 +36,7 @@ public class MatchesFunction
     {
         try
         {
-            var matches = await _matchService.GetMatchesBetweenAsync(serverId, start, end);
+            var matches = await matchService.GetMatchesBetweenAsync(serverId, start, end);
 
             return new JsonResult(matches, JsonSettings.DefaultSettings);
         }

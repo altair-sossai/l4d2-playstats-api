@@ -5,23 +5,16 @@ using L4D2PlayStats.Core.Modules.Ranking.Services;
 
 namespace L4D2PlayStats.Core.Modules.Mix.Services;
 
-public class MixService : IMixService
+public class MixService(
+    IRankingService rankingService,
+    IValidator<MixCommand> validator)
+    : IMixService
 {
-    private readonly IRankingService _rankingService;
-    private readonly IValidator<MixCommand> _validator;
-
-    public MixService(IRankingService rankingService,
-        IValidator<MixCommand> validator)
-    {
-        _rankingService = rankingService;
-        _validator = validator;
-    }
-
     public async Task<MixResult> MixAsync(string serverId, MixCommand command)
     {
-        await _validator.ValidateAndThrowAsync(command);
+        await validator.ValidateAndThrowAsync(command);
 
-        var ranking = await _rankingService.RankingAsync(serverId);
+        var ranking = await rankingService.RankingAsync(serverId);
         var players = ranking.ToDictionary(k => k.CommunityId.ToString(), v => v);
         var availables = command.All
             .Where(communityId => players.ContainsKey(communityId))

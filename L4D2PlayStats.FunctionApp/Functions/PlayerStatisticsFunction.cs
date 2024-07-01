@@ -11,22 +11,15 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class PlayerStatisticsFunction
+public class PlayerStatisticsFunction(IPlayerStatisticsService playerstatisticsService)
 {
-    private readonly IPlayerStatisticsService _playerstatisticsService;
-
-    public PlayerStatisticsFunction(IPlayerStatisticsService playerstatisticsService)
-    {
-        _playerstatisticsService = playerstatisticsService;
-    }
-
     [FunctionName(nameof(PlayerStatisticsFunction) + "_" + nameof(PlayerStatisticsAsync))]
     public async Task<IActionResult> PlayerStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "player-statistics/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {
         try
         {
-            var players = await _playerstatisticsService.PlayerStatisticsAsync(serverId);
+            var players = await playerstatisticsService.PlayerStatisticsAsync(serverId);
 
             return new JsonResult(players, JsonSettings.DefaultSettings);
         }
