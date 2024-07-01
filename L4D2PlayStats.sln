@@ -4,8 +4,6 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "L4D2PlayStats.Core", "L4D2PlayStats.Core\L4D2PlayStats.Core.csproj", "{27D79412-543B-4321-B878-25432C9D54AF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "L4D2PlayStats.DependencyInjection", "L4D2PlayStats.DependencyInjection\L4D2PlayStats.DependencyInjection.csproj", "{384B3B3B-D219-47DC-89A0-477BDE20E747}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "L4D2PlayStats.FunctionApp", "L4D2PlayStats.FunctionApp\L4D2PlayStats.FunctionApp.csproj", "{59145010-5CE4-4BA9-873F-1C40AE00ECDE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".devops", ".devops", "{F20D00F8-9D23-423D-9FAE-C26EA1AE0CAC}"
@@ -27,10 +25,6 @@ Global
 		{27D79412-543B-4321-B878-25432C9D54AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27D79412-543B-4321-B878-25432C9D54AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27D79412-543B-4321-B878-25432C9D54AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{384B3B3B-D219-47DC-89A0-477BDE20E747}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{384B3B3B-D219-47DC-89A0-477BDE20E747}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{384B3B3B-D219-47DC-89A0-477BDE20E747}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{384B3B3B-D219-47DC-89A0-477BDE20E747}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59145010-5CE4-4BA9-873F-1C40AE00ECDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59145010-5CE4-4BA9-873F-1C40AE00ECDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59145010-5CE4-4BA9-873F-1C40AE00ECDE}.Release|Any CPU.ActiveCfg = Release|Any CPU

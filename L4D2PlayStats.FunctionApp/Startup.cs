@@ -1,5 +1,5 @@
-using L4D2PlayStats.DependencyInjection;
 using L4D2PlayStats.FunctionApp;
+using L4D2PlayStats.FunctionApp.DependencyInjection;
 using L4D2PlayStats.FunctionApp.Shared.Json;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Newtonsoft.Json;

@@ -1,8 +1,9 @@
+using System.Linq;
 using System.Reflection;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace L4D2PlayStats.DependencyInjection;
+namespace L4D2PlayStats.FunctionApp.DependencyInjection;
 
 public static class AppInjection
 {
