@@ -1,51 +1,53 @@
-﻿using L4D2PlayStats.Core.Modules.Ranking.Structures;
+﻿using L4D2PlayStats.Core.Modules.Matches;
 
 namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
 
 public static class PlayerExtensions
 {
-    public static Player? AddPoints(this Dictionary<string, Player> players, PlayerPoints points)
+    public static Player? TryAdd(this Dictionary<string, Player> players, PlayerName playerName)
     {
-        var communityId = points.CommunityId!;
+        var communityId = playerName.CommunityId;
 
         if (string.IsNullOrEmpty(communityId))
             return null;
 
-        players.TryAdd(communityId, new Player
+        if (players.TryGetValue(communityId, out var player))
+            return player;
+
+        players.Add(communityId, new Player
         {
             CommunityId = long.Parse(communityId),
-            Name = points.Name
+            Name = playerName.Name
         });
 
-        var player = players[communityId];
-
-        player.Name = points.Name;
-        player.Points += points.Points;
-
-        if (points.Winner)
-            player.Wins++;
-
-        if (points.Loser)
-            player.Loss++;
-
-        if (points.Draw)
-            player.Draw++;
-
-        if (points.Rage)
-            player.Rage++;
-
-        return player;
+        return players[communityId];
     }
 
+    public static Player? TryAdd(this Dictionary<string, Player> players, Match.Player matchPlayer)
+    {
+        var communityId = matchPlayer.CommunityId;
+
+        if (string.IsNullOrEmpty(communityId))
+            return null;
+
+        if (players.TryGetValue(communityId, out var player))
+            return player;
+
+        players.Add(communityId, new Player
+        {
+            CommunityId = long.Parse(communityId),
+            Name = matchPlayer.Name
+        });
+
+        return players[communityId];
+    }
 
     public static IEnumerable<Player> RankPlayers(this IEnumerable<Player> players)
     {
         return players
-            .OrderByDescending(o => o.Points)
-            .ThenByDescending(o => o.Wins)
+            .OrderByDescending(o => o.Wins)
+            .ThenByDescending(o => o.Mvps)
             .ThenBy(o => o.Loss)
-            .ThenBy(o => o.Draw)
-            .ThenBy(o => o.Rage)
             .UpdatePosition();
     }
 

@@ -11,9 +11,7 @@ using Microsoft.Azure.Functions.Worker;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class ServerFunction(
-    IMapper mapper,
-    IServerService serverService)
+public class ServerFunction(IMapper mapper, IServerService serverService)
 {
     [Function(nameof(ServerFunction) + "_" + nameof(Servers))]
     public IActionResult Servers([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "servers")] HttpRequest httpRequest)

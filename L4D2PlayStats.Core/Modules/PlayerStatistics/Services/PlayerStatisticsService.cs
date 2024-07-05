@@ -4,10 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.Core.Modules.PlayerStatistics.Services;
 
-public class PlayerStatisticsService(
-    IMemoryCache memoryCache,
-    IMatchService matchService)
-    : IPlayerStatisticsService
+public class PlayerStatisticsService(IMemoryCache memoryCache, IMatchService matchService) : IPlayerStatisticsService
 {
     public Task<List<Player>> PlayerStatisticsAsync(string serverId)
     {

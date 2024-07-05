@@ -5,7 +5,6 @@ namespace L4D2PlayStats.Core.Modules.Ranking;
 public class Player
 {
     private readonly long _communityId;
-    private int _points;
     private SteamIdentifiers _steamIdentifiers;
 
     public long CommunityId
@@ -23,16 +22,7 @@ public class Player
     public string? ProfileUrl => _steamIdentifiers.ProfileUrl;
     public int Position { get; set; }
     public string? Name { get; set; }
-
-    public int Points
-    {
-        get => _points;
-        set => _points = Math.Max(0, value);
-    }
-
-    public int LastMatchPoints { get; set; }
-    public int Draw { get; set; }
     public int Wins { get; set; }
+    public int Mvps { get; set; }
     public int Loss { get; set; }
-    public int Rage { get; set; }
 }

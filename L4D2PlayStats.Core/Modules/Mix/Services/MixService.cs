@@ -5,10 +5,7 @@ using L4D2PlayStats.Core.Modules.Ranking.Services;
 
 namespace L4D2PlayStats.Core.Modules.Mix.Services;
 
-public class MixService(
-    IRankingService rankingService,
-    IValidator<MixCommand> validator)
-    : IMixService
+public class MixService(IRankingService rankingService, IValidator<MixCommand> validator) : IMixService
 {
     public async Task<MixResult> MixAsync(string serverId, MixCommand command)
     {
@@ -17,7 +14,7 @@ public class MixService(
         var ranking = await rankingService.RankingAsync(serverId);
         var players = ranking.ToDictionary(k => k.CommunityId.ToString(), v => v);
         var availables = command.All
-            .Where(communityId => players.ContainsKey(communityId))
+            .Where(players.ContainsKey)
             .OrderBy(communityId => players[communityId].Position)
             .ToList();
 

@@ -15,14 +15,14 @@ public class StatisticsRepository(IAzureTableStorageContext tableContext)
     {
         var after = DateTime.UtcNow.AddDays(-90);
         var rowKey = $"{long.MaxValue - after.Ticks}";
-        var filter = $@"PartitionKey eq '{serverId}' and RowKey le '{rowKey}'";
+        var filter = $"PartitionKey eq '{serverId}' and RowKey le '{rowKey}'";
 
         return TableClient.QueryAsync<Statistics>(filter);
     }
 
     public IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string serverId, string start, string end)
     {
-        var filter = $@"PartitionKey eq '{serverId}' and RowKey ge '{start}' and RowKey le '{end}'";
+        var filter = $"PartitionKey eq '{serverId}' and RowKey ge '{start}' and RowKey le '{end}'";
 
         return TableClient.QueryAsync<Statistics>(filter);
     }

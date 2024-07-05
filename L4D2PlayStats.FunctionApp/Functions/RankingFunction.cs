@@ -12,9 +12,7 @@ using Microsoft.Azure.Functions.Worker;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class RankingFunction(
-    IRankingService rankingService,
-    IMatchService matchService)
+public class RankingFunction(IRankingService rankingService, IMatchService matchService)
 {
     [Function(nameof(RankingFunction) + "_" + nameof(RankingAsync))]
     public async Task<IActionResult> RankingAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}")] HttpRequest httpRequest,

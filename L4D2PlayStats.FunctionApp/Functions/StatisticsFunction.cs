@@ -18,11 +18,7 @@ using Microsoft.Azure.Functions.Worker;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class StatisticsFunction(
-    IMapper mapper,
-    IServerService serverService,
-    IStatisticsService statisticsService,
-    IStatisticsRepository statisticsRepository)
+public class StatisticsFunction(IMapper mapper, IServerService serverService, IStatisticsService statisticsService, IStatisticsRepository statisticsRepository)
 {
     [Function(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
     public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}/{statisticId}")] HttpRequest httpRequest,

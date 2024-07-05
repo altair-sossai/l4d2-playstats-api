@@ -1,5 +1,4 @@
 ﻿using L4D2PlayStats.Core.Modules.Matches;
-using L4D2PlayStats.Core.Modules.Ranking.Structures;
 
 namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
 
@@ -17,71 +16,37 @@ public static class MatchExtensions
         var players = new Dictionary<string, Player>();
 
         foreach (var match in matches.Reverse())
-        foreach (var points in match.Points())
         {
-            var player = players.AddPoints(points);
+            foreach (var playerName in match.Winners())
+            {
+                var player = players.TryAdd(playerName);
 
-            if (player == null)
-                continue;
+                if (player != null)
+                    player.Wins++;
+            }
 
-            player.LastMatchPoints = points.Points;
+            foreach (var team in match.Teams)
+            foreach (var matchPlayer in team.Players)
+            {
+                var player = players.TryAdd(matchPlayer);
+
+                if (player != null)
+                    player.Mvps += matchPlayer.MvpSiDamage;
+            }
+
+            foreach (var playerName in match.Losers())
+            {
+                var player = players.TryAdd(playerName);
+
+                if (player != null)
+                    player.Loss++;
+            }
         }
 
         return players.Values.RankPlayers();
     }
 
-    private static IEnumerable<PlayerPoints> Points(this Match match)
-    {
-        var points = new Dictionary<string, PlayerPoints>();
-
-        foreach (var point in match.RageQuit())
-            points.AddOrUpdate(point);
-
-        foreach (var point in match.Tied())
-            points.AddOrUpdate(point);
-
-        foreach (var point in match.Winners())
-            points.AddOrUpdate(point);
-
-        foreach (var point in match.Losers())
-            points.AddOrUpdate(point);
-
-        return points.Values;
-    }
-
-    private static IEnumerable<PlayerPoints> RageQuit(this Match match)
-    {
-        var statistics = match.Maps.Select(m => m.Statistic).ToList();
-
-        var firstMap = statistics.LastOrDefault();
-        if (firstMap == null)
-            yield break;
-
-        var lastMap = statistics.FirstOrDefault();
-        if (lastMap == null)
-            yield break;
-
-        var firstMapPlayers = firstMap.TeamA.Concat(firstMap.TeamB);
-        var lastMapPlayers = lastMap.TeamA.Concat(lastMap.TeamB).Select(p => p.CommunityId!).ToHashSet();
-
-        foreach (var playerName in firstMapPlayers.Where(p => !lastMapPlayers.Contains(p.CommunityId ?? string.Empty)))
-            yield return PlayerPoints.RageQuit(playerName);
-    }
-
-    private static IEnumerable<PlayerPoints> Tied(this Match match)
-    {
-        var lastMap = match.Maps.Select(m => m.Statistic).FirstOrDefault();
-
-        if (lastMap?.Scoring?.TeamA == null
-            || lastMap.Scoring?.TeamB == null
-            || lastMap.Scoring.TeamA.Score != lastMap.Scoring.TeamB.Score)
-            yield break;
-
-        foreach (var playerName in lastMap.TeamA.Concat(lastMap.TeamB))
-            yield return PlayerPoints.Tied(playerName);
-    }
-
-    private static IEnumerable<PlayerPoints> Winners(this Match match)
+    private static IEnumerable<PlayerName> Winners(this Match match)
     {
         var lastMap = match.Maps.Select(m => m.Statistic).FirstOrDefault();
 
@@ -93,10 +58,10 @@ public static class MatchExtensions
         var winners = lastMap.Scoring.TeamA.Score > lastMap.Scoring.TeamB.Score ? lastMap.TeamA : lastMap.TeamB;
 
         foreach (var playerName in winners)
-            yield return PlayerPoints.Win(playerName);
+            yield return playerName;
     }
 
-    private static IEnumerable<PlayerPoints> Losers(this Match match)
+    private static IEnumerable<PlayerName> Losers(this Match match)
     {
         var lastMap = match.Maps.Select(m => m.Statistic).FirstOrDefault();
 
@@ -108,6 +73,6 @@ public static class MatchExtensions
         var losers = lastMap.Scoring.TeamA.Score > lastMap.Scoring.TeamB.Score ? lastMap.TeamB : lastMap.TeamA;
 
         foreach (var playerName in losers)
-            yield return PlayerPoints.Lost(playerName);
+            yield return playerName;
     }
 }

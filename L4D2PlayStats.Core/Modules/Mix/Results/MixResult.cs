@@ -5,7 +5,6 @@ public class MixResult
     private static readonly int[] SurvivorsTeam = [1, 4, 6, 8];
     private static readonly int[] InfectedsTeam = [2, 3, 5, 7];
 
-
     public MixResult(IReadOnlyList<string> availables, IReadOnlyDictionary<string, Ranking.Player> players)
     {
         foreach (var survivor in SurvivorsTeam)
