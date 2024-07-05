@@ -13,7 +13,7 @@ public class StatisticsRepository(IAzureTableStorageContext tableContext)
 
     public IAsyncEnumerable<Statistics> GetStatisticsAsync(string serverId)
     {
-        var after = DateTime.UtcNow.AddDays(-90);
+        var after = DateTime.UtcNow.AddDays(-30);
         var rowKey = $"{long.MaxValue - after.Ticks}";
         var filter = $"PartitionKey eq '{serverId}' and RowKey le '{rowKey}'";
 
