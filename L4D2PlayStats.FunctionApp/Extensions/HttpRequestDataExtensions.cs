@@ -7,11 +7,16 @@ namespace L4D2PlayStats.FunctionApp.Extensions;
 
 public static class HttpRequestDataExtensions
 {
+    private static readonly JsonSerializerOptions Settings = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
     public static async Task<T> DeserializeBodyAsync<T>(this HttpRequest httpRequest)
     {
         using var streamReader = new StreamReader(httpRequest.Body);
         var json = await streamReader.ReadToEndAsync();
-        var t = JsonSerializer.Deserialize<T>(json);
+        var t = JsonSerializer.Deserialize<T>(json, Settings);
 
         return t;
     }
