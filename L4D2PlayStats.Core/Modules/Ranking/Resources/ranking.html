@@ -1,0 +1,182 @@
+<html>
+
+<head>
+    <title>Ranking</title>
+
+    <style>
+        * {
+            font-family: 'Future Rot', sans-serif;
+        }
+
+        body {
+            background-image: url('http://l4d2playstats.blob.core.windows.net/assets/background.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+        }
+
+        h1,
+        h3 {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        h3 {
+            padding: 6px 0;
+        }
+
+        table {
+            width: 100%;
+            border: 0;
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+        }
+
+        .top-players .player {
+            border: 1px solid #444;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+        }
+
+        .top-players .player img {
+            border: 2px solid black;
+            border-radius: 5%;
+        }
+
+        .first-line .player img {
+            width: 120px;
+        }
+
+        .first-line td {
+            font-size: 15px;
+        }
+
+        .second-line td {
+            font-size: 12px;
+        }
+
+        .second-line .player img {
+            width: 55px;
+        }
+
+        .all-players th,
+        .all-players td {
+            border: 1px solid #444;
+        }
+
+        .all-players th {
+            background-color: rgba(0, 0, 0, 0.8);
+            font-size: 15px;
+            padding: 3px;
+        }
+
+        .all-players td {
+            background-color: rgba(0, 0, 0, 0.5);
+            font-size: 12px;
+        }
+
+        .footer-message {
+            border: 2px solid black;
+            border-radius: 5%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+<h1>L4D2 | Players Ranking</h1>
+
+<table class="top-players first-line">
+    <tr>
+        {{#FirstLine}}
+        <td>
+            <table class="player">
+                <tr>
+                    <td>
+                        <img src="{{AvatarUrl}}" alt="{{Name}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>#{{Position}} - {{Name}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>win {{Wins}} | mvp {{Mvps}} | loss {{Loss}}</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        {{/FirstLine}}
+    </tr>
+</table>
+
+<table class="top-players second-line">
+    <tr>
+        {{#SecondLine}}
+        <td>
+            <table class="player">
+                <tr>
+                    <td>
+                        <img src="{{AvatarUrl}}" alt="{{Name}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>#{{Position}} - {{Name}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>win {{Wins}} | mvp {{Mvps}}</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        {{/SecondLine}}
+    </tr>
+</table>
+
+<h3>All players</h3>
+
+<table class="all-players">
+    <tr>
+        <th>+</th>
+        <th>player</th>
+        <th>games</th>
+        <th>wins</th>
+        <th>loss</th>
+        <th>mvp</th>
+        <th>wins rating</th>
+    </tr>
+    {{#Players}}
+    <tr>
+        <td>{{Position}}</td>
+        <td>{{Name}}</td>
+        <td>???</td>
+        <td>{{Wins}}</td>
+        <td>{{Loss}}</td>
+        <td>{{Mvps}}</td>
+        <td>???</td>
+    </tr>
+    {{/Players}}
+</table>
+
+<div class="footer-message">
+    The player rankings are determined based on the games played in the last 30 days.
+    <br/>
+    The classification is first by the number of victories, followed by the number of MVP awards, and lastly by the
+    fewest losses.
+</div>
+
+</body>
+
+</html>
