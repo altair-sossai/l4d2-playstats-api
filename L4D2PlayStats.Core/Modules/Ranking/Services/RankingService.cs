@@ -23,14 +23,21 @@ public class RankingService(
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
             var matches = await matchService.GetMatchesAsync(serverId);
-            var lastmatch = matches.FirstOrDefault();
             var players = matches.Ranking().ToList();
-
-            await UpdateRankingPageAsync(players);
-            await UpdateLastMatchPageAsync(lastmatch);
 
             return players;
         })!;
+    }
+
+    public async Task UpdatePagesAsync(string serverId)
+    {
+        var matches = await matchService.GetMatchesAsync(serverId);
+
+        var players = matches.Ranking().ToList();
+        await UpdateRankingPageAsync(players);
+
+        var lastmatch = matches.FirstOrDefault();
+        await UpdateLastMatchPageAsync(lastmatch);
     }
 
     private async Task UpdateRankingPageAsync(List<Player> players)

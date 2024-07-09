@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
+using L4D2PlayStats.Core.Modules.Ranking.Services;
 using L4D2PlayStats.Core.Modules.Server.Services;
 using L4D2PlayStats.Core.Modules.Statistics.Commands;
 using L4D2PlayStats.Core.Modules.Statistics.Helpers;
@@ -18,7 +19,12 @@ using Microsoft.Azure.Functions.Worker;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class StatisticsFunction(IMapper mapper, IServerService serverService, IStatisticsService statisticsService, IStatisticsRepository statisticsRepository)
+public class StatisticsFunction(
+    IMapper mapper,
+    IServerService serverService,
+    IRankingService rankingService,
+    IStatisticsService statisticsService,
+    IStatisticsRepository statisticsRepository)
 {
     [Function($"{nameof(StatisticsFunction)}_{nameof(GetStatisticAsync)}")]
     public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}/{statisticId}")] HttpRequest httpRequest,
@@ -90,6 +96,9 @@ public class StatisticsFunction(IMapper mapper, IServerService serverService, IS
             try
             {
                 var statistic = await statisticsService.AddOrUpdateAsync(server.Id, command);
+
+                await rankingService.UpdatePagesAsync(server.Id);
+
                 var result = new UploadResult(statistic);
 
                 return new JsonResult(result);
