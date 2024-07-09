@@ -98,6 +98,7 @@
 
         .table td {
             background-color: rgba(0, 0, 0, 0.5);
+            padding: 3px 0;
         }
     </style>
 </head>
@@ -248,7 +249,7 @@
     </tr>
 
     <tr class="hover">
-        <td>Commons - Killed</td>
+        <td>Commons | Killed</td>
         {{#Players}}
         <td>{{N0 Common}} | {{P0 CommonPercentage}}</td>
         {{/Players}}
@@ -256,7 +257,7 @@
     </tr>
 
     <tr class="hover">
-        <td>Special Infected - Killed</td>
+        <td>SI | Killed</td>
         {{#Players}}
         <td>{{N0 SiKilled}} | {{P0 SiKilledPercentage}}</td>
         {{/Players}}
@@ -264,7 +265,7 @@
     </tr>
 
     <tr class="hover">
-        <td>Special Infected - Damage Dealt</td>
+        <td>SI | Damage Dealt</td>
         {{#Players}}
         <td>{{N0 SiDamage}} | {{P0 SiDamagePercentage}}</td>
         {{/Players}}
@@ -272,7 +273,7 @@
     </tr>
 
     <tr class="hover">
-        <td>Tank - Damage Dealt</td>
+        <td>Tank | Damage Dealt</td>
         {{#Players}}
         <td>{{N0 TankDamage}} | {{P0 TankDamagePercentage}}</td>
         {{/Players}}
@@ -280,19 +281,11 @@
     </tr>
 
     <tr class="hover">
-        <td>Tank - Rocks Taken</td>
+        <td>Tank | Rocks Taken</td>
         {{#Players}}
         <td>{{N0 RockEats}} | {{P0 RockEatsPercentage}}</td>
         {{/Players}}
         <td>{{N0 RockEats}}</td>
-    </tr>
-
-    <tr class="hover">
-        <td>Witch - Damage Dealt</td>
-        {{#Players}}
-        <td>{{N0 WitchDamage}} | {{P0 WitchDamagePercentage}}</td>
-        {{/Players}}
-        <td>{{N0 WitchDamage}}</td>
     </tr>
 
     <tr class="hover">
@@ -312,15 +305,7 @@
     </tr>
 
     <tr class="hover">
-        <td>Crowns (Kill Witch with 1 Shot)</td>
-        {{#Players}}
-        <td>{{N0 Crowns}} | {{P0 CrownsPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 Crowns}}</td>
-    </tr>
-
-    <tr class="hover">
-        <td>Friendly Fire Given (FFG)</td>
+        <td>Friendly Fire</td>
         {{#Players}}
         <td>{{N0 FfGiven}} | {{P0 FfGivenPercentage}}</td>
         {{/Players}}
@@ -351,7 +336,7 @@
     </tr>
 
     <tr class="hover">
-        <td>Tank - Damage Dealt</td>
+        <td>Tank | Damage Dealt</td>
         {{#Players}}
         <td>{{N0 DmgTank}} | {{P0 DmgTankPercentage}}</td>
         {{/Players}}
@@ -359,7 +344,7 @@
     </tr>
 
     <tr class="hover">
-        <td>Spitter - Damage</td>
+        <td>Spitter | Damage</td>
         {{#Players}}
         <td>{{N0 DmgSpit}} | {{P0 DmgSpitPercentage}}</td>
         {{/Players}}
@@ -367,7 +352,7 @@
     </tr>
 
     <tr class="hover">
-        <td>Hunter - Damage by Pounces</td>
+        <td>Hunter | Damage by Pounces</td>
         {{#Players}}
         <td>{{N0 HunterDpDmg}} | {{P0 HunterDpDmgPercentage}}</td>
         {{/Players}}
