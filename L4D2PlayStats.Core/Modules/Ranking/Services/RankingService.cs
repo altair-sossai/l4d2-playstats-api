@@ -25,6 +25,12 @@ public class RankingService(
             var matches = await matchService.GetMatchesAsync(serverId);
             var players = matches.Ranking().ToList();
 
+#if DEBUG
+            var lastmatch = matches.FirstOrDefault();
+            await UpdateRankingPageAsync(serverId, players);
+            await UpdateLastMatchPageAsync(serverId, lastmatch);
+#endif
+
             return players;
         })!;
     }
@@ -34,13 +40,13 @@ public class RankingService(
         var matches = await matchService.GetMatchesAsync(serverId);
 
         var players = matches.Ranking().ToList();
-        await UpdateRankingPageAsync(players);
+        await UpdateRankingPageAsync(serverId, players);
 
         var lastmatch = matches.FirstOrDefault();
-        await UpdateLastMatchPageAsync(lastmatch);
+        await UpdateLastMatchPageAsync(serverId, lastmatch);
     }
 
-    private async Task UpdateRankingPageAsync(List<Player> players)
+    private async Task UpdateRankingPageAsync(string serverId, List<Player> players)
     {
         if (players.Count == 0)
             return;
@@ -53,10 +59,10 @@ public class RankingService(
 
         await using var stream = await page.RenderAsync();
 
-        await azureTableStorageContext.UploadHtmlFileToBlobAsync("assets", "ranking.html", stream);
+        await azureTableStorageContext.UploadHtmlFileToBlobAsync("assets", $"{serverId}-ranking.html", stream);
     }
 
-    private async Task UpdateLastMatchPageAsync(Match? match)
+    private async Task UpdateLastMatchPageAsync(string serverId, Match? match)
     {
         if (match == null)
             return;
@@ -69,6 +75,6 @@ public class RankingService(
 
         await using var stream = await page.RenderAsync();
 
-        await azureTableStorageContext.UploadHtmlFileToBlobAsync("assets", "last-match.html", stream);
+        await azureTableStorageContext.UploadHtmlFileToBlobAsync("assets", $"{serverId}-last-match.html", stream);
     }
 }
