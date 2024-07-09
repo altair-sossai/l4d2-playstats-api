@@ -7,10 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Modules\Ranking\Resources\last-match.html" />
       <None Remove="Modules\Ranking\Resources\ranking.html" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Modules\Ranking\Resources\last-match.html" />
       <EmbeddedResource Include="Modules\Ranking\Resources\ranking.html" />
     </ItemGroup>
 
@@ -21,12 +23,13 @@
         <PackageReference Include="L4D2PlayStats" Version="1.0.0.37" />
         <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
         <PackageReference Include="NUglify" Version="1.21.9" />
         <PackageReference Include="Refit" Version="7.1.2" />
         <PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="FluentValidation" Version="11.9.2" />
         <PackageReference Include="Stubble.Core" Version="1.10.8" />
+        <PackageReference Include="Stubble.Helpers" Version="2.0.1" />
         <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     </ItemGroup>
 

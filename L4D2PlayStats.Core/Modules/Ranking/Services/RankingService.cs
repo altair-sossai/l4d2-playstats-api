@@ -1,5 +1,6 @@
 ﻿using L4D2PlayStats.Core.Contexts.AzureTableStorage;
 using L4D2PlayStats.Core.Contexts.Steam;
+using L4D2PlayStats.Core.Modules.Matches;
 using L4D2PlayStats.Core.Modules.Matches.Services;
 using L4D2PlayStats.Core.Modules.Ranking.Extensions;
 using L4D2PlayStats.Core.Modules.Ranking.Models;
@@ -22,9 +23,11 @@ public class RankingService(
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
             var matches = await matchService.GetMatchesAsync(serverId);
+            var lastmatch = matches.FirstOrDefault();
             var players = matches.Ranking().ToList();
 
             await UpdateRankingPageAsync(players);
+            await UpdateLastMatchPageAsync(lastmatch);
 
             return players;
         })!;
@@ -35,14 +38,30 @@ public class RankingService(
         if (players.Count == 0)
             return;
 
-        var rankingPage = new RankingPageModel(players);
+        var page = new RankingPageModel(players);
         var steamUserService = steamContext.SteamUserService;
         var steamApiKey = configuration.GetValue<string>("SteamApiKey")!;
 
-        await rankingPage.UpdatePlayersAvatarUrlAsync(steamUserService, steamApiKey);
+        await page.UpdatePlayersAvatarUrlAsync(steamUserService, steamApiKey);
 
-        await using var stream = await rankingPage.RenderAsync();
+        await using var stream = await page.RenderAsync();
 
         await azureTableStorageContext.UploadHtmlFileToBlobAsync("assets", "ranking.html", stream);
+    }
+
+    private async Task UpdateLastMatchPageAsync(Match? match)
+    {
+        if (match == null)
+            return;
+
+        var page = new LastMatchPageModel(match);
+        var steamUserService = steamContext.SteamUserService;
+        var steamApiKey = configuration.GetValue<string>("SteamApiKey")!;
+
+        await page.UpdatePlayersAvatarUrlAsync(steamUserService, steamApiKey);
+
+        await using var stream = await page.RenderAsync();
+
+        await azureTableStorageContext.UploadHtmlFileToBlobAsync("assets", "last-match.html", stream);
     }
 }

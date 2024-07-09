@@ -11,7 +11,7 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
     public TimeSpan? MatchElapsed => MatchEnd - MatchStart;
     public string? Campaign { get; } = campaign.Name;
 
-    public List<Team> Teams { get; } = [new Team(teamA, playersA), new Team(teamB, playersB)];
+    public List<Team> Teams { get; } = [new Team('A', teamA, playersA), new Team('B', teamB, playersB)];
 
     public List<string> Statistics { get; } = [];
 
@@ -37,12 +37,14 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
     {
         private readonly Scoring.Team _team;
 
-        public Team(Scoring.Team team, IEnumerable<PlayerName> players)
+        public Team(char code, Scoring.Team team, IEnumerable<PlayerName> players)
         {
+            Code = code;
             _team = team;
             Players = players.Select(playerName => new Player(playerName, this)).ToList();
         }
 
+        public char Code { get; }
         public int Score => _team.Score;
         public List<Player> Players { get; }
 
