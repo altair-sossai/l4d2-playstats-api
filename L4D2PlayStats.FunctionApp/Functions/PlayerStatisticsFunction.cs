@@ -11,7 +11,7 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class PlayerStatisticsFunction(IPlayerStatisticsService playerstatisticsService)
 {
-    [Function(nameof(PlayerStatisticsFunction) + "_" + nameof(PlayerStatisticsAsync))]
+    [Function($"{nameof(PlayerStatisticsFunction)}_{nameof(PlayerStatisticsAsync)}")]
     public async Task<IActionResult> PlayerStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "player-statistics/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {

@@ -13,7 +13,7 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class ServerFunction(IMapper mapper, IServerService serverService)
 {
-    [Function(nameof(ServerFunction) + "_" + nameof(Servers))]
+    [Function($"{nameof(ServerFunction)}_{nameof(Servers)}")]
     public IActionResult Servers([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "servers")] HttpRequest httpRequest)
     {
         try
@@ -29,7 +29,7 @@ public class ServerFunction(IMapper mapper, IServerService serverService)
         }
     }
 
-    [Function(nameof(ServerFunction) + "_" + nameof(Server))]
+    [Function($"{nameof(ServerFunction)}_{nameof(Server)}")]
     public IActionResult Server([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "servers/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {

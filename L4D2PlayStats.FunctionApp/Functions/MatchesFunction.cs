@@ -12,7 +12,7 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class MatchesFunction(IMatchService matchService)
 {
-    [Function(nameof(MatchesFunction) + "_" + nameof(MatchesAsync))]
+    [Function($"{nameof(MatchesFunction)}_{nameof(MatchesAsync)}")]
     public async Task<IActionResult> MatchesAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {
@@ -28,7 +28,7 @@ public class MatchesFunction(IMatchService matchService)
         }
     }
 
-    [Function(nameof(MatchesFunction) + "_" + nameof(MatchesBetweenAsync))]
+    [Function($"{nameof(MatchesFunction)}_{nameof(MatchesBetweenAsync)}")]
     public async Task<IActionResult> MatchesBetweenAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{serverId}/between/{start}/and/{end}")] HttpRequest httpRequest,
         string serverId, string start, string end)
     {

@@ -14,7 +14,7 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class RankingFunction(IRankingService rankingService, IMatchService matchService)
 {
-    [Function(nameof(RankingFunction) + "_" + nameof(RankingAsync))]
+    [Function($"{nameof(RankingFunction)}_{nameof(RankingAsync)}")]
     public async Task<IActionResult> RankingAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {
@@ -30,7 +30,7 @@ public class RankingFunction(IRankingService rankingService, IMatchService match
         }
     }
 
-    [Function(nameof(RankingFunction) + "_" + nameof(LastMatchAsync))]
+    [Function($"{nameof(RankingFunction)}_{nameof(LastMatchAsync)}")]
     public async Task<IActionResult> LastMatchAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}/last-match")] HttpRequest httpRequest,
         string serverId)
     {
@@ -51,7 +51,7 @@ public class RankingFunction(IRankingService rankingService, IMatchService match
         }
     }
 
-    [Function(nameof(RankingFunction) + "_" + nameof(PlaceAsync))]
+    [Function($"{nameof(RankingFunction)}_{nameof(PlaceAsync)}")]
     public async Task<IActionResult> PlaceAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}/place/{communityId:long}")] HttpRequest httpRequest,
         string serverId, long communityId)
     {

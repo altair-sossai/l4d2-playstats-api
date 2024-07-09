@@ -20,7 +20,7 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class StatisticsFunction(IMapper mapper, IServerService serverService, IStatisticsService statisticsService, IStatisticsRepository statisticsRepository)
 {
-    [Function(nameof(StatisticsFunction) + "_" + nameof(GetStatisticAsync))]
+    [Function($"{nameof(StatisticsFunction)}_{nameof(GetStatisticAsync)}")]
     public async Task<IActionResult> GetStatisticAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}/{statisticId}")] HttpRequest httpRequest,
         string serverId, string statisticId)
     {
@@ -40,7 +40,7 @@ public class StatisticsFunction(IMapper mapper, IServerService serverService, IS
         }
     }
 
-    [Function(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsAsync))]
+    [Function($"{nameof(StatisticsFunction)}_{nameof(GetStatisticsAsync)}")]
     public async Task<IActionResult> GetStatisticsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}")] HttpRequest httpRequest,
         string serverId)
     {
@@ -56,7 +56,7 @@ public class StatisticsFunction(IMapper mapper, IServerService serverService, IS
         }
     }
 
-    [Function(nameof(StatisticsFunction) + "_" + nameof(GetStatisticsBetweenAsync))]
+    [Function($"{nameof(StatisticsFunction)}_{nameof(GetStatisticsBetweenAsync)}")]
     public async Task<IActionResult> GetStatisticsBetweenAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "statistics/{serverId}/between/{start}/and/{end}")] HttpRequest httpRequest,
         string serverId, string start, string end)
     {
@@ -79,7 +79,7 @@ public class StatisticsFunction(IMapper mapper, IServerService serverService, IS
         }
     }
 
-    [Function(nameof(StatisticsFunction) + "_" + nameof(AddOrUpdate))]
+    [Function($"{nameof(StatisticsFunction)}_{nameof(AddOrUpdate)}")]
     public async Task<IActionResult> AddOrUpdate([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "statistics")] HttpRequest httpRequest)
     {
         try

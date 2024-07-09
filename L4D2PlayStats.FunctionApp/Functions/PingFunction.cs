@@ -9,7 +9,7 @@ public class PingFunction
 {
     private static readonly Guid InstanceId = Guid.NewGuid();
 
-    [Function(nameof(PingFunction) + "_" + nameof(Get))]
+    [Function($"{nameof(PingFunction)}_{nameof(Get)}")]
     public IActionResult Get([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ping")] HttpRequest httpRequest)
     {
         var result = new

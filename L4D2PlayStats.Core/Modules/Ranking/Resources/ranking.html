@@ -16,7 +16,6 @@
             background-attachment: fixed;
         }
 
-        h1,
         h3 {
             margin: 0;
             padding: 0;
@@ -52,7 +51,7 @@
         }
 
         .first-line .player img {
-            width: 120px;
+            width: 110px;
         }
 
         .first-line td {
@@ -64,7 +63,7 @@
         }
 
         .second-line .player img {
-            width: 55px;
+            width: 50px;
         }
 
         .all-players th,
@@ -95,20 +94,18 @@
 </head>
 
 <body>
-<h1>L4D2 | Players Ranking</h1>
-
 <table class="top-players first-line">
     <tr>
         {{#FirstLine}}
-        <td>
+        <td style="width: 33.3%">
             <table class="player">
+                <tr>
+                    <td>{{Position}} | {{ShortName}}</td>
+                </tr>
                 <tr>
                     <td>
                         <img src="{{AvatarUrl}}" alt="{{Name}}">
                     </td>
-                </tr>
-                <tr>
-                    <td>#{{Position}} - {{Name}}</td>
                 </tr>
                 <tr>
                     <td>
@@ -124,15 +121,15 @@
 <table class="top-players second-line">
     <tr>
         {{#SecondLine}}
-        <td>
+        <td style="width: 20%">
             <table class="player">
+                <tr>
+                    <td>{{Position}} | {{ShortName}}</td>
+                </tr>
                 <tr>
                     <td>
                         <img src="{{AvatarUrl}}" alt="{{Name}}">
                     </td>
-                </tr>
-                <tr>
-                    <td>#{{Position}} - {{Name}}</td>
                 </tr>
                 <tr>
                     <td>
@@ -155,23 +152,23 @@
         <th>wins</th>
         <th>loss</th>
         <th>mvp</th>
-        <th>wins rating</th>
+        <th>win rate</th>
     </tr>
     {{#Players}}
     <tr>
         <td>{{Position}}</td>
         <td>{{Name}}</td>
-        <td>???</td>
+        <td>{{Games}}</td>
         <td>{{Wins}}</td>
         <td>{{Loss}}</td>
         <td>{{Mvps}}</td>
-        <td>???</td>
+        <td>{{WinRateFormated}}</td>
     </tr>
     {{/Players}}
 </table>
 
 <div class="footer-message">
-    The player rankings are determined based on the games played in the last 30 days.
+    The player rankings are determined based on the games played in the last 45 days.
     <br/>
     The classification is first by the number of victories, followed by the number of MVP awards, and lastly by the
     fewest losses.

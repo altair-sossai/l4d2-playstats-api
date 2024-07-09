@@ -13,7 +13,7 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 
 public class MixFunction(IServerService serverService, IMixService mixService)
 {
-    [Function(nameof(MixFunction) + "_" + nameof(MixAsync))]
+    [Function($"{nameof(MixFunction)}_{nameof(MixAsync)}")]
     public async Task<IActionResult> MixAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "mix")] HttpRequest httpRequest)
     {
         try

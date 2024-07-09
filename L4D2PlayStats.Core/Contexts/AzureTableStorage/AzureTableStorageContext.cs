@@ -30,11 +30,17 @@ public class AzureTableStorageContext(IConfiguration configuration)
         return tableClient;
     }
 
-    public Task<Response<BlobContentInfo>> UploadFileToBlobAsync(string containerName, string blobName, Stream content)
+    public Task<Response<BlobContentInfo>> UploadHtmlFileToBlobAsync(string containerName, string blobName, Stream content)
     {
         var blobContainerClient = BlobServiceClient.GetBlobContainerClient(containerName);
         var blobClient = blobContainerClient.GetBlobClient(blobName);
 
-        return blobClient.UploadAsync(content, true);
+        var blobUploadOptions = new BlobUploadOptions
+        {
+            HttpHeaders = new BlobHttpHeaders { ContentType = "text/html" },
+            Conditions = null
+        };
+
+        return blobClient.UploadAsync(content, blobUploadOptions);
     }
 }

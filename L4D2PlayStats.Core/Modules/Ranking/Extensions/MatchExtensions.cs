@@ -20,26 +20,30 @@ public static class MatchExtensions
             foreach (var playerName in match.Winners())
             {
                 var player = players.TryAdd(playerName);
+                if (player == null)
+                    continue;
 
-                if (player != null)
-                    player.Wins++;
+                player.Wins++;
+            }
+
+            foreach (var playerName in match.Losers())
+            {
+                var player = players.TryAdd(playerName);
+                if (player == null)
+                    continue;
+
+                player.Loss++;
             }
 
             foreach (var team in match.Teams)
             foreach (var matchPlayer in team.Players)
             {
                 var player = players.TryAdd(matchPlayer);
+                if (player == null)
+                    continue;
 
-                if (player != null)
-                    player.Mvps += matchPlayer.MvpSiDamage;
-            }
-
-            foreach (var playerName in match.Losers())
-            {
-                var player = players.TryAdd(playerName);
-
-                if (player != null)
-                    player.Loss++;
+                player.Games++;
+                player.Mvps += matchPlayer.MvpSiDamage;
             }
         }
 

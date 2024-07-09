@@ -27,4 +27,9 @@ public static class StringExtensions
 
         return group.Value;
     }
+
+    public static string Truncate(this string value, int max)
+    {
+        return value.Length <= max ? value : value[..max];
+    }
 }
