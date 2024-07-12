@@ -51,7 +51,7 @@ public class RankingService(
         if (players.Count == 0)
             return;
 
-        var page = new RankingPageModel(players);
+        var page = new RankingPageModel(serverId, players);
         var steamUserService = steamContext.SteamUserService;
         var steamApiKey = configuration.GetValue<string>("SteamApiKey")!;
 
@@ -67,7 +67,7 @@ public class RankingService(
         if (match == null)
             return;
 
-        var page = new LastMatchPageModel(match);
+        var page = new LastMatchPageModel(serverId, match);
         var steamUserService = steamContext.SteamUserService;
         var steamApiKey = configuration.GetValue<string>("SteamApiKey")!;
 

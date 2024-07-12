@@ -7,7 +7,8 @@ namespace L4D2PlayStats.Core.Modules.Ranking.Models;
 
 public class LastMatchPageModel : PageModel
 {
-    public LastMatchPageModel(Match match) : base("L4D2PlayStats.Core.Modules.Ranking.Resources.last-match.html")
+    public LastMatchPageModel(string serverId, Match match)
+        : base(serverId, "L4D2PlayStats.Core.Modules.Ranking.Resources.last-match.html")
     {
         Match = match;
 

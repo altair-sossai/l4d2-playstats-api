@@ -8,7 +8,7 @@ using Stubble.Helpers;
 
 namespace L4D2PlayStats.Core.Modules.Ranking.Models.Infrastructure;
 
-public abstract class PageModel(string resourceName)
+public abstract class PageModel(string serverId, string resourceName)
 {
     private static readonly Dictionary<string, string> Templates = new();
     private static readonly CultureInfo CultureInfo = new("en-us");
@@ -24,6 +24,10 @@ public abstract class PageModel(string resourceName)
             .Register("Truncate30", (HelperContext _, string value) => value.Truncate(30))
             .Register("Time", (HelperContext _, TimeSpan? value) => value?.ToString(@"hh\:mm\:ss"));
     }
+
+    public string ServerId { get; } = serverId;
+    public string UrlRanking => $"http://l4d2playstats.blob.core.windows.net/assets/{ServerId}-ranking.html";
+    public string UrlLastMatch => $"http://l4d2playstats.blob.core.windows.net/assets/{ServerId}-last-match.html";
 
     private static StubbleVisitorRenderer Stuble
     {

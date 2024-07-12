@@ -48,6 +48,31 @@
             text-align: center;
         }
 
+        a, a:visited, a:hover, a:active {
+            color: inherit;
+        }
+
+        hr {
+            border: 1px solid #444;
+        }
+
+        .breadcrumb {
+            text-align: center;
+            color: white;
+        }
+
+            .breadcrumb a {
+                text-decoration: none;
+            }
+
+                .breadcrumb a.active {
+                    color: #f1c40f;
+                }
+
+            .breadcrumb span {
+                color: #444;
+            }
+
         .hover:hover {
             background-color: #a7a7a7;
         }
@@ -105,263 +130,271 @@
 </head>
 
 <body>
-<h3>{{Match.Campaign}}</h3>
+    <div class="breadcrumb">
+        <a href="{{UrlRanking}}">Ranking</a>
+        <span> | </span>
+        <a class="active">Last match</a>
+    </div>
 
-<table class="scoreboard">
-    <tr class="title">
-        <td colspan="2" class="{{TeamAScoreboardClass}}">
-            <p>Team A | {{TeamAScoreboardTitle}}</p>
-            <p>{{N0 TeamAScore}} pts</p>
-        </td>
-        <td rowspan="{{VsRowSpan}}">
-            <h1>VS</h1>
-        </td>
-        <td colspan="2" class="{{TeamBScoreboardClass}}">
-            <p>Team B | {{TeamBScoreboardTitle}}</p>
-            <p>{{N0 TeamBScore}} pts</p>
-        </td>
-    </tr>
-    {{#PlayersGrouped}}
-    <tr>
-        {{#PlayersA}}
-        <td style="width: 20%" class="hover">
-            <table class="player">
-                <tr>
-                    <td>{{Truncate12 Name}}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="{{AvatarUrl}}" alt="{{Name}}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>mvp {{Mvps}} | common {{MvpCommons}}</p>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        {{/PlayersA}}
+    <hr />
 
-        {{#PlayersB}}
-        <td style="width: 20%" class="hover">
-            <table class="player">
-                <tr>
-                    <td>{{Truncate12 Name}}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="{{AvatarUrl}}" alt="{{Name}}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>mvp {{Mvps}} | common {{MvpCommons}}</p>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        {{/PlayersB}}
-    </tr>
-    {{/PlayersGrouped}}
-</table>
+    <h3>{{Match.Campaign}}</h3>
 
-<h3>Maps</h3>
+    <table class="scoreboard">
+        <tr class="title">
+            <td colspan="2" class="{{TeamAScoreboardClass}}">
+                <p>Team A | {{TeamAScoreboardTitle}}</p>
+                <p>{{N0 TeamAScore}} pts</p>
+            </td>
+            <td rowspan="{{VsRowSpan}}">
+                <h1>VS</h1>
+            </td>
+            <td colspan="2" class="{{TeamBScoreboardClass}}">
+                <p>Team B | {{TeamBScoreboardTitle}}</p>
+                <p>{{N0 TeamBScore}} pts</p>
+            </td>
+        </tr>
+        {{#PlayersGrouped}}
+        <tr>
+            {{#PlayersA}}
+            <td style="width: 20%" class="hover">
+                <table class="player">
+                    <tr>
+                        <td>{{Truncate12 Name}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="{{AvatarUrl}}" alt="{{Name}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>mvp {{Mvps}} | common {{MvpCommons}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            {{/PlayersA}}
 
-<table class="table">
-    <tr>
-        <th>+</th>
-        <th>map</th>
-        <th>elapsed</th>
-        <th>team A</th>
-        <th>team B</th>
-        <th>diff</th>
-    </tr>
-    {{#Maps}}
-    <tr class="hover">
-        <td>{{Round}}</td>
-        <td>{{Name}}</td>
-        <td>{{Time Elapsed}}</td>
-        <td>{{TeamAScore}}</td>
-        <td>{{TeamBScore}}</td>
-        <td>{{ScoreDifference}}</td>
-    </tr>
-    {{/Maps}}
-</table>
+            {{#PlayersB}}
+            <td style="width: 20%" class="hover">
+                <table class="player">
+                    <tr>
+                        <td>{{Truncate12 Name}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="{{AvatarUrl}}" alt="{{Name}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>mvp {{Mvps}} | common {{MvpCommons}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            {{/PlayersB}}
+        </tr>
+        {{/PlayersGrouped}}
+    </table>
 
-{{#Match.Teams}}
-<h3>Team {{Code}} | Survivors</h3>
+    <h3>Maps</h3>
 
-<table class="table">
-    <tr>
-        <th>+</th>
-        {{#Players}}
-        <th>{{Truncate30 Name}}</th>
-        {{/Players}}
-        <th>total</th>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>+</th>
+            <th>map</th>
+            <th>elapsed</th>
+            <th>team A</th>
+            <th>team B</th>
+            <th>diff</th>
+        </tr>
+        {{#Maps}}
+        <tr class="hover">
+            <td>{{Round}}</td>
+            <td>{{Name}}</td>
+            <td>{{Time Elapsed}}</td>
+            <td>{{TeamAScore}}</td>
+            <td>{{TeamBScore}}</td>
+            <td>{{ScoreDifference}}</td>
+        </tr>
+        {{/Maps}}
+    </table>
 
-    <tr class="hover">
-        <td>MVP</td>
-        {{#Players}}
-        <td>{{N0 MvpSiDamage}} | {{P0 MvpSiDamagePercentage}}</td>
-        {{/Players}}
-        <td>{{N0 MvpSiDamage}}</td>
-    </tr>
+    {{#Match.Teams}}
+    <h3>Team {{Code}} | Survivors</h3>
 
-    <tr class="hover">
-        <td>MVP (Common)</td>
-        {{#Players}}
-        <td>{{N0 MvpCommon}} | {{P0 MvpCommonPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 MvpCommon}}</td>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>+</th>
+            {{#Players}}
+            <th>{{Truncate30 Name}}</th>
+            {{/Players}}
+            <th>total</th>
+        </tr>
 
-    <tr class="hover">
-        <td>LVP (FF)</td>
-        {{#Players}}
-        <td>{{N0 LvpFfGiven}} | {{P0 LvpFfGivenPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 LvpFfGiven}}</td>
-    </tr>
+        <tr class="hover">
+            <td>MVP</td>
+            {{#Players}}
+            <td>{{N0 MvpSiDamage}} | {{P0 MvpSiDamagePercentage}}</td>
+            {{/Players}}
+            <td>{{N0 MvpSiDamage}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Deaths</td>
-        {{#Players}}
-        <td>{{N0 Died}} | {{P0 DiedPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 Died}}</td>
-    </tr>
+        <tr class="hover">
+            <td>MVP (Common)</td>
+            {{#Players}}
+            <td>{{N0 MvpCommon}} | {{P0 MvpCommonPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 MvpCommon}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Times Incapacitated</td>
-        {{#Players}}
-        <td>{{N0 Incaps}} | {{P0 IncapsPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 Incaps}}</td>
-    </tr>
+        <tr class="hover">
+            <td>LVP (FF)</td>
+            {{#Players}}
+            <td>{{N0 LvpFfGiven}} | {{P0 LvpFfGivenPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 LvpFfGiven}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Damage Taken</td>
-        {{#Players}}
-        <td>{{N0 DmgTaken}} | {{P0 DmgTakenPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 DmgTaken}}</td>
-    </tr>
+        <tr class="hover">
+            <td>Deaths</td>
+            {{#Players}}
+            <td>{{N0 Died}} | {{P0 DiedPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 Died}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Commons | Killed</td>
-        {{#Players}}
-        <td>{{N0 Common}} | {{P0 CommonPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 Common}}</td>
-    </tr>
+        <tr class="hover">
+            <td>Times Incapacitated</td>
+            {{#Players}}
+            <td>{{N0 Incaps}} | {{P0 IncapsPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 Incaps}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>SI | Killed</td>
-        {{#Players}}
-        <td>{{N0 SiKilled}} | {{P0 SiKilledPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 SiKilled}}</td>
-    </tr>
+        <tr class="hover">
+            <td>Damage Taken</td>
+            {{#Players}}
+            <td>{{N0 DmgTaken}} | {{P0 DmgTakenPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 DmgTaken}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>SI | Damage Dealt</td>
-        {{#Players}}
-        <td>{{N0 SiDamage}} | {{P0 SiDamagePercentage}}</td>
-        {{/Players}}
-        <td>{{N0 SiDamage}}</td>
-    </tr>
+        <tr class="hover">
+            <td>Commons | Killed</td>
+            {{#Players}}
+            <td>{{N0 Common}} | {{P0 CommonPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 Common}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Tank | Damage Dealt</td>
-        {{#Players}}
-        <td>{{N0 TankDamage}} | {{P0 TankDamagePercentage}}</td>
-        {{/Players}}
-        <td>{{N0 TankDamage}}</td>
-    </tr>
+        <tr class="hover">
+            <td>SI | Killed</td>
+            {{#Players}}
+            <td>{{N0 SiKilled}} | {{P0 SiKilledPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 SiKilled}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Tank | Rocks Taken</td>
-        {{#Players}}
-        <td>{{N0 RockEats}} | {{P0 RockEatsPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 RockEats}}</td>
-    </tr>
+        <tr class="hover">
+            <td>SI | Damage Dealt</td>
+            {{#Players}}
+            <td>{{N0 SiDamage}} | {{P0 SiDamagePercentage}}</td>
+            {{/Players}}
+            <td>{{N0 SiDamage}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Skeets</td>
-        {{#Players}}
-        <td>{{N0 Skeets}} | {{P0 SkeetsPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 Skeets}}</td>
-    </tr>
+        <tr class="hover">
+            <td>Tank | Damage Dealt</td>
+            {{#Players}}
+            <td>{{N0 TankDamage}} | {{P0 TankDamagePercentage}}</td>
+            {{/Players}}
+            <td>{{N0 TankDamage}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Levels</td>
-        {{#Players}}
-        <td>{{N0 Levels}} | {{P0 LevelsPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 Levels}}</td>
-    </tr>
+        <tr class="hover">
+            <td>Tank | Rocks Taken</td>
+            {{#Players}}
+            <td>{{N0 RockEats}} | {{P0 RockEatsPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 RockEats}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Friendly Fire</td>
-        {{#Players}}
-        <td>{{N0 FfGiven}} | {{P0 FfGivenPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 FfGiven}}</td>
-    </tr>
+        <tr class="hover">
+            <td>Skeets</td>
+            {{#Players}}
+            <td>{{N0 Skeets}} | {{P0 SkeetsPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 Skeets}}</td>
+        </tr>
 
-</table>
-{{/Match.Teams}}
+        <tr class="hover">
+            <td>Levels</td>
+            {{#Players}}
+            <td>{{N0 Levels}} | {{P0 LevelsPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 Levels}}</td>
+        </tr>
 
-{{#Match.Teams}}
-<h3>Team {{Code}} | Infecteds</h3>
+        <tr class="hover">
+            <td>Friendly Fire</td>
+            {{#Players}}
+            <td>{{N0 FfGiven}} | {{P0 FfGivenPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 FfGiven}}</td>
+        </tr>
 
-<table class="table">
-    <tr>
-        <th>+</th>
-        {{#Players}}
-        <th>{{Truncate30 Name}}</th>
-        {{/Players}}
-        <th>total</th>
-    </tr>
+    </table>
+    {{/Match.Teams}}
 
-    <tr class="hover">
-        <td>Total Damage</td>
-        {{#Players}}
-        <td>{{N0 DmgTotal}} | {{P0 DmgTotalPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 DmgTotal}}</td>
-    </tr>
+    {{#Match.Teams}}
+    <h3>Team {{Code}} | Infecteds</h3>
 
-    <tr class="hover">
-        <td>Tank | Damage Dealt</td>
-        {{#Players}}
-        <td>{{N0 DmgTank}} | {{P0 DmgTankPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 DmgTank}}</td>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>+</th>
+            {{#Players}}
+            <th>{{Truncate30 Name}}</th>
+            {{/Players}}
+            <th>total</th>
+        </tr>
 
-    <tr class="hover">
-        <td>Spitter | Damage</td>
-        {{#Players}}
-        <td>{{N0 DmgSpit}} | {{P0 DmgSpitPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 DmgSpit}}</td>
-    </tr>
+        <tr class="hover">
+            <td>Total Damage</td>
+            {{#Players}}
+            <td>{{N0 DmgTotal}} | {{P0 DmgTotalPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 DmgTotal}}</td>
+        </tr>
 
-    <tr class="hover">
-        <td>Hunter | Damage by Pounces</td>
-        {{#Players}}
-        <td>{{N0 HunterDpDmg}} | {{P0 HunterDpDmgPercentage}}</td>
-        {{/Players}}
-        <td>{{N0 HunterDpDmg}}</td>
-    </tr>
+        <tr class="hover">
+            <td>Tank | Damage Dealt</td>
+            {{#Players}}
+            <td>{{N0 DmgTank}} | {{P0 DmgTankPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 DmgTank}}</td>
+        </tr>
 
-</table>
-{{/Match.Teams}}
+        <tr class="hover">
+            <td>Spitter | Damage</td>
+            {{#Players}}
+            <td>{{N0 DmgSpit}} | {{P0 DmgSpitPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 DmgSpit}}</td>
+        </tr>
+
+        <tr class="hover">
+            <td>Hunter | Damage by Pounces</td>
+            {{#Players}}
+            <td>{{N0 HunterDpDmg}} | {{P0 HunterDpDmgPercentage}}</td>
+            {{/Players}}
+            <td>{{N0 HunterDpDmg}}</td>
+        </tr>
+
+    </table>
+    {{/Match.Teams}}
 </body>
 
 </html>

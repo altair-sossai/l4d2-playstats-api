@@ -35,6 +35,31 @@
             text-align: center;
         }
 
+        a, a:visited, a:hover, a:active {
+            color: inherit;
+        }
+
+        hr {
+            border: 1px solid #444;
+        }
+
+        .breadcrumb {
+            text-align: center;
+            color: white;
+        }
+
+            .breadcrumb a {
+                text-decoration: none;
+            }
+
+                .breadcrumb a.active {
+                    color: #f1c40f;
+                }
+
+            .breadcrumb span {
+                color: #444;
+            }
+
         .hover:hover {
             background-color: #a7a7a7;
         }
@@ -96,85 +121,94 @@
 </head>
 
 <body>
-<table class="top-players first-line">
-    <tr>
-        {{#FirstLine}}
-        <td style="width: 33.3%" class="hover">
-            <table class="player">
-                <tr>
-                    <td>{{Position}} | {{Truncate12 Name}}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="{{AvatarUrl}}" alt="{{Name}}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>win {{Wins}} | mvp {{Mvps}} | loss {{Loss}}</p>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        {{/FirstLine}}
-    </tr>
-</table>
 
-<table class="top-players second-line">
-    <tr>
-        {{#SecondLine}}
-        <td style="width: 20%" class="hover">
-            <table class="player">
-                <tr>
-                    <td>{{Position}} | {{Truncate12 Name}}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="{{AvatarUrl}}" alt="{{Name}}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>win {{Wins}} | mvp {{Mvps}}</p>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        {{/SecondLine}}
-    </tr>
-</table>
+    <div class="breadcrumb">
+        <a class="active">Ranking</a>
+        <span> | </span>
+        <a href="{{UrlLastMatch}}">Last match</a>
+    </div>
 
-<h3>All players</h3>
+    <hr />
 
-<table class="all-players">
-    <tr>
-        <th>+</th>
-        <th>player</th>
-        <th>games</th>
-        <th>wins</th>
-        <th>loss</th>
-        <th>mvp</th>
-        <th>win rate</th>
-    </tr>
-    {{#Players}}
-    <tr class="hover">
-        <td>{{Position}}</td>
-        <td>{{Truncate30 Name}}</td>
-        <td>{{Games}}</td>
-        <td>{{Wins}}</td>
-        <td>{{Loss}}</td>
-        <td>{{Mvps}}</td>
-        <td>{{P0 WinRate}}</td>
-    </tr>
-    {{/Players}}
-</table>
+    <table class="top-players first-line">
+        <tr>
+            {{#FirstLine}}
+            <td style="width: 33.3%" class="hover">
+                <table class="player">
+                    <tr>
+                        <td>{{Position}} | {{Truncate12 Name}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="{{AvatarUrl}}" alt="{{Name}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>win {{Wins}} | mvp {{Mvps}} | loss {{Loss}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            {{/FirstLine}}
+        </tr>
+    </table>
 
-<div class="footer-message">
-    The player rankings are determined based on the games played in the last 45 days.
-    <br/>
-    The classification is first by the number of victories, followed by the number of MVP awards, and lastly by the
-    fewest losses.
-</div>
+    <table class="top-players second-line">
+        <tr>
+            {{#SecondLine}}
+            <td style="width: 20%" class="hover">
+                <table class="player">
+                    <tr>
+                        <td>{{Position}} | {{Truncate12 Name}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="{{AvatarUrl}}" alt="{{Name}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>win {{Wins}} | mvp {{Mvps}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            {{/SecondLine}}
+        </tr>
+    </table>
+
+    <h3>All players</h3>
+
+    <table class="all-players">
+        <tr>
+            <th>+</th>
+            <th>player</th>
+            <th>games</th>
+            <th>wins</th>
+            <th>loss</th>
+            <th>mvp</th>
+            <th>win rate</th>
+        </tr>
+        {{#Players}}
+        <tr class="hover">
+            <td>{{Position}}</td>
+            <td>{{Truncate30 Name}}</td>
+            <td>{{Games}}</td>
+            <td>{{Wins}}</td>
+            <td>{{Loss}}</td>
+            <td>{{Mvps}}</td>
+            <td>{{P0 WinRate}}</td>
+        </tr>
+        {{/Players}}
+    </table>
+
+    <div class="footer-message">
+        The player rankings are determined based on the games played in the last 45 days.
+        <br />
+        The classification is first by the number of victories, followed by the number of MVP awards, and lastly by the
+        fewest losses.
+    </div>
 
 </body>
 

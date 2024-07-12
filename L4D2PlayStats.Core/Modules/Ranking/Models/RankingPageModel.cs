@@ -12,7 +12,8 @@ public class RankingPageModel : PageModel
 
     private readonly List<PlayerModel> _players = [];
 
-    public RankingPageModel(List<Player> players) : base("L4D2PlayStats.Core.Modules.Ranking.Resources.ranking.html")
+    public RankingPageModel(string serverId, List<Player> players)
+        : base(serverId, "L4D2PlayStats.Core.Modules.Ranking.Resources.ranking.html")
     {
         Players = players.Take(MaxPlayers).Select(player => new PlayerModel(player)).ToList();
     }
