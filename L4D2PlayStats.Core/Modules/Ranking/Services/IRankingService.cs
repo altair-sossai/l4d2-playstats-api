@@ -3,5 +3,4 @@
 public interface IRankingService
 {
     Task<List<Player>> RankingAsync(string serverId);
-    Task UpdatePagesAsync(string serverId);
 }

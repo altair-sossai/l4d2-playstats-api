@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
-using L4D2PlayStats.Core.Modules.Ranking.Services;
 using L4D2PlayStats.Core.Modules.Server.Services;
 using L4D2PlayStats.Core.Modules.Statistics.Commands;
 using L4D2PlayStats.Core.Modules.Statistics.Helpers;
@@ -22,7 +21,6 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 public class StatisticsFunction(
     IMapper mapper,
     IServerService serverService,
-    IRankingService rankingService,
     IStatisticsService statisticsService,
     IStatisticsRepository statisticsRepository)
 {
@@ -96,9 +94,6 @@ public class StatisticsFunction(
             try
             {
                 var statistic = await statisticsService.AddOrUpdateAsync(server.Id, command);
-
-                await rankingService.UpdatePagesAsync(server.Id);
-
                 var result = new UploadResult(statistic);
 
                 return new JsonResult(result);

@@ -1,6 +1,6 @@
-using L4D2PlayStats.Core.Contexts.Steam.Helpers;
+using L4D2PlayStats.Core.Infrastructure.Helpers;
 
-namespace L4D2PlayStats.Core.Contexts.Steam.Structures;
+namespace L4D2PlayStats.Core.Infrastructure.Structures;
 
 public struct SteamIdentifiers
 {

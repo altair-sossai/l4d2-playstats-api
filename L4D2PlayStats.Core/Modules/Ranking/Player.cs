@@ -1,4 +1,4 @@
-﻿using L4D2PlayStats.Core.Contexts.Steam.Structures;
+﻿using L4D2PlayStats.Core.Infrastructure.Structures;
 
 namespace L4D2PlayStats.Core.Modules.Ranking;
 
@@ -24,6 +24,7 @@ public class Player
     public string? Name { get; set; }
     public int Games { get; set; }
     public int Wins { get; set; }
+    public decimal WinRate => Games == 0 ? 0 : Wins / (decimal)Games;
     public int Mvps { get; set; }
     public int Loss { get; set; }
 }

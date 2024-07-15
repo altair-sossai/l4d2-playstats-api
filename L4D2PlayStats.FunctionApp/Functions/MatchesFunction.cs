@@ -14,13 +14,14 @@ public class MatchesFunction(IMatchService matchService)
 {
     [Function($"{nameof(MatchesFunction)}_{nameof(MatchesAsync)}")]
     public async Task<IActionResult> MatchesAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{serverId}")] HttpRequest httpRequest,
-        string serverId)
+        string serverId, int count = 10)
     {
         try
         {
-            var matches = (await matchService.GetMatchesAsync(serverId)).Take(10).ToList();
+            var matches = await matchService.GetMatchesAsync(serverId);
+            var result = matches.Take(count).ToList();
 
-            return new JsonResult(matches);
+            return new JsonResult(result);
         }
         catch (Exception exception)
         {

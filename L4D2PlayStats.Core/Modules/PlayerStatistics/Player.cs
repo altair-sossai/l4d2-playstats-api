@@ -1,4 +1,4 @@
-﻿using L4D2PlayStats.Core.Contexts.Steam.Structures;
+﻿using L4D2PlayStats.Core.Infrastructure.Structures;
 using L4D2PlayStats.Core.Modules.PlayerStatistics.Structures;
 
 namespace L4D2PlayStats.Core.Modules.PlayerStatistics;

@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using L4D2PlayStats.Core.Infrastructure.Extensions;
 
-namespace L4D2PlayStats.Core.Contexts.Steam.Helpers;
+namespace L4D2PlayStats.Core.Infrastructure.Helpers;
 
 public static class SteamIdHelper
 {
