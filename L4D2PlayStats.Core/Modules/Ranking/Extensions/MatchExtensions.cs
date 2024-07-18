@@ -18,22 +18,10 @@ public static class MatchExtensions
         foreach (var match in matches.Reverse())
         {
             foreach (var playerName in match.Winners())
-            {
-                var player = players.TryAdd(playerName);
-                if (player == null)
-                    continue;
-
-                player.Wins++;
-            }
+                players.TryAdd(playerName)?.AddWin();
 
             foreach (var playerName in match.Losers())
-            {
-                var player = players.TryAdd(playerName);
-                if (player == null)
-                    continue;
-
-                player.Loss++;
-            }
+                players.TryAdd(playerName)?.AddLoss();
 
             foreach (var team in match.Teams)
             foreach (var matchPlayer in team.Players)
@@ -42,8 +30,8 @@ public static class MatchExtensions
                 if (player == null)
                     continue;
 
-                player.Games++;
                 player.Mvps += matchPlayer.MvpSiDamage;
+                player.MvpsCommon += matchPlayer.MvpCommon;
             }
         }
 
