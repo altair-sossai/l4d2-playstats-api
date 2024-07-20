@@ -74,7 +74,8 @@ public class CampaignRepository : ICampaignRepository
             [
                 "c6m1_riverbank",
                 "c6m2_bedlam",
-                "c6m3_port"
+                "c7m1_docks",
+                "c7m2_barge"
             ]
         },
 
@@ -108,7 +109,9 @@ public class CampaignRepository : ICampaignRepository
             Maps =
             [
                 "c9m1_alleys",
-                "c9m2_lots"
+                "c9m2_lots",
+                "c14m1_junkyard",
+                "c14m2_lighthouse"
             ]
         },
 
