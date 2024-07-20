@@ -6,10 +6,10 @@ namespace L4D2PlayStats.Core.Modules.Statistics.Extensions;
 
 public static class StatisticsExtensions
 {
-    public static async Task<List<Match>> ToMatchesAsync(this IAsyncEnumerable<Statistics> statistics, IEnumerable<Campaign> campaigns)
+    public static async Task<List<Match>> ToMatchesAsync(this IAsyncEnumerable<Statistics> statistics, List<Campaign> campaigns)
     {
-        var maps = campaigns.Maps();
         var matches = new List<Match>();
+        var maps = campaigns.SelectMany(c => c.Maps).ToHashSet();
 
         Match? match = null;
         string? lastMap = null;
@@ -32,13 +32,21 @@ public static class StatisticsExtensions
             var halfA = stats.Halves.FirstOrDefault(half => half.RoundHalf?.Team == 'A');
             var halfB = stats.Halves.FirstOrDefault(half => half.RoundHalf?.Team == 'B');
 
-            if (gameRound == null || mapName == null || teamA == null || teamB == null || halfA == null || halfB == null || !maps.ContainsKey(mapName))
+            if (gameRound == null || mapName == null || teamA == null || teamB == null || halfA == null || halfB == null || !maps.Contains(mapName))
                 continue;
 
             if (teamA.Score == 0 && teamB.Score == 0)
                 continue;
 
-            var campaign = maps[mapName];
+            var campaign = campaigns.FirstOrDefault(c => c.Name == match?.Campaign) ?? campaigns.FindUsingMapName(mapName);
+            if (campaign == null)
+                continue;
+
+            if (!string.IsNullOrEmpty(lastMap) && !campaign.SequentialMaps(mapName, lastMap))
+                campaign = campaigns.FindUsingMapName(mapName);
+
+            if (campaign == null)
+                continue;
 
             if (match == null || string.IsNullOrEmpty(lastMap) || !campaign.SequentialMaps(mapName, lastMap))
             {

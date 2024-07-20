@@ -2,5 +2,5 @@
 
 public interface ICampaignRepository
 {
-    IEnumerable<Campaign> GetCampaigns();
+    List<Campaign> GetCampaigns();
 }

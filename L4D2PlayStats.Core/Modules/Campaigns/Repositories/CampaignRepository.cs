@@ -177,7 +177,7 @@ public class CampaignRepository : ICampaignRepository
         }
     ];
 
-    public IEnumerable<Campaign> GetCampaigns()
+    public List<Campaign> GetCampaigns()
     {
         return Campaigns;
     }
