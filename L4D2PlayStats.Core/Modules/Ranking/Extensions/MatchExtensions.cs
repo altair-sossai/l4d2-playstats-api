@@ -14,9 +14,23 @@ public static class MatchExtensions
     public static IEnumerable<Player> Ranking(this IEnumerable<Match> matches)
     {
         var players = new Dictionary<string, Player>();
+        var previousExperience = new Dictionary<string, decimal>();
 
         foreach (var match in matches.Reverse())
         {
+            previousExperience.Clear();
+
+            foreach (var team in match.Teams)
+            foreach (var matchPlayer in team.Players)
+            {
+                if (string.IsNullOrEmpty(matchPlayer.CommunityId)
+                    || !players.ContainsKey(matchPlayer.CommunityId)
+                    || previousExperience.ContainsKey(matchPlayer.CommunityId))
+                    continue;
+
+                previousExperience.Add(matchPlayer.CommunityId, players[matchPlayer.CommunityId].Experience);
+            }
+
             foreach (var playerName in match.Winners())
                 players.TryAdd(playerName)?.AddWin();
 
@@ -33,6 +47,14 @@ public static class MatchExtensions
                 player.Mvps += matchPlayer.MvpSiDamage;
                 player.MvpsCommon += matchPlayer.MvpCommon;
             }
+        }
+
+        foreach (var (communityId, experience) in previousExperience)
+        {
+            if (!players.TryGetValue(communityId, out var player))
+                continue;
+
+            player.PreviousExperience = experience;
         }
 
         return players.Values.RankPlayers();

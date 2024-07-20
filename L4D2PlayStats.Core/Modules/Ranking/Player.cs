@@ -29,6 +29,7 @@ public class Player
     public int Position { get; set; }
     public string? Name { get; set; }
     public decimal Experience => GameExperience + Mvps * MvpsExperience + MvpsCommon * MvpsCommonExperience;
+    public decimal? PreviousExperience { get; set; }
     public int Games { get; private set; }
     public int Wins { get; private set; }
     public int Loss { get; private set; }
