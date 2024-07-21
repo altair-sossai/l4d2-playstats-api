@@ -12,7 +12,11 @@ public static class PlayerExtensions
             return null;
 
         if (players.TryGetValue(communityId, out var player))
+        {
+            player.Name = playerName.Name;
+
             return player;
+        }
 
         players.Add(communityId, new Player
         {
