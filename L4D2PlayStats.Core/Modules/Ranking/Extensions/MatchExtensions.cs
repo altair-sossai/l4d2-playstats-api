@@ -1,17 +1,19 @@
 ﻿using L4D2PlayStats.Core.Modules.Matches;
+using L4D2PlayStats.Core.Modules.Ranking.Configs;
+using L4D2PlayStats.Core.Modules.Ranking.Structures;
 
 namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
 
 public static class MatchExtensions
 {
-    public static IEnumerable<Player> Ranking(this Match match)
+    public static IEnumerable<Player> Ranking(this Match match, IExperienceConfig config)
     {
         var matches = new[] { match };
 
-        return matches.Ranking();
+        return matches.Ranking(config);
     }
 
-    public static IEnumerable<Player> Ranking(this IEnumerable<Match> matches)
+    public static IEnumerable<Player> Ranking(this IEnumerable<Match> matches, IExperienceConfig config)
     {
         var players = new Dictionary<string, Player>();
         var previousExperience = new Dictionary<string, decimal>();
@@ -31,11 +33,25 @@ public static class MatchExtensions
                 previousExperience.Add(matchPlayer.CommunityId, players[matchPlayer.CommunityId].Experience);
             }
 
+            var playersExperience = new Dictionary<string, ExperienceCalculation>();
+
             foreach (var playerName in match.Winners())
-                players.TryAdd(playerName)?.AddWin();
+            {
+                var player = players.TryAdd(playerName);
+                if (player != null)
+                    player.Wins++;
+
+                playersExperience.Win(playerName.CommunityId, config);
+            }
 
             foreach (var playerName in match.Losers())
-                players.TryAdd(playerName)?.AddLoss();
+            {
+                var player = players.TryAdd(playerName);
+                if (player != null)
+                    player.Loss++;
+
+                playersExperience.Loss(playerName.CommunityId, config);
+            }
 
             foreach (var team in match.Teams)
             foreach (var matchPlayer in team.Players)
@@ -44,8 +60,18 @@ public static class MatchExtensions
                 if (player == null)
                     continue;
 
+                player.Games++;
                 player.Mvps += matchPlayer.MvpSiDamage;
                 player.MvpsCommon += matchPlayer.MvpCommon;
+                playersExperience.Mvps(matchPlayer.CommunityId, matchPlayer.MvpSiDamage, matchPlayer.MvpCommon, config);
+            }
+
+            foreach (var (communityId, experienceCalculation) in playersExperience)
+            {
+                if (!players.TryGetValue(communityId, out var player))
+                    continue;
+
+                player.Experience += experienceCalculation.Experience;
             }
         }
 
