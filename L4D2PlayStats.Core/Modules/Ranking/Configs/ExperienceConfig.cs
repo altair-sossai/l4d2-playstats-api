@@ -2,6 +2,7 @@
 
 public class ExperienceConfig : IExperienceConfig
 {
+    public int DaysRange => 60;
     public int Win => 80;
     public int Loss => -45;
     public int Mvps => 8;
