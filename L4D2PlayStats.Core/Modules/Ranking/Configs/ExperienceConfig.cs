@@ -3,8 +3,8 @@
 public class ExperienceConfig : IExperienceConfig
 {
     public int DaysRange => 60;
-    public int Win => 80;
-    public int Loss => -45;
-    public int Mvps => 8;
-    public int MvpsCommon => 6;
+    public int Win => 65;
+    public int Loss => -80;
+    public int Mvps => 7;
+    public int MvpsCommon => 5;
 }
