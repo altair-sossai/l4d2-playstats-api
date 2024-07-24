@@ -17,11 +17,11 @@ public class RankingFunction(IRankingService rankingService, IMatchService match
 {
     [Function($"{nameof(RankingFunction)}_{nameof(RankingAsync)}")]
     public async Task<IActionResult> RankingAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}")] HttpRequest httpRequest,
-        string serverId)
+        string serverId, int count = 50)
     {
         try
         {
-            var players = await rankingService.RankingAsync(serverId);
+            var players = await rankingService.RankingAsync(serverId, count);
 
             return new JsonResult(players);
         }
@@ -54,11 +54,11 @@ public class RankingFunction(IRankingService rankingService, IMatchService match
 
     [Function($"{nameof(RankingFunction)}_{nameof(PlaceAsync)}")]
     public async Task<IActionResult> PlaceAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}/place/{communityId:long}")] HttpRequest httpRequest,
-        string serverId, long communityId)
+        string serverId, long communityId, int count = 50)
     {
         try
         {
-            var players = await rankingService.RankingAsync(serverId);
+            var players = await rankingService.RankingAsync(serverId, count);
             var top3 = players.Take(3).ToList();
             var me = players.FirstOrDefault(f => f.CommunityId == communityId);
             var result = new { top3, me };

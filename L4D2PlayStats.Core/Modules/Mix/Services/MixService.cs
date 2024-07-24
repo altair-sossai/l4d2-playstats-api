@@ -7,11 +7,11 @@ namespace L4D2PlayStats.Core.Modules.Mix.Services;
 
 public class MixService(IRankingService rankingService, IValidator<MixCommand> validator) : IMixService
 {
-    public async Task<MixResult> MixAsync(string serverId, MixCommand command)
+    public async Task<MixResult> MixAsync(string serverId, int count, MixCommand command)
     {
         await validator.ValidateAndThrowAsync(command);
 
-        var ranking = await rankingService.RankingAsync(serverId);
+        var ranking = await rankingService.RankingAsync(serverId, count);
         var players = ranking.ToDictionary(k => k.CommunityId.ToString(), v => v);
         var availables = command.All
             .Where(players.ContainsKey)

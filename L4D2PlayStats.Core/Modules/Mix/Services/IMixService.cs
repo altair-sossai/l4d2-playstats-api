@@ -5,5 +5,5 @@ namespace L4D2PlayStats.Core.Modules.Mix.Services;
 
 public interface IMixService
 {
-    Task<MixResult> MixAsync(string serverId, MixCommand command);
+    Task<MixResult> MixAsync(string serverId, int count, MixCommand command);
 }

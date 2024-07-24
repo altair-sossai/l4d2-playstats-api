@@ -7,14 +7,14 @@ namespace L4D2PlayStats.Core.Modules.Ranking.Services;
 
 public class RankingService(IMemoryCache memoryCache, IMatchService matchService, IExperienceConfig config) : IRankingService
 {
-    public Task<List<Player>> RankingAsync(string serverId)
+    public Task<List<Player>> RankingAsync(string serverId, int count)
     {
         return memoryCache.GetOrCreateAsync($"ranking_{serverId}".ToLower(), async factory =>
         {
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
             var matches = await matchService.GetMatchesAsync(serverId);
-            var players = matches.Ranking(config).ToList();
+            var players = matches.Ranking(config).Take(count).ToList();
 
             return players;
         })!;

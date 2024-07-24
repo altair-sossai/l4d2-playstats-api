@@ -14,13 +14,14 @@ namespace L4D2PlayStats.FunctionApp.Functions;
 public class MixFunction(IServerService serverService, IMixService mixService)
 {
     [Function($"{nameof(MixFunction)}_{nameof(MixAsync)}")]
-    public async Task<IActionResult> MixAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "mix")] HttpRequest httpRequest)
+    public async Task<IActionResult> MixAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "mix")] HttpRequest httpRequest,
+        int count = 50)
     {
         try
         {
             var server = serverService.EnsureAuthentication(httpRequest.AuthorizationToken());
             var command = await httpRequest.DeserializeBodyAsync<MixCommand>();
-            var result = await mixService.MixAsync(server.Id, command);
+            var result = await mixService.MixAsync(server.Id, count, command);
 
             return new JsonResult(result);
         }

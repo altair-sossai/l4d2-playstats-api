@@ -2,5 +2,5 @@
 
 public interface IRankingService
 {
-    Task<List<Player>> RankingAsync(string serverId);
+    Task<List<Player>> RankingAsync(string serverId, int count);
 }
