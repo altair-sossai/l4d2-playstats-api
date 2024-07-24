@@ -18,7 +18,7 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
     [IgnoreDataMember]
     public List<Statistics.Statistics> Maps { get; } = [];
 
-    public bool Competitive => Maps.Count >= 4 && TeamSize == 4;
+    public bool Competitive => Maps.Count >= 3 && TeamSize == 4;
 
     public void Add(Statistics.Statistics statistic)
     {
