@@ -52,8 +52,8 @@ public static class PlayerExtensions
             .OrderByDescending(o => o.Experience)
             .ThenByDescending(o => o.Wins)
             .ThenBy(o => o.Loss)
-            .ThenByDescending(o => o.Mvps)
-            .ThenByDescending(o => o.MvpsCommon)
+            .ThenByDescending(o => o.MvpSiDamage)
+            .ThenByDescending(o => o.MvpCommon)
             .UpdatePosition();
     }
 
