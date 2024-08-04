@@ -53,6 +53,15 @@ public static class MatchExtensions
                 playersExperience.Loss(playerName.CommunityId, config);
             }
 
+            foreach (var statsPlayer in match.RageQuit())
+            {
+                var player = players.TryAdd(statsPlayer);
+                if (player != null)
+                    player.RageQuit++;
+
+                playersExperience.RageQuit(statsPlayer.CommunityId, config);
+            }
+
             foreach (var team in match.Teams)
             foreach (var matchPlayer in team.Players)
             {
@@ -88,6 +97,10 @@ public static class MatchExtensions
 
     private static IEnumerable<PlayerName> Winners(this Match match)
     {
+        var firstRoundPlayers = match.FirstRoundPlayers?.Select(p => p.CommunityId).ToHashSet();
+        if (firstRoundPlayers == null)
+            yield break;
+
         var lastMap = match.Maps.Select(m => m.Statistic).FirstOrDefault();
 
         if (lastMap?.Scoring?.TeamA == null
@@ -97,12 +110,16 @@ public static class MatchExtensions
 
         var winners = lastMap.Scoring.TeamA.Score > lastMap.Scoring.TeamB.Score ? lastMap.TeamA : lastMap.TeamB;
 
-        foreach (var playerName in winners)
+        foreach (var playerName in winners.Where(w => firstRoundPlayers.Contains(w.CommunityId)))
             yield return playerName;
     }
 
     private static IEnumerable<PlayerName> Losers(this Match match)
     {
+        var firstRoundPlayers = match.FirstRoundPlayers?.Select(p => p.CommunityId).ToHashSet();
+        if (firstRoundPlayers == null)
+            yield break;
+
         var lastMap = match.Maps.Select(m => m.Statistic).FirstOrDefault();
 
         if (lastMap?.Scoring?.TeamA == null
@@ -112,7 +129,21 @@ public static class MatchExtensions
 
         var losers = lastMap.Scoring.TeamA.Score > lastMap.Scoring.TeamB.Score ? lastMap.TeamB : lastMap.TeamA;
 
-        foreach (var playerName in losers)
+        foreach (var playerName in losers.Where(w => firstRoundPlayers.Contains(w.CommunityId)))
             yield return playerName;
+    }
+
+    private static IEnumerable<L4D2PlayStats.Player> RageQuit(this Match match)
+    {
+        var firstRoundPlayers = match.FirstRoundPlayers?.ToList();
+        if (firstRoundPlayers == null)
+            yield break;
+
+        var lastRoundPlayers = match.LastRoundPlayers?.ToList();
+        if (lastRoundPlayers == null)
+            yield break;
+
+        foreach (var firstRoundPlayer in firstRoundPlayers.Where(frp => lastRoundPlayers.All(lrp => lrp.CommunityId != frp.CommunityId)))
+            yield return firstRoundPlayer;
     }
 }

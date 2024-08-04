@@ -46,6 +46,25 @@ public static class PlayerExtensions
         return players[communityId];
     }
 
+    public static Player? TryAdd(this Dictionary<string, Player> players, L4D2PlayStats.Player statsPlayer)
+    {
+        var communityId = statsPlayer.CommunityId;
+
+        if (string.IsNullOrEmpty(communityId))
+            return null;
+
+        if (players.TryGetValue(communityId, out var player))
+            return player;
+
+        players.Add(communityId, new Player
+        {
+            CommunityId = long.Parse(communityId),
+            Name = statsPlayer.PlayerName
+        });
+
+        return players[communityId];
+    }
+
     public static IEnumerable<Player> RankPlayers(this IEnumerable<Player> players)
     {
         return players

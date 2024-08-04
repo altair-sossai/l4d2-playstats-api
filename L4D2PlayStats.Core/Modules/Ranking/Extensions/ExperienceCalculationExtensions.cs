@@ -27,6 +27,17 @@ public static class ExperienceCalculationExtensions
         playersExperience[communityId].Loss = true;
     }
 
+    public static void RageQuit(this Dictionary<string, ExperienceCalculation> playersExperience, string? communityId, IExperienceConfig config)
+    {
+        if (string.IsNullOrEmpty(communityId))
+            return;
+
+        if (!playersExperience.ContainsKey(communityId))
+            playersExperience.Add(communityId, new ExperienceCalculation(config));
+
+        playersExperience[communityId].RageQuit = true;
+    }
+
     public static void Mvps(this Dictionary<string, ExperienceCalculation> playersExperience, string? communityId, int mvpSiDamage, int mvpCommon, IExperienceConfig config)
     {
         if (string.IsNullOrEmpty(communityId))

@@ -6,6 +6,7 @@ public class ExperienceCalculation(IExperienceConfig config)
 {
     public bool Win { get; set; }
     public bool Loss { get; set; }
+    public bool RageQuit { get; set; }
     public int Mvps { get; set; }
     public int MvpsCommon { get; set; }
 
@@ -13,6 +14,9 @@ public class ExperienceCalculation(IExperienceConfig config)
     {
         get
         {
+            if (RageQuit)
+                return config.RageQuit;
+
             var experience = 0m;
 
             if (Win)
