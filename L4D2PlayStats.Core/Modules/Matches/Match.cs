@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using L4D2PlayStats.Core.Modules.Campaigns;
 
 namespace L4D2PlayStats.Core.Modules.Matches;
@@ -13,13 +14,13 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
     public List<Team> Teams { get; } = [new Team('A', teamA, playersA), new Team('B', teamB, playersB)];
     public List<string> Statistics { get; } = [];
 
-    [IgnoreDataMember]
+    [IgnoreDataMember, JsonIgnore]
     public List<Statistics.Statistics> Maps { get; } = [];
 
-    [IgnoreDataMember]
+    [IgnoreDataMember, JsonIgnore]
     public IEnumerable<L4D2PlayStats.Player>? FirstRoundPlayers => Maps.LastOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
 
-    [IgnoreDataMember]
+    [IgnoreDataMember, JsonIgnore]
     public IEnumerable<L4D2PlayStats.Player>? LastRoundPlayers => Maps.FirstOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
 
     public bool Competitive => Maps.Count >= 3 && TeamSize == 4;
