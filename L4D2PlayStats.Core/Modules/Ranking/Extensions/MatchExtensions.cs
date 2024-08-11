@@ -57,7 +57,10 @@ public static class MatchExtensions
             {
                 var player = players.TryAdd(statsPlayer);
                 if (player != null)
+                {
+                    player.Loss++;
                     player.RageQuit++;
+                }
 
                 playersExperience.RageQuit(statsPlayer.CommunityId, config);
             }
