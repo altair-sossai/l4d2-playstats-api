@@ -22,15 +22,29 @@ public static class MatchExtensions
         {
             previousExperience.Clear();
 
-            foreach (var team in match.Teams)
-            foreach (var matchPlayer in team.Players)
+            foreach (var half in match.Maps.SelectMany(map => map.Statistic?.Halves ?? []))
             {
-                if (string.IsNullOrEmpty(matchPlayer.CommunityId)
-                    || !players.ContainsKey(matchPlayer.CommunityId)
-                    || previousExperience.ContainsKey(matchPlayer.CommunityId))
-                    continue;
+                foreach (var matchPlayer in half.Players
+                             .Where(matchPlayer => !string.IsNullOrEmpty(matchPlayer.CommunityId)
+                                                   && players.ContainsKey(matchPlayer.CommunityId)
+                                                   && !previousExperience.ContainsKey(matchPlayer.CommunityId)))
+                {
+                    if (string.IsNullOrEmpty(matchPlayer.CommunityId))
+                        continue;
 
-                previousExperience.Add(matchPlayer.CommunityId, players[matchPlayer.CommunityId].Experience);
+                    previousExperience.Add(matchPlayer.CommunityId, players[matchPlayer.CommunityId].Experience);
+                }
+
+                foreach (var matchPlayer in half.InfectedPlayers
+                             .Where(matchPlayer => !string.IsNullOrEmpty(matchPlayer.CommunityId)
+                                                   && players.ContainsKey(matchPlayer.CommunityId)
+                                                   && !previousExperience.ContainsKey(matchPlayer.CommunityId)))
+                {
+                    if (string.IsNullOrEmpty(matchPlayer.CommunityId))
+                        continue;
+
+                    previousExperience.Add(matchPlayer.CommunityId, players[matchPlayer.CommunityId].Experience);
+                }
             }
 
             var playersExperience = new Dictionary<string, ExperienceCalculation>();
