@@ -86,7 +86,6 @@ public static class MatchExtensions
                 if (player == null)
                     continue;
 
-                player.Games++;
                 player.AppendInfo(matchPlayer);
 
                 playersExperience.Mvps(matchPlayer.CommunityId, matchPlayer.MvpSiDamage, matchPlayer.MvpCommon, config);
