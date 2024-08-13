@@ -17,7 +17,7 @@ public class RankingFunction(IRankingService rankingService, IMatchService match
 {
     [Function($"{nameof(RankingFunction)}_{nameof(RankingAsync)}")]
     public async Task<IActionResult> RankingAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}")] HttpRequest httpRequest,
-        string serverId, int count = 50)
+        string serverId, int count = 100)
     {
         try
         {
@@ -54,7 +54,7 @@ public class RankingFunction(IRankingService rankingService, IMatchService match
 
     [Function($"{nameof(RankingFunction)}_{nameof(PlaceAsync)}")]
     public async Task<IActionResult> PlaceAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}/place/{communityId:long}")] HttpRequest httpRequest,
-        string serverId, long communityId, int count = 50)
+        string serverId, long communityId, int count = 100)
     {
         try
         {

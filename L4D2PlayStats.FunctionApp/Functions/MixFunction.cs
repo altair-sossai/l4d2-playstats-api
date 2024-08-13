@@ -15,7 +15,7 @@ public class MixFunction(IServerService serverService, IMixService mixService)
 {
     [Function($"{nameof(MixFunction)}_{nameof(MixAsync)}")]
     public async Task<IActionResult> MixAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "mix")] HttpRequest httpRequest,
-        int count = 50)
+        int count = 100)
     {
         try
         {

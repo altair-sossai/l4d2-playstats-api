@@ -14,7 +14,7 @@ public class MatchesFunction(IMatchService matchService)
 {
     [Function($"{nameof(MatchesFunction)}_{nameof(MatchesAsync)}")]
     public async Task<IActionResult> MatchesAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "matches/{serverId}")] HttpRequest httpRequest,
-        string serverId, int count = 10)
+        string serverId, int count = 20)
     {
         try
         {
