@@ -9,7 +9,7 @@ public class RankingService(IMemoryCache memoryCache, IMatchService matchService
 {
     public Task<List<Player>> RankingAsync(string serverId, int count)
     {
-        return memoryCache.GetOrCreateAsync($"ranking_{serverId}".ToLower(), async factory =>
+        return memoryCache.GetOrCreateAsync($"ranking_{serverId}_{count}".ToLower(), async factory =>
         {
             factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
