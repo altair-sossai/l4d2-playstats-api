@@ -2,5 +2,6 @@
 
 public interface IRankingService
 {
-    Task<List<Player>> RankingAsync(string serverId, int count);
+    Task<List<Player>> RankingAsync(string serverId, int count, DateTime? reference = null);
+    Task SaveRankingAsync(string serverId, DateTime reference);
 }

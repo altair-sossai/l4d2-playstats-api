@@ -28,26 +28,19 @@ public class MatchService(
         return match;
     }
 
-    public async Task<List<Match>> GetMatchesAsync(string serverId)
+    public async Task<List<Match>> GetMatchesAsync(string serverId, DateTime? reference = null)
     {
-        var matches = await memoryCache.GetOrCreateAsync($"matches_{serverId}".ToLower(), async factory =>
-        {
-            factory.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
+        var server = serverService.GetServer(serverId);
+        if (server == null)
+            return [];
 
-            var server = serverService.GetServer(serverId);
-            if (server == null)
-                return [];
+        var campaigns = campaignRepository.GetCampaigns();
+        var matches = await statisticsRepository
+            .GetStatisticsAsync(serverId, reference)
+            .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
+            .ToMatchesAsync(campaigns);
 
-            var campaigns = campaignRepository.GetCampaigns();
-            var matches = await statisticsRepository
-                .GetStatisticsAsync(serverId)
-                .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
-                .ToMatchesAsync(campaigns);
-
-            return matches;
-        });
-
-        return matches!;
+        return matches;
     }
 
     public async Task<List<Match>> GetMatchesBetweenAsync(string serverId, string start, string end)

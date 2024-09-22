@@ -5,6 +5,8 @@ using L4D2PlayStats.Core.Modules.Matches.Services;
 using L4D2PlayStats.Core.Modules.Ranking.Configs;
 using L4D2PlayStats.Core.Modules.Ranking.Extensions;
 using L4D2PlayStats.Core.Modules.Ranking.Services;
+using L4D2PlayStats.Core.Modules.Server.Services;
+using L4D2PlayStats.Core.Modules.Statistics.Models;
 using L4D2PlayStats.FunctionApp.Errors;
 using L4D2PlayStats.FunctionApp.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +15,7 @@ using Microsoft.Azure.Functions.Worker;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class RankingFunction(IRankingService rankingService, IMatchService matchService, IExperienceConfig config)
+public class RankingFunction(IServerService serverService, IRankingService rankingService, IMatchService matchService, IExperienceConfig config)
 {
     [Function($"{nameof(RankingFunction)}_{nameof(RankingAsync)}")]
     public async Task<IActionResult> RankingAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}")] HttpRequest httpRequest,
@@ -82,5 +84,15 @@ public class RankingFunction(IRankingService rankingService, IMatchService match
         {
             return ErrorResult.Build(exception).ResponseMessageResult();
         }
+    }
+
+    [Function($"{nameof(RankingFunction)}_{nameof(SaveRankingFromPreviousPeriodAsync)}")]
+    public async Task SaveRankingFromPreviousPeriodAsync([TimerTrigger("0 */1 * * * *")] TimerInfo timerInfo)
+    {
+        var currentPeriod = new RankingPeriodModel(DateTime.UtcNow);
+        var previousPeriod = currentPeriod.PreviousPeriod();
+
+        foreach (var server in serverService.GetServers())
+            await rankingService.SaveRankingAsync(server.Id, previousPeriod.Start);
     }
 }

@@ -3,7 +3,7 @@
 public interface IStatisticsRepository
 {
     ValueTask<Statistics?> GetStatisticAsync(string serverId, string statisticId);
-    IAsyncEnumerable<Statistics> GetStatisticsAsync(string serverId);
+    IAsyncEnumerable<Statistics> GetStatisticsAsync(string serverId, DateTime? reference = null);
     IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string serverId, string start, string end);
     Task AddOrUpdateAsync(Statistics statistics);
 }
