@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,13 @@ public class AzureBlobStorageContext(IConfiguration configuration) : IAzureBlobS
         var containerClient = BlobServiceClient.GetBlobContainerClient(containerName);
 
         return containerClient.GetBlobClient(fileName);
+    }
+
+    public AsyncPageable<BlobItem> GetBlobsAsync(string containerName)
+    {
+        var containerClient = BlobServiceClient.GetBlobContainerClient(containerName);
+
+        return containerClient.GetBlobsAsync();
     }
 
     public async Task CreateContainerIfNotExistsAsync(string containerName, PublicAccessType accessType)

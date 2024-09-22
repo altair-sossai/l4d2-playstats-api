@@ -86,8 +86,40 @@ public class RankingFunction(IServerService serverService, IRankingService ranki
         }
     }
 
-    [Function($"{nameof(RankingFunction)}_{nameof(SaveRankingFromPreviousPeriodAsync)}")]
-    public async Task SaveRankingFromPreviousPeriodAsync([TimerTrigger("0 */1 * * * *")] TimerInfo timerInfo)
+    [Function($"{nameof(RankingFunction)}_{nameof(AllHistoryAsync)}")]
+    public async Task<IActionResult> AllHistoryAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}/history")] HttpRequest httpRequest,
+        string serverId)
+    {
+        try
+        {
+            var history = await rankingService.AllHistoryAsync(serverId).ToListAsync();
+
+            return new JsonResult(history);
+        }
+        catch (Exception exception)
+        {
+            return ErrorResult.Build(exception).ResponseMessageResult();
+        }
+    }
+
+    [Function($"{nameof(RankingFunction)}_{nameof(HistoryAsync)}")]
+    public async Task<IActionResult> HistoryAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}/history/{historyId}")] HttpRequest httpRequest,
+        string serverId, string historyId)
+    {
+        try
+        {
+            var history = await rankingService.HistoryAsync(serverId, historyId);
+
+            return new JsonResult(history);
+        }
+        catch (Exception exception)
+        {
+            return ErrorResult.Build(exception).ResponseMessageResult();
+        }
+    }
+
+    [Function($"{nameof(RankingFunction)}_{nameof(SaveRankingAsync)}")]
+    public async Task SaveRankingAsync([TimerTrigger("0 0 0 * * *")] TimerInfo timerInfo)
     {
         var currentPeriod = new RankingPeriodModel(DateTime.UtcNow);
         var previousPeriod = currentPeriod.PreviousPeriod();
