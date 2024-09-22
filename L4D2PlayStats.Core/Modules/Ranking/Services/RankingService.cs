@@ -43,7 +43,12 @@ public class RankingService(IMatchService matchService, IExperienceConfig config
         var containerName = $"{serverId}-ranking-history".ToLower();
 
         await foreach (var blobItem in blobStorageContext.GetBlobsAsync(containerName))
-            yield return new HistoryModel(blobItem.Name);
+        {
+            var history = HistoryModel.Parse(blobItem.Name);
+
+            if (history != null)
+                yield return new HistoryModel(blobItem.Name);
+        }
     }
 
     public async Task<List<Player>> HistoryAsync(string serverId, string historyId)
