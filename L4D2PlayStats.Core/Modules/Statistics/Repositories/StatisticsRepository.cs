@@ -1,13 +1,10 @@
 ﻿using L4D2PlayStats.Core.Contexts.AzureTableStorage;
 using L4D2PlayStats.Core.Contexts.AzureTableStorage.Repositories;
-using L4D2PlayStats.Core.Modules.Ranking.Configs;
+using L4D2PlayStats.Core.Modules.Statistics.Helpers;
 
 namespace L4D2PlayStats.Core.Modules.Statistics.Repositories;
 
-public class StatisticsRepository(
-    IAzureTableStorageContext tableContext,
-    IExperienceConfig config)
-    : BaseTableStorageRepository<Statistics>("Statistics", tableContext), IStatisticsRepository
+public class StatisticsRepository(IAzureTableStorageContext tableContext) : BaseTableStorageRepository<Statistics>("Statistics", tableContext), IStatisticsRepository
 {
     public ValueTask<Statistics?> GetStatisticAsync(string serverId, string statisticId)
     {
@@ -16,8 +13,8 @@ public class StatisticsRepository(
 
     public IAsyncEnumerable<Statistics> GetStatisticsAsync(string serverId)
     {
-        var after = DateTime.UtcNow.AddDays(config.DaysRange * -1);
-        var rowKey = $"{long.MaxValue - after.Ticks}";
+        var rankingPeriod = StatisticsHelper.CurrentRankingPeriod(DateTime.UtcNow);
+        var rowKey = $"{long.MaxValue - rankingPeriod.Ticks}";
         var filter = $"PartitionKey eq '{serverId}' and RowKey le '{rowKey}'";
 
         return TableClient.QueryAsync<Statistics>(filter);

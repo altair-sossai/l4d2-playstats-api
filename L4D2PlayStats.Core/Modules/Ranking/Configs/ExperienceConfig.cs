@@ -4,7 +4,6 @@ namespace L4D2PlayStats.Core.Modules.Ranking.Configs;
 
 public class ExperienceConfig(IConfiguration configuration) : IExperienceConfig
 {
-    public int DaysRange => configuration.GetValue("ExperienceConfig:DaysRange", 60);
     public int Win => configuration.GetValue("ExperienceConfig:Win", 80);
     public int Loss => configuration.GetValue("ExperienceConfig:Loss", -65);
     public int RageQuit => configuration.GetValue("ExperienceConfig:RageQuit", -130);

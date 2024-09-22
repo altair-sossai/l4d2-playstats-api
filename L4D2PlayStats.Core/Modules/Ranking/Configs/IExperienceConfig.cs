@@ -2,7 +2,6 @@
 
 public interface IExperienceConfig
 {
-    int DaysRange { get; }
     int Win { get; }
     int Loss { get; }
     int RageQuit { get; }
