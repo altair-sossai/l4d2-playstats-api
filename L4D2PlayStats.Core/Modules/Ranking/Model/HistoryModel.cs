@@ -4,7 +4,7 @@ namespace L4D2PlayStats.Core.Modules.Ranking.Model;
 
 public class HistoryModel
 {
-    private const string Pattern = @"^ranking_(\d{4})\-(\d{2})_(\d{4})\-(\d{2})\.json$";
+    private const string Pattern = @"^ranking_(\d{4})(\d{2})(\d{4})(\d{2})\.json$";
     private static readonly Regex Regex = new(Pattern);
     private string _fileName = default!;
 
@@ -13,7 +13,7 @@ public class HistoryModel
         FileName = fileName;
     }
 
-    public string Id { get; private set; } = default!;
+    public string Id => $"{StartYear:0000}{StartMonth:00}{EndYear:0000}{EndMonth:00}";
 
     public string FileName
     {
@@ -22,22 +22,20 @@ public class HistoryModel
         {
             _fileName = value;
 
-            Id = value[..^5];
-
             var match = Regex.Match(value);
 
-            StartMonth = int.Parse(match.Groups[1].Value);
-            StartYear = int.Parse(match.Groups[2].Value);
+            StartYear = int.Parse(match.Groups[1].Value);
+            StartMonth = int.Parse(match.Groups[2].Value);
 
-            EndMonth = int.Parse(match.Groups[3].Value);
-            EndYear = int.Parse(match.Groups[4].Value);
+            EndYear = int.Parse(match.Groups[3].Value);
+            EndMonth = int.Parse(match.Groups[4].Value);
         }
     }
 
-    public int StartMonth { get; private set; }
     public int StartYear { get; private set; }
-    public int EndMonth { get; private set; }
+    public int StartMonth { get; private set; }
     public int EndYear { get; private set; }
+    public int EndMonth { get; private set; }
 
     public static HistoryModel? Parse(string fileName)
     {

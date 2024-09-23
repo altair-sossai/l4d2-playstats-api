@@ -26,7 +26,7 @@ public class RankingService(IMatchService matchService, IExperienceConfig config
         await blobStorageContext.CreateContainerIfNotExistsAsync(containerName, PublicAccessType.Blob);
 
         var period = new RankingPeriodModel(reference);
-        var fileName = $"ranking_{period.Start:yyyy-MM}_{period.End:yyyy-MM}.json".ToLower();
+        var fileName = $"ranking_{period.Start:yyyyMM}{period.End:yyyyMM}.json".ToLower();
 
         var blobClient = blobStorageContext.GetBlobClient(containerName, fileName);
 
@@ -54,7 +54,7 @@ public class RankingService(IMatchService matchService, IExperienceConfig config
     public async Task<List<Player>> HistoryAsync(string serverId, string historyId)
     {
         var containerName = $"{serverId}-ranking-history".ToLower();
-        var fileName = $"{historyId}.json".ToLower();
+        var fileName = $"ranking_{historyId}.json".ToLower();
 
         var blobClient = blobStorageContext.GetBlobClient(containerName, fileName);
 
