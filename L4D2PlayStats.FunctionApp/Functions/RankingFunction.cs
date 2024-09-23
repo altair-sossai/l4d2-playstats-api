@@ -108,9 +108,9 @@ public class RankingFunction(IServerService serverService, IRankingService ranki
     {
         try
         {
-            var history = await rankingService.HistoryAsync(serverId, historyId);
+            var players = await rankingService.HistoryAsync(serverId, historyId);
 
-            return new JsonResult(history);
+            return new JsonResult(players);
         }
         catch (Exception exception)
         {
