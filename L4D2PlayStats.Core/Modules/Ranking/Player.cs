@@ -1,5 +1,6 @@
 ﻿using L4D2PlayStats.Core.Infrastructure.Structures;
 using L4D2PlayStats.Core.Modules.Matches;
+using L4D2PlayStats.Core.Modules.Ranking.Structures;
 
 namespace L4D2PlayStats.Core.Modules.Ranking;
 
@@ -7,6 +8,7 @@ public class Player
 {
     private readonly long _communityId;
     private decimal _experience;
+    private string? _name;
     private SteamIdentifiers _steamIdentifiers;
 
     public long CommunityId
@@ -23,7 +25,36 @@ public class Player
     public string? Steam3 => _steamIdentifiers.Steam3;
     public string? ProfileUrl => _steamIdentifiers.ProfileUrl;
     public int Position { get; set; }
-    public string? Name { get; set; }
+
+    public string? Name
+    {
+        get => _name;
+        set
+        {
+            _name = value;
+
+            if (string.IsNullOrEmpty(value))
+                return;
+
+            var previousName = PreviousNames.FirstOrDefault(pn => pn.Name.Equals(value, StringComparison.CurrentCultureIgnoreCase));
+
+            if (previousName == null)
+            {
+                previousName = new PreviousName(value);
+                PreviousNames.Add(previousName);
+            }
+
+            previousName.TimesUsed++;
+
+            PreviousNames.Sort((a, b) => b.TimesUsed - a.TimesUsed);
+        }
+    }
+
+    public string MainName => PreviousNames.FirstOrDefault()?.Name ?? Name ?? "Unknown";
+
+    public string MostUsedNames => string.Join(" | ", PreviousNames.Take(3).Select(pn => pn.Name));
+
+    public List<PreviousName> PreviousNames { get; } = [];
 
     public decimal Experience
     {
