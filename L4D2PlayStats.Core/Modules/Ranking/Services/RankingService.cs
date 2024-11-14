@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs.Models;
 using L4D2PlayStats.Core.Contexts.AzureBlobStorage;
 using L4D2PlayStats.Core.Modules.Matches.Services;
+using L4D2PlayStats.Core.Modules.Punishments.Repositories;
 using L4D2PlayStats.Core.Modules.Ranking.Configs;
 using L4D2PlayStats.Core.Modules.Ranking.Extensions;
 using L4D2PlayStats.Core.Modules.Ranking.Model;
@@ -9,12 +10,21 @@ using L4D2PlayStats.Core.Modules.Statistics.Models;
 
 namespace L4D2PlayStats.Core.Modules.Ranking.Services;
 
-public class RankingService(IMatchService matchService, IExperienceConfig config, IAzureBlobStorageContext blobStorageContext) : IRankingService
+public class RankingService(
+    IMatchService matchService,
+    IPunishmentsRepository punishmentsRepository,
+    IExperienceConfig experienceConfig,
+    IAzureBlobStorageContext blobStorageContext) : IRankingService
 {
     public async Task<List<Player>> RankingAsync(string serverId, int count, DateTime? reference = null)
     {
         var matches = await matchService.GetMatchesAsync(serverId, reference);
-        var players = matches.Ranking(config).Take(count).ToList();
+
+        var punishments = await punishmentsRepository
+            .GetPunishmentsAsync(serverId)
+            .ToDictionaryAsync(k => k.CommunityId, v => v.LostExperiencePoints);
+
+        var players = matches.Ranking(punishments, experienceConfig).Take(count).ToList();
 
         return players;
     }
@@ -36,6 +46,8 @@ public class RankingService(IMatchService matchService, IExperienceConfig config
         var players = await RankingAsync(serverId, 100, reference);
 
         await blobStorageContext.UploadAsync(containerName, fileName, players);
+
+        await punishmentsRepository.DeleteAllAsync(serverId);
     }
 
     public async IAsyncEnumerable<HistoryModel> AllHistoryAsync(string serverId)

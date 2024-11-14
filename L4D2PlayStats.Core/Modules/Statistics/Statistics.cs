@@ -43,7 +43,8 @@ public class Statistics : ITableEntity
         }
     }
 
-    [IgnoreDataMember, JsonIgnore]
+    [IgnoreDataMember]
+    [JsonIgnore]
     public L4D2PlayStats.Statistics? Statistic => _statistic ??= L4D2PlayStats.Statistics.TryParse(Content!, out var statistic) ? statistic : null;
 
     public int ScoreDifference => Math.Abs((Statistic?.Scoring?.TeamA?.Score ?? 0) - (Statistic?.Scoring?.TeamB?.Score ?? 00));

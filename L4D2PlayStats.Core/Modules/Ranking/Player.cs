@@ -67,6 +67,7 @@ public class Player
     public int Wins { get; set; }
     public int Loss { get; set; }
     public int RageQuit { get; set; }
+    public int Punishment { get; set; }
     public int Games => Wins + Loss;
     public decimal WinRate => Games == 0 ? 0 : Wins / (decimal)Games;
 

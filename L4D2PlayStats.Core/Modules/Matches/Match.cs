@@ -11,16 +11,19 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
     public DateTime? MatchEnd { get; internal init; }
     public TimeSpan? MatchElapsed => MatchEnd - MatchStart;
     public string? Campaign { get; } = campaign.Name;
-    public List<Team> Teams { get; } = [new Team('A', teamA, playersA), new Team('B', teamB, playersB)];
+    public List<Team> Teams { get; } = [new('A', teamA, playersA), new('B', teamB, playersB)];
     public List<string> Statistics { get; } = [];
 
-    [IgnoreDataMember, JsonIgnore]
+    [IgnoreDataMember]
+    [JsonIgnore]
     public List<Statistics.Statistics> Maps { get; } = [];
 
-    [IgnoreDataMember, JsonIgnore]
+    [IgnoreDataMember]
+    [JsonIgnore]
     public IEnumerable<L4D2PlayStats.Player>? FirstRoundPlayers => Maps.LastOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
 
-    [IgnoreDataMember, JsonIgnore]
+    [IgnoreDataMember]
+    [JsonIgnore]
     public IEnumerable<L4D2PlayStats.Player>? LastRoundPlayers => Maps.FirstOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
 
     public bool Competitive => Maps.Count >= 3 && TeamSize == 4;

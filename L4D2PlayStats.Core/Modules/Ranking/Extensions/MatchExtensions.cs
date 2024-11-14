@@ -6,14 +6,14 @@ namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
 
 public static class MatchExtensions
 {
-    public static IEnumerable<Player> Ranking(this Match match, IExperienceConfig config)
+    public static IEnumerable<Player> Ranking(this Match match, Dictionary<string, int> punishments, IExperienceConfig config)
     {
         var matches = new[] { match };
 
-        return matches.Ranking(config);
+        return matches.Ranking(punishments, config);
     }
 
-    public static IEnumerable<Player> Ranking(this IEnumerable<Match> matches, IExperienceConfig config)
+    public static IEnumerable<Player> Ranking(this IEnumerable<Match> matches, Dictionary<string, int> punishments, IExperienceConfig config)
     {
         var players = new Dictionary<string, Player>();
         var previousExperience = new Dictionary<string, decimal>();
@@ -98,6 +98,15 @@ public static class MatchExtensions
 
                 player.Experience += experienceCalculation.Experience;
             }
+        }
+
+        foreach (var (key, value) in punishments)
+        {
+            if (!players.TryGetValue(key, out var player))
+                continue;
+
+            player.Punishment = value;
+            player.Experience -= value;
         }
 
         foreach (var (communityId, experience) in previousExperience)

@@ -4,7 +4,7 @@ public class CampaignRepository : ICampaignRepository
 {
     private static readonly List<Campaign> Campaigns =
     [
-        new Campaign
+        new()
         {
             Name = "Dead Center",
             Maps =
@@ -16,7 +16,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "Dark Carnival",
             Maps =
@@ -29,7 +29,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "Swamp Fever",
             Maps =
@@ -41,7 +41,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "Hard Rain",
             Maps =
@@ -54,7 +54,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "The Parish",
             Maps =
@@ -67,7 +67,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "The Passing",
             Maps =
@@ -79,7 +79,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "The Sacrifice",
             Maps =
@@ -90,7 +90,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "No Mercy",
             Maps =
@@ -103,7 +103,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "Crash Course",
             Maps =
@@ -115,7 +115,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "Death Toll",
             Maps =
@@ -128,7 +128,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "Dead Air",
             Maps =
@@ -141,7 +141,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "Blood Harvest",
             Maps =
@@ -154,7 +154,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "Cold Stream",
             Maps =
@@ -166,7 +166,7 @@ public class CampaignRepository : ICampaignRepository
             ]
         },
 
-        new Campaign
+        new()
         {
             Name = "The Last Stand",
             Maps =
