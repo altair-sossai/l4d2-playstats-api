@@ -10,10 +10,10 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Install .NET 8 SDK'
+  displayName: 'Install .NET 9 SDK'
   inputs:
     packageType: 'sdk'
-    version: '8.x'
+    version: '9.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - task: DotNetCoreCLI@2
