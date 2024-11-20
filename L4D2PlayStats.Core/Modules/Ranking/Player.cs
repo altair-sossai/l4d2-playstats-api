@@ -82,6 +82,7 @@ public class Player
     public int RockEats { get; set; }
     public int WitchDamage { get; set; }
     public int Skeets { get; set; }
+    public int SkeetsMelee { get; set; }
     public int Levels { get; set; }
     public int Crowns { get; set; }
     public int FfGiven { get; set; }
@@ -109,6 +110,7 @@ public class Player
         RockEats += player.RockEats;
         WitchDamage += player.WitchDamage;
         Skeets += player.Skeets;
+        SkeetsMelee += player.SkeetsMelee;
         Levels += player.Levels;
         Crowns += player.Crowns;
         FfGiven += player.FfGiven;

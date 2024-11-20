@@ -67,6 +67,7 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
         public int RockEats => Players.Select(p => p.RockEats).DefaultIfEmpty(0).Sum();
         public int WitchDamage => Players.Select(p => p.WitchDamage).DefaultIfEmpty(0).Sum();
         public int Skeets => Players.Select(p => p.Skeets).DefaultIfEmpty(0).Sum();
+        public int SkeetsMelee => Players.Select(p => p.SkeetsMelee).DefaultIfEmpty(0).Sum();
         public int Levels => Players.Select(p => p.Levels).DefaultIfEmpty(0).Sum();
         public int Crowns => Players.Select(p => p.Crowns).DefaultIfEmpty(0).Sum();
         public int FfGiven => Players.Select(p => p.FfGiven).DefaultIfEmpty(0).Sum();
@@ -110,9 +111,10 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
                     currentPlayer.TankDamage += player.TankDamage;
                     currentPlayer.RockEats += player.RockEats;
                     currentPlayer.WitchDamage += player.WitchDamage;
-                    currentPlayer.Skeets += player.Skeets;
-                    currentPlayer.Levels += player.Levels;
-                    currentPlayer.Crowns += player.Crowns;
+                    currentPlayer.Skeets += player.Skeets + player.SkeetsHurt + player.SkeetsMelee;
+                    currentPlayer.SkeetsMelee += player.SkeetsMelee;
+                    currentPlayer.Levels += player.Levels + player.LevelsHurt;
+                    currentPlayer.Crowns += player.Crowns + player.CrownsHurt;
                     currentPlayer.FfGiven += player.FfGiven;
 
                     if (mvpSiDamage != null && player.CommunityId == mvpSiDamage.CommunityId)
@@ -166,6 +168,8 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
         public decimal WitchDamagePercentage => SafeDivision(WitchDamage, team.WitchDamage);
         public int Skeets { get; set; }
         public decimal SkeetsPercentage => SafeDivision(Skeets, team.Skeets);
+        public int SkeetsMelee { get; set; }
+        public decimal SkeetsMeleePercentage => SafeDivision(SkeetsMelee, team.SkeetsMelee);
         public int Levels { get; set; }
         public decimal LevelsPercentage => SafeDivision(Levels, team.Levels);
         public int Crowns { get; set; }
