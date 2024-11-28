@@ -13,26 +13,36 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
     public string? Campaign { get; } = campaign.Name;
     public List<Team> Teams { get; } = [new('A', teamA, playersA), new('B', teamB, playersB)];
     public List<string> Statistics { get; } = [];
+    public List<Map> Maps { get; } = [];
 
     [IgnoreDataMember]
     [JsonIgnore]
-    public List<Statistics.Statistics> Maps { get; } = [];
+    public List<Statistics.Statistics> MapsStatistics { get; } = [];
 
     [IgnoreDataMember]
     [JsonIgnore]
-    public IEnumerable<L4D2PlayStats.Player>? FirstRoundPlayers => Maps.LastOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
+    public IEnumerable<L4D2PlayStats.Player>? FirstRoundPlayers => MapsStatistics.LastOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
 
     [IgnoreDataMember]
     [JsonIgnore]
-    public IEnumerable<L4D2PlayStats.Player>? LastRoundPlayers => Maps.FirstOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
+    public IEnumerable<L4D2PlayStats.Player>? LastRoundPlayers => MapsStatistics.FirstOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
 
-    public bool Competitive => Maps.Count >= 3 && TeamSize == 4;
+    public bool Competitive => MapsStatistics.Count >= 3 && TeamSize == 4;
 
     public void Add(Statistics.Statistics statistic)
     {
         Statistics.Add(statistic.RowKey);
-        Maps.Add(statistic);
+        MapsStatistics.Add(statistic);
+
         UpdateTeamStats(statistic);
+        AddMap(statistic);
+    }
+
+    private void AddMap(Statistics.Statistics statistic)
+    {
+        var map = new Map(statistic);
+
+        Maps.Insert(0, map);
     }
 
     private void UpdateTeamStats(Statistics.Statistics statistic)
@@ -202,5 +212,12 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
 
             return dividend / divisor;
         }
+    }
+
+    public class Map(Statistics.Statistics statistic)
+    {
+        public int Round => statistic.Round;
+        public string? MapName => statistic.MapName;
+        public Scoring? Scoring => statistic.Statistic?.Scoring;
     }
 }

@@ -22,7 +22,7 @@ public static class MatchExtensions
         {
             previousExperience.Clear();
 
-            foreach (var half in match.Maps.SelectMany(map => map.Statistic?.Halves ?? []))
+            foreach (var half in match.MapsStatistics.SelectMany(map => map.Statistic?.Halves ?? []))
             {
                 foreach (var matchPlayer in half.Players
                              .Where(matchPlayer => !string.IsNullOrEmpty(matchPlayer.CommunityId)
@@ -126,7 +126,7 @@ public static class MatchExtensions
         if (firstRoundPlayers == null)
             yield break;
 
-        var lastMap = match.Maps.Select(m => m.Statistic).FirstOrDefault();
+        var lastMap = match.MapsStatistics.Select(m => m.Statistic).FirstOrDefault();
 
         if (lastMap?.Scoring?.TeamA == null
             || lastMap.Scoring?.TeamB == null
@@ -145,7 +145,7 @@ public static class MatchExtensions
         if (firstRoundPlayers == null)
             yield break;
 
-        var lastMap = match.Maps.Select(m => m.Statistic).FirstOrDefault();
+        var lastMap = match.MapsStatistics.Select(m => m.Statistic).FirstOrDefault();
 
         if (lastMap?.Scoring?.TeamA == null
             || lastMap.Scoring?.TeamB == null

@@ -9,7 +9,7 @@ public static class MatchExtensions
         var players = new Dictionary<string, Player>();
 
         foreach (var match in matches)
-        foreach (var half in match.Maps.Where(statistic => statistic.Statistic != null).SelectMany(statistic => statistic.Statistic!.Halves))
+        foreach (var half in match.MapsStatistics.Where(statistic => statistic.Statistic != null).SelectMany(statistic => statistic.Statistic!.Halves))
         {
             foreach (var playerStats in half.Players)
             {
