@@ -49,7 +49,10 @@ public static class MatchExtensions
 
             var playersExperience = new Dictionary<string, ExperienceCalculation>();
 
-            foreach (var playerName in match.Winners())
+            var winners = match.Winners().ToList();
+            var losers = match.Losers().ToList();
+
+            foreach (var playerName in winners)
             {
                 var player = players.TryAdd(playerName);
                 if (player != null)
@@ -58,7 +61,7 @@ public static class MatchExtensions
                 playersExperience.Win(playerName.CommunityId, config);
             }
 
-            foreach (var playerName in match.Losers())
+            foreach (var playerName in losers)
             {
                 var player = players.TryAdd(playerName);
                 if (player != null)
@@ -66,6 +69,22 @@ public static class MatchExtensions
 
                 playersExperience.Loss(playerName.CommunityId, config);
             }
+
+            foreach (var player in winners.Select(pn => players[pn.CommunityId!]))
+            foreach (var anotherPlayer in winners.Select(pn => players[pn.CommunityId!]))
+                player.WonWith(anotherPlayer);
+
+            foreach (var player in losers.Select(pn => players[pn.CommunityId!]))
+            foreach (var anotherPlayer in losers.Select(pn => players[pn.CommunityId!]))
+                player.LostWith(anotherPlayer);
+
+            foreach (var player in winners.Select(pn => players[pn.CommunityId!]))
+            foreach (var anotherPlayer in losers.Select(pn => players[pn.CommunityId!]))
+                player.WonAgainst(anotherPlayer);
+
+            foreach (var player in losers.Select(pn => players[pn.CommunityId!]))
+            foreach (var anotherPlayer in winners.Select(pn => players[pn.CommunityId!]))
+                player.LostAgainst(anotherPlayer);
 
             foreach (var statsPlayer in match.RageQuit())
             {

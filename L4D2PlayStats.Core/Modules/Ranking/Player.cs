@@ -98,6 +98,8 @@ public class Player
     public int MvpCommon { get; set; }
     public int LvpFfGiven { get; set; }
 
+    public Dictionary<long, AnotherPlayer> Anothers { get; } = [];
+
     public void AppendInfo(Match.Player player)
     {
         Died += player.Died;
@@ -125,5 +127,70 @@ public class Player
         MvpSiDamage += player.MvpSiDamage;
         MvpCommon += player.MvpCommon;
         LvpFfGiven += player.LvpFfGiven;
+    }
+
+    public void WonWith(Player player)
+    {
+        if (player.CommunityId == CommunityId)
+            return;
+
+        if (!Anothers.ContainsKey(player.CommunityId))
+            Anothers.Add(player.CommunityId, new AnotherPlayer(player));
+
+        var anotherPlayer = Anothers[player.CommunityId];
+
+        anotherPlayer.Name = player.Name;
+        anotherPlayer.WinsWith++;
+    }
+
+    public void LostWith(Player player)
+    {
+        if (player.CommunityId == CommunityId)
+            return;
+
+        if (!Anothers.ContainsKey(player.CommunityId))
+            Anothers.Add(player.CommunityId, new AnotherPlayer(player));
+
+        var anotherPlayer = Anothers[player.CommunityId];
+
+        anotherPlayer.Name = player.Name;
+        anotherPlayer.LossWith++;
+    }
+
+    public void WonAgainst(Player player)
+    {
+        if (player.CommunityId == CommunityId)
+            return;
+
+        if (!Anothers.ContainsKey(player.CommunityId))
+            Anothers.Add(player.CommunityId, new AnotherPlayer(player));
+
+        var anotherPlayer = Anothers[player.CommunityId];
+
+        anotherPlayer.Name = player.Name;
+        anotherPlayer.WinsAgainst++;
+    }
+
+    public void LostAgainst(Player player)
+    {
+        if (player.CommunityId == CommunityId)
+            return;
+
+        if (!Anothers.ContainsKey(player.CommunityId))
+            Anothers.Add(player.CommunityId, new AnotherPlayer(player));
+
+        var anotherPlayer = Anothers[player.CommunityId];
+
+        anotherPlayer.Name = player.Name;
+        anotherPlayer.LossAgainst++;
+    }
+
+    public class AnotherPlayer(Player playerName)
+    {
+        public string? Name { get; set; } = playerName.Name;
+        public int WinsWith { get; set; }
+        public int LossWith { get; set; }
+        public int WinsAgainst { get; set; }
+        public int LossAgainst { get; set; }
     }
 }
