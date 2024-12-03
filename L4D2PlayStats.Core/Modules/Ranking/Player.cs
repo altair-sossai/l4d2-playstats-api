@@ -6,7 +6,6 @@ namespace L4D2PlayStats.Core.Modules.Ranking;
 
 public class Player
 {
-    private readonly Dictionary<long, AnotherPlayer> _anothers = [];
     private readonly long _communityId;
     private decimal _experience;
     private string? _name;
@@ -99,11 +98,7 @@ public class Player
     public int MvpCommon { get; set; }
     public int LvpFfGiven { get; set; }
 
-    public IEnumerable<AnotherPlayer> Anothers => _anothers.Values
-        .OrderByDescending(o => o.WinsWith)
-        .ThenBy(o => o.LossWith)
-        .ThenByDescending(o => o.WinsAgainst)
-        .ThenBy(o => o.LossAgainst);
+    public Dictionary<long, AnotherPlayer> Anothers { get; } = [];
 
     public void AppendInfo(Match.Player player)
     {
@@ -139,10 +134,10 @@ public class Player
         if (player.CommunityId == CommunityId)
             return;
 
-        if (!_anothers.ContainsKey(player.CommunityId))
-            _anothers.Add(player.CommunityId, new AnotherPlayer(player));
+        if (!Anothers.ContainsKey(player.CommunityId))
+            Anothers.Add(player.CommunityId, new AnotherPlayer(player));
 
-        var anotherPlayer = _anothers[player.CommunityId];
+        var anotherPlayer = Anothers[player.CommunityId];
 
         anotherPlayer.Name = player.Name;
         anotherPlayer.WinsWith++;
@@ -153,10 +148,10 @@ public class Player
         if (player.CommunityId == CommunityId)
             return;
 
-        if (!_anothers.ContainsKey(player.CommunityId))
-            _anothers.Add(player.CommunityId, new AnotherPlayer(player));
+        if (!Anothers.ContainsKey(player.CommunityId))
+            Anothers.Add(player.CommunityId, new AnotherPlayer(player));
 
-        var anotherPlayer = _anothers[player.CommunityId];
+        var anotherPlayer = Anothers[player.CommunityId];
 
         anotherPlayer.Name = player.Name;
         anotherPlayer.LossWith++;
@@ -167,10 +162,10 @@ public class Player
         if (player.CommunityId == CommunityId)
             return;
 
-        if (!_anothers.ContainsKey(player.CommunityId))
-            _anothers.Add(player.CommunityId, new AnotherPlayer(player));
+        if (!Anothers.ContainsKey(player.CommunityId))
+            Anothers.Add(player.CommunityId, new AnotherPlayer(player));
 
-        var anotherPlayer = _anothers[player.CommunityId];
+        var anotherPlayer = Anothers[player.CommunityId];
 
         anotherPlayer.Name = player.Name;
         anotherPlayer.WinsAgainst++;
@@ -181,10 +176,10 @@ public class Player
         if (player.CommunityId == CommunityId)
             return;
 
-        if (!_anothers.ContainsKey(player.CommunityId))
-            _anothers.Add(player.CommunityId, new AnotherPlayer(player));
+        if (!Anothers.ContainsKey(player.CommunityId))
+            Anothers.Add(player.CommunityId, new AnotherPlayer(player));
 
-        var anotherPlayer = _anothers[player.CommunityId];
+        var anotherPlayer = Anothers[player.CommunityId];
 
         anotherPlayer.Name = player.Name;
         anotherPlayer.LossAgainst++;
@@ -192,8 +187,7 @@ public class Player
 
     public class AnotherPlayer(Player playerName)
     {
-        public long? CommunityId => playerName.CommunityId;
-        public string? Name { get; internal set; } = playerName.Name;
+        public string? Name { get; set; } = playerName.Name;
         public int WinsWith { get; set; }
         public int LossWith { get; set; }
         public int WinsAgainst { get; set; }
