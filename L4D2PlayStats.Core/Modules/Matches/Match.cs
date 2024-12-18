@@ -11,25 +11,38 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
     public DateTime? MatchEnd { get; internal init; }
     public TimeSpan? MatchElapsed => MatchEnd - MatchStart;
     public string? Campaign { get; } = campaign.Name;
-    public List<Team> Teams { get; } = [new Team('A', teamA, playersA), new Team('B', teamB, playersB)];
+    public List<Team> Teams { get; } = [new('A', teamA, playersA), new('B', teamB, playersB)];
     public List<string> Statistics { get; } = [];
+    public List<Map> Maps { get; } = [];
 
-    [IgnoreDataMember, JsonIgnore]
-    public List<Statistics.Statistics> Maps { get; } = [];
+    [IgnoreDataMember]
+    [JsonIgnore]
+    public List<Statistics.Statistics> MapsStatistics { get; } = [];
 
-    [IgnoreDataMember, JsonIgnore]
-    public IEnumerable<L4D2PlayStats.Player>? FirstRoundPlayers => Maps.LastOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
+    [IgnoreDataMember]
+    [JsonIgnore]
+    public IEnumerable<L4D2PlayStats.Player>? FirstRoundPlayers => MapsStatistics.LastOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
 
-    [IgnoreDataMember, JsonIgnore]
-    public IEnumerable<L4D2PlayStats.Player>? LastRoundPlayers => Maps.FirstOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
+    [IgnoreDataMember]
+    [JsonIgnore]
+    public IEnumerable<L4D2PlayStats.Player>? LastRoundPlayers => MapsStatistics.FirstOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
 
-    public bool Competitive => Maps.Count >= 3 && TeamSize == 4;
+    public bool Competitive => MapsStatistics.Count >= 3 && TeamSize == 4;
 
     public void Add(Statistics.Statistics statistic)
     {
         Statistics.Add(statistic.RowKey);
-        Maps.Add(statistic);
+        MapsStatistics.Add(statistic);
+
         UpdateTeamStats(statistic);
+        AddMap(statistic);
+    }
+
+    private void AddMap(Statistics.Statistics statistic)
+    {
+        var map = new Map(statistic);
+
+        Maps.Insert(0, map);
     }
 
     private void UpdateTeamStats(Statistics.Statistics statistic)
@@ -64,6 +77,7 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
         public int RockEats => Players.Select(p => p.RockEats).DefaultIfEmpty(0).Sum();
         public int WitchDamage => Players.Select(p => p.WitchDamage).DefaultIfEmpty(0).Sum();
         public int Skeets => Players.Select(p => p.Skeets).DefaultIfEmpty(0).Sum();
+        public int SkeetsMelee => Players.Select(p => p.SkeetsMelee).DefaultIfEmpty(0).Sum();
         public int Levels => Players.Select(p => p.Levels).DefaultIfEmpty(0).Sum();
         public int Crowns => Players.Select(p => p.Crowns).DefaultIfEmpty(0).Sum();
         public int FfGiven => Players.Select(p => p.FfGiven).DefaultIfEmpty(0).Sum();
@@ -107,9 +121,10 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
                     currentPlayer.TankDamage += player.TankDamage;
                     currentPlayer.RockEats += player.RockEats;
                     currentPlayer.WitchDamage += player.WitchDamage;
-                    currentPlayer.Skeets += player.Skeets;
-                    currentPlayer.Levels += player.Levels;
-                    currentPlayer.Crowns += player.Crowns;
+                    currentPlayer.Skeets += player.Skeets + player.SkeetsHurt + player.SkeetsMelee;
+                    currentPlayer.SkeetsMelee += player.SkeetsMelee;
+                    currentPlayer.Levels += player.Levels + player.LevelsHurt;
+                    currentPlayer.Crowns += player.Crowns + player.CrownsHurt;
                     currentPlayer.FfGiven += player.FfGiven;
 
                     if (mvpSiDamage != null && player.CommunityId == mvpSiDamage.CommunityId)
@@ -163,6 +178,8 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
         public decimal WitchDamagePercentage => SafeDivision(WitchDamage, team.WitchDamage);
         public int Skeets { get; set; }
         public decimal SkeetsPercentage => SafeDivision(Skeets, team.Skeets);
+        public int SkeetsMelee { get; set; }
+        public decimal SkeetsMeleePercentage => SafeDivision(SkeetsMelee, team.SkeetsMelee);
         public int Levels { get; set; }
         public decimal LevelsPercentage => SafeDivision(Levels, team.Levels);
         public int Crowns { get; set; }
@@ -195,5 +212,12 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
 
             return dividend / divisor;
         }
+    }
+
+    public class Map(Statistics.Statistics statistic)
+    {
+        public int Round => statistic.Round;
+        public string? MapName => statistic.MapName;
+        public Scoring? Scoring => statistic.Statistic?.Scoring;
     }
 }

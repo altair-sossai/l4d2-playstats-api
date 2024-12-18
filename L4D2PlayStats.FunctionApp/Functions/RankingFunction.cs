@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using L4D2PlayStats.Core.Modules.Matches.Services;
+using L4D2PlayStats.Core.Modules.Punishments.Repositories;
 using L4D2PlayStats.Core.Modules.Ranking.Configs;
 using L4D2PlayStats.Core.Modules.Ranking.Extensions;
 using L4D2PlayStats.Core.Modules.Ranking.Services;
@@ -15,7 +16,12 @@ using Microsoft.Azure.Functions.Worker;
 
 namespace L4D2PlayStats.FunctionApp.Functions;
 
-public class RankingFunction(IServerService serverService, IRankingService rankingService, IMatchService matchService, IExperienceConfig config)
+public class RankingFunction(
+    IServerService serverService,
+    IRankingService rankingService,
+    IMatchService matchService,
+    IPunishmentsRepository punishmentsRepository,
+    IExperienceConfig experienceConfig)
 {
     [Function($"{nameof(RankingFunction)}_{nameof(RankingAsync)}")]
     public async Task<IActionResult> RankingAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ranking/{serverId}")] HttpRequest httpRequest,
@@ -43,7 +49,11 @@ public class RankingFunction(IServerService serverService, IRankingService ranki
             if (match == null)
                 return new NotFoundResult();
 
-            var players = match.Ranking(config).ToList();
+            var punishments = await punishmentsRepository
+                .GetPunishmentsAsync(serverId)
+                .ToDictionaryAsync(k => k.CommunityId, v => v.LostExperiencePoints);
+
+            var players = match.Ranking(punishments, experienceConfig).ToList();
             var result = new { match, players };
 
             return new JsonResult(result);
@@ -78,7 +88,7 @@ public class RankingFunction(IServerService serverService, IRankingService ranki
     {
         try
         {
-            return new JsonResult(config);
+            return new JsonResult(experienceConfig);
         }
         catch (Exception exception)
         {

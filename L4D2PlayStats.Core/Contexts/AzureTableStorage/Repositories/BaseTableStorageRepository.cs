@@ -37,7 +37,7 @@ public abstract class BaseTableStorageRepository<TEntity>(string tableName, IAzu
     : BaseTableStorageRepository(tableName, tableContext)
     where TEntity : class, ITableEntity, new()
 {
-    protected ValueTask<TEntity?> FindAsync(string partitionKey, string rowKey)
+    public ValueTask<TEntity?> FindAsync(string partitionKey, string rowKey)
     {
         return TableClient.QueryAsync<TEntity>(q => q.PartitionKey == partitionKey && q.RowKey == rowKey).FirstOrDefaultAsync();
     }

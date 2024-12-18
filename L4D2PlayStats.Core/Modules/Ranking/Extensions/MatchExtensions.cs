@@ -6,14 +6,14 @@ namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
 
 public static class MatchExtensions
 {
-    public static IEnumerable<Player> Ranking(this Match match, IExperienceConfig config)
+    public static IEnumerable<Player> Ranking(this Match match, Dictionary<string, int> punishments, IExperienceConfig config)
     {
         var matches = new[] { match };
 
-        return matches.Ranking(config);
+        return matches.Ranking(punishments, config);
     }
 
-    public static IEnumerable<Player> Ranking(this IEnumerable<Match> matches, IExperienceConfig config)
+    public static IEnumerable<Player> Ranking(this IEnumerable<Match> matches, Dictionary<string, int> punishments, IExperienceConfig config)
     {
         var players = new Dictionary<string, Player>();
         var previousExperience = new Dictionary<string, decimal>();
@@ -22,7 +22,7 @@ public static class MatchExtensions
         {
             previousExperience.Clear();
 
-            foreach (var half in match.Maps.SelectMany(map => map.Statistic?.Halves ?? []))
+            foreach (var half in match.MapsStatistics.SelectMany(map => map.Statistic?.Halves ?? []))
             {
                 foreach (var matchPlayer in half.Players
                              .Where(matchPlayer => !string.IsNullOrEmpty(matchPlayer.CommunityId)
@@ -100,6 +100,15 @@ public static class MatchExtensions
             }
         }
 
+        foreach (var (key, value) in punishments)
+        {
+            if (!players.TryGetValue(key, out var player))
+                continue;
+
+            player.Punishment = value;
+            player.Experience -= value;
+        }
+
         foreach (var (communityId, experience) in previousExperience)
         {
             if (!players.TryGetValue(communityId, out var player))
@@ -117,7 +126,7 @@ public static class MatchExtensions
         if (firstRoundPlayers == null)
             yield break;
 
-        var lastMap = match.Maps.Select(m => m.Statistic).FirstOrDefault();
+        var lastMap = match.MapsStatistics.Select(m => m.Statistic).FirstOrDefault();
 
         if (lastMap?.Scoring?.TeamA == null
             || lastMap.Scoring?.TeamB == null
@@ -136,7 +145,7 @@ public static class MatchExtensions
         if (firstRoundPlayers == null)
             yield break;
 
-        var lastMap = match.Maps.Select(m => m.Statistic).FirstOrDefault();
+        var lastMap = match.MapsStatistics.Select(m => m.Statistic).FirstOrDefault();
 
         if (lastMap?.Scoring?.TeamA == null
             || lastMap.Scoring?.TeamB == null

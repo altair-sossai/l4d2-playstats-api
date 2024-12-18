@@ -67,6 +67,7 @@ public class Player
     public int Wins { get; set; }
     public int Loss { get; set; }
     public int RageQuit { get; set; }
+    public int Punishment { get; set; }
     public int Games => Wins + Loss;
     public decimal WinRate => Games == 0 ? 0 : Wins / (decimal)Games;
 
@@ -81,6 +82,7 @@ public class Player
     public int RockEats { get; set; }
     public int WitchDamage { get; set; }
     public int Skeets { get; set; }
+    public int SkeetsMelee { get; set; }
     public int Levels { get; set; }
     public int Crowns { get; set; }
     public int FfGiven { get; set; }
@@ -108,6 +110,7 @@ public class Player
         RockEats += player.RockEats;
         WitchDamage += player.WitchDamage;
         Skeets += player.Skeets;
+        SkeetsMelee += player.SkeetsMelee;
         Levels += player.Levels;
         Crowns += player.Crowns;
         FfGiven += player.FfGiven;
