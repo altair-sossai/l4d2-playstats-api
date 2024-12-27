@@ -164,7 +164,7 @@ public class CampaignRepository : ICampaignRepository
         },
         new()
         {
-            Name = "Dark Carnival - Remix",
+            Name = "Dark Carnival Remix",
             Maps =
             [
                 "dkr_m1_motel",
