@@ -15,7 +15,6 @@ public class CampaignRepository : ICampaignRepository
                 "c1m4_atrium"
             ]
         },
-
         new()
         {
             Name = "Dark Carnival",
@@ -28,7 +27,6 @@ public class CampaignRepository : ICampaignRepository
                 "c2m5_concert"
             ]
         },
-
         new()
         {
             Name = "Swamp Fever",
@@ -40,7 +38,6 @@ public class CampaignRepository : ICampaignRepository
                 "c3m4_plantation"
             ]
         },
-
         new()
         {
             Name = "Hard Rain",
@@ -53,7 +50,6 @@ public class CampaignRepository : ICampaignRepository
                 "c4m5_milltown_escape"
             ]
         },
-
         new()
         {
             Name = "The Parish",
@@ -66,7 +62,6 @@ public class CampaignRepository : ICampaignRepository
                 "c5m5_bridge"
             ]
         },
-
         new()
         {
             Name = "The Passing",
@@ -78,7 +73,6 @@ public class CampaignRepository : ICampaignRepository
                 "c7m2_barge"
             ]
         },
-
         new()
         {
             Name = "The Sacrifice",
@@ -89,7 +83,6 @@ public class CampaignRepository : ICampaignRepository
                 "c7m3_port"
             ]
         },
-
         new()
         {
             Name = "No Mercy",
@@ -102,7 +95,6 @@ public class CampaignRepository : ICampaignRepository
                 "c8m5_rooftop"
             ]
         },
-
         new()
         {
             Name = "Crash Course",
@@ -114,7 +106,6 @@ public class CampaignRepository : ICampaignRepository
                 "c14m2_lighthouse"
             ]
         },
-
         new()
         {
             Name = "Death Toll",
@@ -127,7 +118,6 @@ public class CampaignRepository : ICampaignRepository
                 "c10m5_houseboat"
             ]
         },
-
         new()
         {
             Name = "Dead Air",
@@ -140,7 +130,6 @@ public class CampaignRepository : ICampaignRepository
                 "c11m5_runway"
             ]
         },
-
         new()
         {
             Name = "Blood Harvest",
@@ -153,7 +142,6 @@ public class CampaignRepository : ICampaignRepository
                 "c12m5_cornfield"
             ]
         },
-
         new()
         {
             Name = "Cold Stream",
@@ -165,7 +153,6 @@ public class CampaignRepository : ICampaignRepository
                 "c13m4_cutthroatcreek"
             ]
         },
-
         new()
         {
             Name = "The Last Stand",
@@ -173,6 +160,18 @@ public class CampaignRepository : ICampaignRepository
             [
                 "c14m1_junkyard",
                 "c14m2_lighthouse"
+            ]
+        },
+        new()
+        {
+            Name = "Dark Carnival - Remix",
+            Maps =
+            [
+                "dkr_m1_motel",
+                "dkr_m2_carnival",
+                "dkr_m3_tunneloflove",
+                "dkr_m4_ferris",
+                "dkr_m5_stadium"
             ]
         }
     ];
