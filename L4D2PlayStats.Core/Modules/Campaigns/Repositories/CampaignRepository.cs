@@ -173,6 +173,18 @@ public class CampaignRepository : ICampaignRepository
                 "dkr_m4_ferris",
                 "dkr_m5_stadium"
             ]
+        },
+        new()
+        {
+            Name = "Open Road",
+            Maps =
+            [
+                "x1m1_cliffs",
+                "x1m2_path",
+                "x1m3_city",
+                "x1m4_forest",
+                "x1m5_salvation"
+            ]
         }
     ];
 
