@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using L4D2PlayStats.Core.Modules.Statistics.Helpers;
+﻿using L4D2PlayStats.Core.Modules.Statistics.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace L4D2PlayStats.Tests.Modules.Statistics.Helpers;
@@ -14,7 +13,7 @@ public class StatisticsHelperTests
 
         var result = StatisticsHelper.FileNameToRowKey(fileName);
 
-        result.Should().Be("8585261265054665807");
+        Assert.AreEqual("8585261265054665807", result);
     }
 
     [TestMethod]
@@ -24,7 +23,7 @@ public class StatisticsHelperTests
 
         var result = StatisticsHelper.FileNameToRowKey(fileName);
 
-        result.Should().BeNull();
+        Assert.IsNull(result);
     }
 
     [TestMethod]
@@ -34,6 +33,6 @@ public class StatisticsHelperTests
 
         var result = StatisticsHelper.FileNameToRowKey(fileName);
 
-        result.Should().BeNull();
+        Assert.IsNull(result);
     }
 }
