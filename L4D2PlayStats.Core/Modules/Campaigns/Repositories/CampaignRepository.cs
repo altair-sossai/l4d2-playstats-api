@@ -371,6 +371,17 @@ public class CampaignRepository : ICampaignRepository
                 "maria_cristina",
                 "mnac"
             ]
+        },
+        new()
+        {
+            Name = "Urban Flight",
+            Maps =
+            [
+                "uf1_boulevard",
+                "uf2_rooftops",
+                "uf3_harbor",
+                "uf4_airfield"
+            ]
         }
     ];
 
