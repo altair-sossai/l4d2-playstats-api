@@ -301,6 +301,18 @@ public class CampaignRepository : ICampaignRepository
                 "l4d_tbm_4",
                 "l4d_tbm_5"
             ]
+        },
+        new()
+        {
+            Name = "Yama",
+            Maps =
+            [
+                "l4d_yama_1",
+                "l4d_yama_2",
+                "l4d_yama_3",
+                "l4d_yama_4",
+                "l4d_yama_5"
+            ]
         }
     ];
 
