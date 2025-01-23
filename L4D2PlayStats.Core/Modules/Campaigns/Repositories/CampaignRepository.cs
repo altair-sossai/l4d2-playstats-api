@@ -394,6 +394,18 @@ public class CampaignRepository : ICampaignRepository
                 "uz_bunker",
                 "uz_escape"
             ]
+        },
+        new()
+        {
+            Name = "Firetower Trail",
+            Maps =
+            [
+                "versus_1",
+                "versus_2",
+                "versus_3",
+                "versus_4",
+                "versus_5"
+            ]
         }
     ];
 
