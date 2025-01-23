@@ -220,6 +220,17 @@ public class CampaignRepository : ICampaignRepository
                 "cwm3_drain",
                 "cwm4_building"
             ]
+        },
+        new()
+        {
+            Name = "Dam It! The Director's Cut",
+            Maps =
+            [
+                "damitdc1",
+                "damitdc2",
+                "damitdc3",
+                "damitdc4"
+            ]
         }
     ];
 
