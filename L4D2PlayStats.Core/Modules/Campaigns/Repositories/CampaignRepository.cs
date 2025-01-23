@@ -337,6 +337,17 @@ public class CampaignRepository : ICampaignRepository
                 "l4d2_darkblood03_platform",
                 "l4d2_darkblood04_extraction"
             ]
+        },
+        new()
+        {
+            Name = "Diescraper Redux",
+            Maps =
+            [
+                "l4d2_diescraper1_apartment_361",
+                "l4d2_diescraper2_streets_361",
+                "l4d2_diescraper3_mid_361",
+                "l4d2_diescraper4_top_361"
+            ]
         }
     ];
 
