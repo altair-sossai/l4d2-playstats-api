@@ -313,6 +313,19 @@ public class CampaignRepository : ICampaignRepository
                 "l4d_yama_4",
                 "l4d_yama_5"
             ]
+        },
+        new()
+        {
+            Name = "Back to School",
+            Maps =
+            [
+                "l4d2_bts01_forest",
+                "l4d2_bts02_station",
+                "l4d2_bts03_town",
+                "l4d2_bts04_cinema",
+                "l4d2_bts05_church",
+                "l4d2_bts06_school"
+            ]
         }
     ];
 
