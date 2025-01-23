@@ -348,6 +348,18 @@ public class CampaignRepository : ICampaignRepository
                 "l4d2_diescraper3_mid_361",
                 "l4d2_diescraper4_top_361"
             ]
+        },
+        new()
+        {
+            Name = "Suicide Blitz 2",
+            Maps =
+            [
+                "l4d2_stadium1_apartment",
+                "l4d2_stadium2_riverwalk",
+                "l4d2_stadium3_city1",
+                "l4d2_stadium4_city2",
+                "l4d2_stadium5_stadium"
+            ]
         }
     ];
 
