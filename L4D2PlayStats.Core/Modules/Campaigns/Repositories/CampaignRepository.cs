@@ -243,6 +243,17 @@ public class CampaignRepository : ICampaignRepository
                 "dprm4_milltown_b",
                 "dprm5_milltown_escape"
             ]
+        },
+        new()
+        {
+            Name = "Haunted Forest",
+            Maps =
+            [
+                "hf01_theforest",
+                "hf02_thesteeple",
+                "hf03_themansion",
+                "hf04_escape"
+            ]
         }
     ];
 
