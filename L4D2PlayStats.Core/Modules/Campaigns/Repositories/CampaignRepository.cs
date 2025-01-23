@@ -326,6 +326,17 @@ public class CampaignRepository : ICampaignRepository
                 "l4d2_bts05_church",
                 "l4d2_bts06_school"
             ]
+        },
+        new()
+        {
+            Name = "Dark Blood 2",
+            Maps =
+            [
+                "l4d2_darkblood01_tanker",
+                "l4d2_darkblood02_engine",
+                "l4d2_darkblood03_platform",
+                "l4d2_darkblood04_extraction"
+            ]
         }
     ];
 
