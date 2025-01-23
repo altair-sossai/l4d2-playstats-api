@@ -289,6 +289,18 @@ public class CampaignRepository : ICampaignRepository
                 "l4d_ihm04_lumberyard",
                 "l4d_ihm05_lakeside"
             ]
+        },
+        new()
+        {
+            Name = "The Bloody Moors",
+            Maps =
+            [
+                "l4d_tbm_1",
+                "l4d_tbm_2",
+                "l4d_tbm_3",
+                "l4d_tbm_4",
+                "l4d_tbm_5"
+            ]
         }
     ];
 
