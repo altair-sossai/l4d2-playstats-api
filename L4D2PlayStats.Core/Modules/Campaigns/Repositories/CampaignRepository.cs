@@ -277,6 +277,18 @@ public class CampaignRepository : ICampaignRepository
                 "l4d_dbd2dc_undead_center",
                 "l4d_dbd2dc_new_dawn"
             ]
+        },
+        new()
+        {
+            Name = "I Hate Mountains 2",
+            Maps =
+            [
+                "l4d_ihm01_forest",
+                "l4d_ihm02_manor",
+                "l4d_ihm03_underground",
+                "l4d_ihm04_lumberyard",
+                "l4d_ihm05_lakeside"
+            ]
         }
     ];
 
