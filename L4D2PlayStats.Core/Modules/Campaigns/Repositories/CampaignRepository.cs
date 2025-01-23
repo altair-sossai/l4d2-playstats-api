@@ -265,6 +265,18 @@ public class CampaignRepository : ICampaignRepository
                 "jsarena203_roof",
                 "jsarena204_arena"
             ]
+        },
+        new()
+        {
+            Name = "Dead Before Dawn DC",
+            Maps =
+            [
+                "l4d_dbd2dc_anna_is_gone",
+                "l4d_dbd2dc_the_mall",
+                "l4d_dbd2dc_clean_up",
+                "l4d_dbd2dc_undead_center",
+                "l4d_dbd2dc_new_dawn"
+            ]
         }
     ];
 
