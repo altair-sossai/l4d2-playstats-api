@@ -197,6 +197,18 @@ public class CampaignRepository : ICampaignRepository
                 "cdta_04onarail",
                 "cdta_05finalroad"
             ]
+        },
+        new()
+        {
+            Name = "Heaven Can Wait",
+            Maps =
+            [
+                "AirCrash",
+                "RiverMotel",
+                "OutSkirts",
+                "CityHall",
+                "BombShelter"
+            ]
         }
     ];
 
