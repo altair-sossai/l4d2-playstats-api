@@ -209,6 +209,17 @@ public class CampaignRepository : ICampaignRepository
                 "CityHall",
                 "BombShelter"
             ]
+        },
+        new()
+        {
+            Name = "Carried Off",
+            Maps =
+            [
+                "cwm1_intro",
+                "cwm2_warehouse",
+                "cwm3_drain",
+                "cwm4_building"
+            ]
         }
     ];
 
