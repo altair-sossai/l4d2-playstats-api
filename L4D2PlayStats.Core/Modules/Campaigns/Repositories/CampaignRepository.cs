@@ -382,6 +382,18 @@ public class CampaignRepository : ICampaignRepository
                 "uf3_harbor",
                 "uf4_airfield"
             ]
+        },
+        new()
+        {
+            Name = "The Undead Zone",
+            Maps =
+            [
+                "uz_crash",
+                "uz_town",
+                "uz_desert",
+                "uz_bunker",
+                "uz_escape"
+            ]
         }
     ];
 
