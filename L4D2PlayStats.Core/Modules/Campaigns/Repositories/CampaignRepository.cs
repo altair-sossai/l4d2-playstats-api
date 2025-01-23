@@ -185,6 +185,18 @@ public class CampaignRepository : ICampaignRepository
                 "x1m4_forest",
                 "x1m5_salvation"
             ]
+        },
+        new()
+        {
+            Name = "Detour Ahead",
+            Maps =
+            [
+                "cdta_01detour",
+                "cdta_02road",
+                "cdta_03warehouse",
+                "cdta_04onarail",
+                "cdta_05finalroad"
+            ]
         }
     ];
 
