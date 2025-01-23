@@ -231,6 +231,18 @@ public class CampaignRepository : ICampaignRepository
                 "damitdc3",
                 "damitdc4"
             ]
+        },
+        new()
+        {
+            Name = "Hard Rain: Downpour",
+            Maps =
+            [
+                "dprm1_milltown_a",
+                "dprm2_sugarmill_a",
+                "dprm3_sugarmill_b",
+                "dprm4_milltown_b",
+                "dprm5_milltown_escape"
+            ]
         }
     ];
 
