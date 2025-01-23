@@ -360,6 +360,17 @@ public class CampaignRepository : ICampaignRepository
                 "l4d2_stadium4_city2",
                 "l4d2_stadium5_stadium"
             ]
+        },
+        new()
+        {
+            Name = "Warcelona",
+            Maps =
+            [
+                "srocchurch",
+                "plaza_espana",
+                "maria_cristina",
+                "mnac"
+            ]
         }
     ];
 
