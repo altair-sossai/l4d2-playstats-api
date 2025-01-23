@@ -254,6 +254,17 @@ public class CampaignRepository : ICampaignRepository
                 "hf03_themansion",
                 "hf04_escape"
             ]
+        },
+        new()
+        {
+            Name = "Arena of the Dead 2",
+            Maps =
+            [
+                "jsarena201_town",
+                "jsarena202_alley",
+                "jsarena203_roof",
+                "jsarena204_arena"
+            ]
         }
     ];
 
