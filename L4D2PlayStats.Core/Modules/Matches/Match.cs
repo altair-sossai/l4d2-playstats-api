@@ -6,6 +6,7 @@ namespace L4D2PlayStats.Core.Modules.Matches;
 
 public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName> playersA, Scoring.Team teamB, IEnumerable<PlayerName> playersB)
 {
+    public string? ConfigurationName => MapsStatistics.FirstOrDefault()?.ConfigurationName;
     public int TeamSize { get; internal init; }
     public DateTime MatchStart { get; internal set; }
     public DateTime? MatchEnd { get; internal init; }
