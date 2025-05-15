@@ -49,8 +49,8 @@ public class Statistics : ITableEntity
 
     public int ScoreDifference => Math.Abs((Statistic?.Scoring?.TeamA?.Score ?? 0) - (Statistic?.Scoring?.TeamB?.Score ?? 00));
 
-    public string PartitionKey { get; set; } = default!;
-    public string RowKey { get; set; } = default!;
+    public string PartitionKey { get; set; } = null!;
+    public string RowKey { get; set; } = null!;
     public DateTimeOffset? Timestamp { get; set; }
     public ETag ETag { get; set; }
 }

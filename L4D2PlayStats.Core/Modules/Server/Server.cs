@@ -31,7 +31,7 @@ public class Server : ITableEntity
     }
 
     public string PartitionKey { get; set; } = "shared";
-    public string RowKey { get; set; } = default!;
+    public string RowKey { get; set; } = null!;
     public DateTimeOffset? Timestamp { get; set; }
     public ETag ETag { get; set; }
 

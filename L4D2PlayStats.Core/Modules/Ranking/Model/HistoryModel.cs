@@ -6,7 +6,7 @@ public class HistoryModel
 {
     private const string Pattern = @"^ranking_(\d{4})(\d{2})(\d{4})(\d{2})\.json$";
     private static readonly Regex Regex = new(Pattern);
-    private string _fileName = default!;
+    private string _fileName = null!;
 
     public HistoryModel(string fileName)
     {

@@ -18,8 +18,8 @@ public class Punishment : ITableEntity
     }
 
     public int LostExperiencePoints { get; set; }
-    public string PartitionKey { get; set; } = default!;
-    public string RowKey { get; set; } = default!;
+    public string PartitionKey { get; set; } = null!;
+    public string RowKey { get; set; } = null!;
     public DateTimeOffset? Timestamp { get; set; }
     public ETag ETag { get; set; }
 }
