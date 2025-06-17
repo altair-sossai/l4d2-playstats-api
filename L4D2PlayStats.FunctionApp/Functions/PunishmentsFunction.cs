@@ -15,8 +15,8 @@ public class PunishmentsFunction(
     IServerService serverService,
     IPunishmentsService punishmentsService)
 {
-    [Function($"{nameof(PunishmentsFunction)}_{nameof(AddOrUpdate)}")]
-    public async Task<IActionResult> AddOrUpdate([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "punishments")] HttpRequest httpRequest)
+    [Function($"{nameof(PunishmentsFunction)}_{nameof(AddOrUpdateAsync)}")]
+    public async Task<IActionResult> AddOrUpdateAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "punishments")] HttpRequest httpRequest)
     {
         try
         {
@@ -32,8 +32,8 @@ public class PunishmentsFunction(
         }
     }
 
-    [Function($"{nameof(PunishmentsFunction)}_{nameof(Delete)}")]
-    public async Task<IActionResult> Delete([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "punishments/{communityId}")] HttpRequest httpRequest, string communityId)
+    [Function($"{nameof(PunishmentsFunction)}_{nameof(DeleteAsync)}")]
+    public async Task<IActionResult> DeleteAsync([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "punishments/{communityId}")] HttpRequest httpRequest, string communityId)
     {
         try
         {

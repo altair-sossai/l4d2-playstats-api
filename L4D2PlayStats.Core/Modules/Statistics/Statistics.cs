@@ -53,4 +53,24 @@ public class Statistics : ITableEntity
     public string RowKey { get; set; } = null!;
     public DateTimeOffset? Timestamp { get; set; }
     public ETag ETag { get; set; }
+
+    public void UpdateScore(int teamAScore, int teamBScore)
+    {
+        if (Statistic == null)
+            throw new InvalidOperationException("Statistic is not initialized.");
+
+        if (Statistic.Scoring == null)
+            throw new InvalidOperationException("Scoring is not initialized in the statistic.");
+
+        if (Statistic.Scoring.TeamA == null)
+            throw new InvalidOperationException("Team A is not initialized in the statistic scoring.");
+
+        if (Statistic.Scoring.TeamB == null)
+            throw new InvalidOperationException("Team B is not initialized in the statistic scoring.");
+
+        Statistic.Scoring.TeamA.Score = teamAScore;
+        Statistic.Scoring.TeamB.Score = teamBScore;
+
+        Content = Statistic.ToString();
+    }
 }

@@ -83,8 +83,8 @@ public class StatisticsFunction(
         }
     }
 
-    [Function($"{nameof(StatisticsFunction)}_{nameof(AddOrUpdate)}")]
-    public async Task<IActionResult> AddOrUpdate([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "statistics")] HttpRequest httpRequest)
+    [Function($"{nameof(StatisticsFunction)}_{nameof(AddOrUpdateAsync)}")]
+    public async Task<IActionResult> AddOrUpdateAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "statistics")] HttpRequest httpRequest)
     {
         try
         {
@@ -109,6 +109,24 @@ public class StatisticsFunction(
 
                 return new JsonResult(UploadResult.DeleteFile(command.FileName));
             }
+        }
+        catch (Exception exception)
+        {
+            return ErrorResult.Build(exception).ResponseMessageResult();
+        }
+    }
+
+    [Function($"{nameof(StatisticsFunction)}_{nameof(UpdateScoreAsync)}")]
+    public async Task<IActionResult> UpdateScoreAsync([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "statistics/{statisticId}/update-score")] HttpRequest httpRequest,
+        string statisticId)
+    {
+        try
+        {
+            var server = serverService.EnsureAuthentication(httpRequest.AuthorizationToken());
+            var command = await httpRequest.DeserializeBodyAsync<UpdateScoreCommand>();
+            var statistic = await statisticsService.UpdateScoreAsync(server.Id, statisticId, command);
+
+            return new JsonResult(statistic);
         }
         catch (Exception exception)
         {

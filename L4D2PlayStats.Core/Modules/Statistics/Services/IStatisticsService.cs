@@ -5,6 +5,7 @@ namespace L4D2PlayStats.Core.Modules.Statistics.Services;
 
 public interface IStatisticsService
 {
-    Task<Statistics> AddOrUpdateAsync(string serverId, StatisticsCommand command);
     Task<List<StatisticsSimplifiedResult>> GetStatistics(string serverId);
+    Task<Statistics> AddOrUpdateAsync(string serverId, StatisticsCommand command);
+    Task<Statistics> UpdateScoreAsync(string serverId, string statisticId, UpdateScoreCommand command);
 }
