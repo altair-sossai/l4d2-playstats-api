@@ -17,7 +17,7 @@ public class HistoryModel
         FileName = fileName;
     }
 
-    public string Id => $"{StartYear:0000}{StartMonth:00}{EndYear:0000}{EndMonth:00}";
+    public string Id => IsAnnual ? $"{StartYear:0000}" : $"{StartYear:0000}{StartMonth:00}{EndYear:0000}{EndMonth:00}";
 
     public string FileName
     {
