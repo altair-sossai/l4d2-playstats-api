@@ -102,7 +102,12 @@ public class RankingFunction(
     {
         try
         {
-            var history = await rankingService.AllHistoryAsync(serverId).ToListAsync();
+            var history = await rankingService
+                .AllHistoryAsync(serverId)
+                .OrderBy(h => h.StartYear)
+                .ThenBy(h => h.IsAnnual)
+                .ThenBy(h => h.StartMonth)
+                .ToListAsync();
 
             return new JsonResult(history);
         }
