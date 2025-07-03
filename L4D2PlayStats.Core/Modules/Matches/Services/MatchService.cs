@@ -43,6 +43,21 @@ public class MatchService(
         return matches;
     }
 
+    public async Task<List<Match>> GetMatchesAsync(string serverId, DateTime start, DateTime end)
+    {
+        var server = serverService.GetServer(serverId);
+        if (server == null)
+            return [];
+
+        var campaigns = campaignRepository.GetCampaigns();
+        var matches = await statisticsRepository
+            .GetStatisticsAsync(serverId, start, end)
+            .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
+            .ToMatchesAsync(campaigns);
+
+        return matches;
+    }
+
     public async Task<List<Match>> GetMatchesBetweenAsync(string serverId, string start, string end)
     {
         var server = serverService.GetServer(serverId);

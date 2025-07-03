@@ -29,6 +29,19 @@ public class RankingService(
         return players;
     }
 
+    public async Task<List<Player>> RankingAsync(string serverId, int count, DateTime start, DateTime end)
+    {
+        var matches = await matchService.GetMatchesAsync(serverId, start, end);
+
+        var punishments = await punishmentsRepository
+            .GetPunishmentsAsync(serverId)
+            .ToDictionaryAsync(k => k.CommunityId, v => v.LostExperiencePoints);
+
+        var players = matches.Ranking(punishments, experienceConfig).Take(count).ToList();
+
+        return players;
+    }
+
     public async Task SaveRankingAsync(string serverId, DateTime reference)
     {
         var containerName = $"{serverId}-ranking-history".ToLower();
@@ -48,6 +61,26 @@ public class RankingService(
         await blobStorageContext.UploadAsync(containerName, fileName, players);
 
         await punishmentsRepository.DeleteAllAsync(serverId);
+    }
+
+    public async Task SaveAnnualRankingAsync(string serverId, int year)
+    {
+        var containerName = $"{serverId}-ranking-history".ToLower();
+
+        await blobStorageContext.CreateContainerIfNotExistsAsync(containerName, PublicAccessType.Blob);
+
+        var start = new DateTime(year, 1, 1);
+        var end = start.AddYears(1).AddMicroseconds(-1);
+        var fileName = $"ranking_{year}.json".ToLower();
+
+        var blobClient = blobStorageContext.GetBlobClient(containerName, fileName);
+
+        if (await blobClient.ExistsAsync())
+            return;
+
+        var players = await RankingAsync(serverId, 100, start, end);
+
+        await blobStorageContext.UploadAsync(containerName, fileName, players);
     }
 
     public async IAsyncEnumerable<HistoryModel> AllHistoryAsync(string serverId)

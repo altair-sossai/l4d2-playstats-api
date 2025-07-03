@@ -20,6 +20,14 @@ public class StatisticsRepository(IAzureTableStorageContext tableContext) : Base
         return GetStatisticsBetweenAsync(serverId, start, end);
     }
 
+    public IAsyncEnumerable<Statistics> GetStatisticsAsync(string serverId, DateTime start, DateTime end)
+    {
+        var startTicks = $"{long.MaxValue - end.Ticks}";
+        var endTicks = $"{long.MaxValue - start.Ticks}";
+
+        return GetStatisticsBetweenAsync(serverId, startTicks, endTicks);
+    }
+
     public IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string serverId, string start, string end)
     {
         var filter = $"PartitionKey eq '{serverId}' and RowKey ge '{start}' and RowKey le '{end}'";

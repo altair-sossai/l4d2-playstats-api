@@ -135,6 +135,9 @@ public class RankingFunction(
         var previousPeriod = currentPeriod.PreviousPeriod();
 
         foreach (var server in serverService.GetServers())
+        {
             await rankingService.SaveRankingAsync(server.Id, previousPeriod.Start);
+            await rankingService.SaveAnnualRankingAsync(server.Id, DateTime.UtcNow.Year - 1);
+        }
     }
 }
