@@ -20,33 +20,6 @@ public static class MatchExtensions
 
         foreach (var match in matches.Reverse())
         {
-            previousExperience.Clear();
-
-            foreach (var half in match.MapsStatistics.SelectMany(map => map.Statistic?.Halves ?? []))
-            {
-                foreach (var matchPlayer in half.Players
-                             .Where(matchPlayer => !string.IsNullOrEmpty(matchPlayer.CommunityId)
-                                                   && players.ContainsKey(matchPlayer.CommunityId)
-                                                   && !previousExperience.ContainsKey(matchPlayer.CommunityId)))
-                {
-                    if (string.IsNullOrEmpty(matchPlayer.CommunityId))
-                        continue;
-
-                    previousExperience.Add(matchPlayer.CommunityId, players[matchPlayer.CommunityId].Experience);
-                }
-
-                foreach (var matchPlayer in half.InfectedPlayers
-                             .Where(matchPlayer => !string.IsNullOrEmpty(matchPlayer.CommunityId)
-                                                   && players.ContainsKey(matchPlayer.CommunityId)
-                                                   && !previousExperience.ContainsKey(matchPlayer.CommunityId)))
-                {
-                    if (string.IsNullOrEmpty(matchPlayer.CommunityId))
-                        continue;
-
-                    previousExperience.Add(matchPlayer.CommunityId, players[matchPlayer.CommunityId].Experience);
-                }
-            }
-
             var playersExperience = new Dictionary<string, ExperienceCalculation>();
 
             foreach (var playerName in match.Winners())
@@ -77,6 +50,33 @@ public static class MatchExtensions
                 }
 
                 playersExperience.RageQuit(statsPlayer.CommunityId, config);
+            }
+
+            previousExperience.Clear();
+
+            foreach (var half in match.MapsStatistics.SelectMany(map => map.Statistic?.Halves ?? []))
+            {
+                foreach (var matchPlayer in half.Players
+                             .Where(matchPlayer => !string.IsNullOrEmpty(matchPlayer.CommunityId)
+                                                   && players.ContainsKey(matchPlayer.CommunityId)
+                                                   && !previousExperience.ContainsKey(matchPlayer.CommunityId)))
+                {
+                    if (string.IsNullOrEmpty(matchPlayer.CommunityId))
+                        continue;
+
+                    previousExperience.Add(matchPlayer.CommunityId, players[matchPlayer.CommunityId].Experience);
+                }
+
+                foreach (var matchPlayer in half.InfectedPlayers
+                             .Where(matchPlayer => !string.IsNullOrEmpty(matchPlayer.CommunityId)
+                                                   && players.ContainsKey(matchPlayer.CommunityId)
+                                                   && !previousExperience.ContainsKey(matchPlayer.CommunityId)))
+                {
+                    if (string.IsNullOrEmpty(matchPlayer.CommunityId))
+                        continue;
+
+                    previousExperience.Add(matchPlayer.CommunityId, players[matchPlayer.CommunityId].Experience);
+                }
             }
 
             foreach (var team in match.Teams)
