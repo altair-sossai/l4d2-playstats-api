@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
-    .ConfigureServices(services => { services.AddApp(); })
+    .ConfigureServices((host, services) => { services.AddApp(host.Configuration); })
     .ConfigureAppConfiguration((_, config) => { config.AddJsonFile("host.json", true); })
     .Build();
 
