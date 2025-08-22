@@ -1,4 +1,4 @@
-trigger:
+﻿trigger:
 - main
 
 pool:
@@ -10,32 +10,32 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Install .NET 8 SDK'
+  displayName: '📦 Install .NET 9 SDK'
   inputs:
     packageType: 'sdk'
     version: '9.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - task: DotNetCoreCLI@2
-  displayName: 'Restore NuGet Packages'
+  displayName: '🔄 Restore NuGet Packages'
   inputs:
     command: 'restore'
     projects: 'L4D2PlayStats.FunctionApp/L4D2PlayStats.FunctionApp.csproj'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build Project'
+  displayName: '🏗️ Build Project'
   inputs:
     command: 'build'
     projects: 'L4D2PlayStats.FunctionApp/L4D2PlayStats.FunctionApp.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Run Tests'
+  displayName: '🧪 Run Tests'
   inputs:
     command: 'test'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish Project'
+  displayName: '🚀 Publish Project'
   inputs:
     command: 'publish'
     projects: 'L4D2PlayStats.FunctionApp/L4D2PlayStats.FunctionApp.csproj'
@@ -43,7 +43,7 @@ steps:
     publishWebProjects: false
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Build Artifacts'
+  displayName: '📤 Publish Build Artifacts'
   inputs:
     PathtoPublish: '$(outputDir)'
     ArtifactName: 'function'
