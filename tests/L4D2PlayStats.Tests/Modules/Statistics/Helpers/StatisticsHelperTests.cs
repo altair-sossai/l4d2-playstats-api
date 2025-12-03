@@ -1,5 +1,4 @@
 ﻿using L4D2PlayStats.Core.Modules.Statistics.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace L4D2PlayStats.Tests.Modules.Statistics.Helpers;
 
