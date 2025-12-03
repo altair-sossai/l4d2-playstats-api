@@ -5,48 +5,51 @@ namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
 
 public static class ExperienceCalculationExtensions
 {
-    public static void Win(this Dictionary<string, ExperienceCalculation> playersExperience, string? communityId, IExperienceConfig config)
+    extension(Dictionary<string, ExperienceCalculation> playersExperience)
     {
-        if (string.IsNullOrEmpty(communityId))
-            return;
+        public void Win(string? communityId, IExperienceConfig config)
+        {
+            if (string.IsNullOrEmpty(communityId))
+                return;
 
-        if (!playersExperience.ContainsKey(communityId))
-            playersExperience.Add(communityId, new ExperienceCalculation(config));
+            if (!playersExperience.ContainsKey(communityId))
+                playersExperience.Add(communityId, new ExperienceCalculation(config));
 
-        playersExperience[communityId].Win = true;
-    }
+            playersExperience[communityId].Win = true;
+        }
 
-    public static void Loss(this Dictionary<string, ExperienceCalculation> playersExperience, string? communityId, IExperienceConfig config)
-    {
-        if (string.IsNullOrEmpty(communityId))
-            return;
+        public void Loss(string? communityId, IExperienceConfig config)
+        {
+            if (string.IsNullOrEmpty(communityId))
+                return;
 
-        if (!playersExperience.ContainsKey(communityId))
-            playersExperience.Add(communityId, new ExperienceCalculation(config));
+            if (!playersExperience.ContainsKey(communityId))
+                playersExperience.Add(communityId, new ExperienceCalculation(config));
 
-        playersExperience[communityId].Loss = true;
-    }
+            playersExperience[communityId].Loss = true;
+        }
 
-    public static void RageQuit(this Dictionary<string, ExperienceCalculation> playersExperience, string? communityId, IExperienceConfig config)
-    {
-        if (string.IsNullOrEmpty(communityId))
-            return;
+        public void RageQuit(string? communityId, IExperienceConfig config)
+        {
+            if (string.IsNullOrEmpty(communityId))
+                return;
 
-        if (!playersExperience.ContainsKey(communityId))
-            playersExperience.Add(communityId, new ExperienceCalculation(config));
+            if (!playersExperience.ContainsKey(communityId))
+                playersExperience.Add(communityId, new ExperienceCalculation(config));
 
-        playersExperience[communityId].RageQuit = true;
-    }
+            playersExperience[communityId].RageQuit = true;
+        }
 
-    public static void Mvps(this Dictionary<string, ExperienceCalculation> playersExperience, string? communityId, int mvpSiDamage, int mvpCommon, IExperienceConfig config)
-    {
-        if (string.IsNullOrEmpty(communityId))
-            return;
+        public void Mvps(string? communityId, int mvpSiDamage, int mvpCommon, IExperienceConfig config)
+        {
+            if (string.IsNullOrEmpty(communityId))
+                return;
 
-        if (!playersExperience.ContainsKey(communityId))
-            playersExperience.Add(communityId, new ExperienceCalculation(config));
+            if (!playersExperience.ContainsKey(communityId))
+                playersExperience.Add(communityId, new ExperienceCalculation(config));
 
-        playersExperience[communityId].Mvps += mvpSiDamage;
-        playersExperience[communityId].MvpsCommon += mvpCommon;
+            playersExperience[communityId].Mvps += mvpSiDamage;
+            playersExperience[communityId].MvpsCommon += mvpCommon;
+        }
     }
 }

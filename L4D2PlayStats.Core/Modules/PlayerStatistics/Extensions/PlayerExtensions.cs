@@ -2,41 +2,44 @@
 
 public static class PlayerExtensions
 {
-    public static Player? AddIfNotExist(this Dictionary<string, Player> players, L4D2PlayStats.Player playerStats)
+    extension(Dictionary<string, Player> players)
     {
-        if (string.IsNullOrEmpty(playerStats.CommunityId))
-            return null;
-
-        if (players.TryGetValue(playerStats.CommunityId, out var value))
-            return value;
-
-        var player = new Player
+        public Player? AddIfNotExist(L4D2PlayStats.Player playerStats)
         {
-            CommunityId = long.Parse(playerStats.CommunityId),
-            Name = playerStats.PlayerName
-        };
+            if (string.IsNullOrEmpty(playerStats.CommunityId))
+                return null;
 
-        players.Add(playerStats.CommunityId, player);
+            if (players.TryGetValue(playerStats.CommunityId, out var value))
+                return value;
 
-        return player;
-    }
+            var player = new Player
+            {
+                CommunityId = long.Parse(playerStats.CommunityId),
+                Name = playerStats.PlayerName
+            };
 
-    public static Player? AddIfNotExist(this Dictionary<string, Player> players, InfectedPlayer infectedPlayerStats)
-    {
-        if (string.IsNullOrEmpty(infectedPlayerStats.CommunityId))
-            return null;
+            players.Add(playerStats.CommunityId, player);
 
-        if (players.TryGetValue(infectedPlayerStats.CommunityId, out var value))
-            return value;
+            return player;
+        }
 
-        var player = new Player
+        public Player? AddIfNotExist(InfectedPlayer infectedPlayerStats)
         {
-            CommunityId = long.Parse(infectedPlayerStats.CommunityId),
-            Name = infectedPlayerStats.PlayerName
-        };
+            if (string.IsNullOrEmpty(infectedPlayerStats.CommunityId))
+                return null;
 
-        players.Add(infectedPlayerStats.CommunityId, player);
+            if (players.TryGetValue(infectedPlayerStats.CommunityId, out var value))
+                return value;
 
-        return player;
+            var player = new Player
+            {
+                CommunityId = long.Parse(infectedPlayerStats.CommunityId),
+                Name = infectedPlayerStats.PlayerName
+            };
+
+            players.Add(infectedPlayerStats.CommunityId, player);
+
+            return player;
+        }
     }
 }

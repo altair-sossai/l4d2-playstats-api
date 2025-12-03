@@ -12,17 +12,20 @@ public static class HttpRequestDataExtensions
         PropertyNameCaseInsensitive = true
     };
 
-    public static async Task<T> DeserializeBodyAsync<T>(this HttpRequest httpRequest)
+    extension(HttpRequest httpRequest)
     {
-        using var streamReader = new StreamReader(httpRequest.Body);
-        var json = await streamReader.ReadToEndAsync();
-        var t = JsonSerializer.Deserialize<T>(json, Settings);
+        public async Task<T> DeserializeBodyAsync<T>()
+        {
+            using var streamReader = new StreamReader(httpRequest.Body);
+            var json = await streamReader.ReadToEndAsync();
+            var t = JsonSerializer.Deserialize<T>(json, Settings);
 
-        return t;
-    }
+            return t;
+        }
 
-    public static string AuthorizationToken(this HttpRequest httpRequest)
-    {
-        return httpRequest.Headers["Authorization"].ToString();
+        public string AuthorizationToken()
+        {
+            return httpRequest.Headers["Authorization"].ToString();
+        }
     }
 }
