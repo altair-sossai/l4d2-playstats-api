@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
-using AutoMapper;
 using L4D2PlayStats.Core.Modules.Server.Results;
 using L4D2PlayStats.Core.Modules.Server.Services;
 using L4D2PlayStats.FunctionApp.Errors;
 using L4D2PlayStats.FunctionApp.Extensions;
+using MapsterMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;

@@ -1,8 +1,8 @@
-using AutoMapper;
 using FluentValidation;
 using L4D2PlayStats.Core.Modules.Statistics.Commands;
 using L4D2PlayStats.Core.Modules.Statistics.Repositories;
 using L4D2PlayStats.Core.Modules.Statistics.Results;
+using MapsterMapper;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace L4D2PlayStats.Core.Modules.Statistics.Services;
