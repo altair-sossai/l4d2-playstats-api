@@ -15,7 +15,7 @@
         <PackageReference Include="System.Linq.Async" Version="7.0.0" />
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
         <PackageReference Include="Scrutor" Version="7.0.0" />
-        <PackageReference Include="Mapster.DependencyInjection" Version="10.0.6" />
+        <PackageReference Include="Mapster.DependencyInjection" Version="10.0.7" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\L4D2PlayStats.Core\L4D2PlayStats.Core.csproj" />
