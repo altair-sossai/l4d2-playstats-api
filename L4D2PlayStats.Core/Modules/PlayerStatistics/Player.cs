@@ -5,15 +5,14 @@ namespace L4D2PlayStats.Core.Modules.PlayerStatistics;
 
 public class Player
 {
-    private readonly long _communityId;
     private SteamIdentifiers _steamIdentifiers;
 
     public long CommunityId
     {
-        get => _communityId;
+        get;
         init
         {
-            _communityId = value;
+            field = value;
             SteamIdentifiers.TryParse(value.ToString(), out _steamIdentifiers);
         }
     }

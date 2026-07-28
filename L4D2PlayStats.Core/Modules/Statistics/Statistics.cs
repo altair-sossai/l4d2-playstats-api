@@ -8,8 +8,6 @@ namespace L4D2PlayStats.Core.Modules.Statistics;
 
 public class Statistics : ITableEntity
 {
-    private string? _content;
-    private string? _fileName;
     private L4D2PlayStats.Statistics? _statistic;
 
     public string Server
@@ -20,10 +18,10 @@ public class Statistics : ITableEntity
 
     public string? FileName
     {
-        get => _fileName;
+        get;
         set
         {
-            _fileName = value;
+            field = value;
             RowKey = StatisticsHelper.FileNameToRowKey(value)!;
         }
     }
@@ -35,10 +33,10 @@ public class Statistics : ITableEntity
 
     public string? Content
     {
-        get => _content;
+        get;
         set
         {
-            _content = value;
+            field = value;
             _statistic = null;
         }
     }

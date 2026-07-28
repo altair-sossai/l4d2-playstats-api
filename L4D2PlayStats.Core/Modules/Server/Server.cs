@@ -6,7 +6,6 @@ namespace L4D2PlayStats.Core.Modules.Server;
 
 public class Server : ITableEntity
 {
-    private string? _configurationName;
     private Regex? _configurationNameRegex;
 
     public string Id
@@ -20,13 +19,13 @@ public class Server : ITableEntity
 
     public string? ConfigurationName
     {
-        get => _configurationName;
+        get;
         set
         {
-            _configurationName = value;
+            field = value;
 
-            if (!string.IsNullOrEmpty(_configurationName))
-                _configurationNameRegex = new Regex(_configurationName);
+            if (!string.IsNullOrEmpty(field))
+                _configurationNameRegex = new Regex(field);
         }
     }
 

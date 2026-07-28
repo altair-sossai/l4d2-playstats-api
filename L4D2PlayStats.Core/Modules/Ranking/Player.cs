@@ -6,17 +6,14 @@ namespace L4D2PlayStats.Core.Modules.Ranking;
 
 public class Player
 {
-    private readonly long _communityId;
-    private decimal _experience;
-    private string? _name;
     private SteamIdentifiers _steamIdentifiers;
 
     public long CommunityId
     {
-        get => _communityId;
+        get;
         init
         {
-            _communityId = value;
+            field = value;
             SteamIdentifiers.TryParse(value.ToString(), out _steamIdentifiers);
         }
     }
@@ -28,10 +25,10 @@ public class Player
 
     public string? Name
     {
-        get => _name;
+        get;
         set
         {
-            _name = value;
+            field = value;
 
             if (string.IsNullOrEmpty(value))
                 return;
@@ -58,8 +55,8 @@ public class Player
 
     public decimal Experience
     {
-        get => _experience;
-        set => _experience = Math.Max(0, value);
+        get;
+        set => field = Math.Max(0, value);
     }
 
     public decimal? PreviousExperience { get; set; }

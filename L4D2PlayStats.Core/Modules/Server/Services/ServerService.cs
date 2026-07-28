@@ -10,9 +10,7 @@ public class ServerService(
     IMemoryCache memoryCache)
     : IServerService
 {
-    private TableClient? _serverTable;
-
-    private TableClient ServerTable => _serverTable ??= context.GetTableClientAsync("Servers").Result;
+    private TableClient ServerTable => field ??= context.GetTableClientAsync("Servers").Result;
 
     private IEnumerable<Server> Servers => memoryCache.GetOrCreate("servers", factory =>
     {

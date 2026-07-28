@@ -10,8 +10,6 @@ public class HistoryModel
     private static readonly Regex BimonthlyRegex = new(BimonthlyPattern);
     private static readonly Regex AnnualRegex = new(AnnualPattern);
 
-    private string _fileName = null!;
-
     public HistoryModel(string fileName)
     {
         FileName = fileName;
@@ -21,10 +19,10 @@ public class HistoryModel
 
     public string FileName
     {
-        get => _fileName;
+        get;
         set
         {
-            _fileName = value;
+            field = value;
 
             if (IsBimonthly)
             {

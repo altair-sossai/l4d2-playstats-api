@@ -9,10 +9,8 @@ namespace L4D2PlayStats.Core.Contexts.AzureBlobStorage;
 
 public class AzureBlobStorageContext(IConfiguration configuration) : IAzureBlobStorageContext
 {
-    private BlobServiceClient? _blobServiceClient;
-
     private string ConnectionString => configuration.GetValue<string>("AzureWebJobsStorage")!;
-    private BlobServiceClient BlobServiceClient => _blobServiceClient ??= new BlobServiceClient(ConnectionString);
+    private BlobServiceClient BlobServiceClient => field ??= new BlobServiceClient(ConnectionString);
 
     public BlobClient GetBlobClient(string containerName, string fileName)
     {

@@ -2,8 +2,6 @@
 
 public class RankingPeriodModel
 {
-    private DateTime _start;
-
     public RankingPeriodModel(DateTime reference)
     {
         Start = reference.Month switch
@@ -19,10 +17,10 @@ public class RankingPeriodModel
 
     public DateTime Start
     {
-        get => _start;
+        get;
         private set
         {
-            _start = value;
+            field = value;
             End = value.AddMonths(2).AddTicks(-1);
         }
     }

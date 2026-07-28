@@ -2,17 +2,16 @@
 
 public class StatisticsCommand
 {
-    private string? _content;
     private L4D2PlayStats.Statistics? _statistics;
 
     public string? FileName { get; set; }
 
     public string? Content
     {
-        get => _content;
+        get;
         set
         {
-            _content = value;
+            field = value;
             _statistics = L4D2PlayStats.Statistics.TryParse(value!, out var statistics) ? statistics : null;
         }
     }

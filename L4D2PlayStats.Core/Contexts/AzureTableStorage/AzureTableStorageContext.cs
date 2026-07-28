@@ -7,10 +7,9 @@ public class AzureTableStorageContext(IConfiguration configuration)
     : IAzureTableStorageContext
 {
     private static readonly HashSet<string> CreatedTables = [];
-    private TableServiceClient? _tableServiceClient;
 
     private string ConnectionString => configuration.GetValue<string>("AzureWebJobsStorage")!;
-    private TableServiceClient TableServiceClient => _tableServiceClient ??= new TableServiceClient(ConnectionString);
+    private TableServiceClient TableServiceClient => field ??= new TableServiceClient(ConnectionString);
 
     public async Task<TableClient> GetTableClientAsync(string tableName)
     {

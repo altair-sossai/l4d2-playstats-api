@@ -9,8 +9,6 @@ public abstract class BaseTableStorageRepository
     private readonly IAzureTableStorageContext _tableContext;
     private readonly string _tableName;
 
-    private TableClient? _tableClient;
-
     protected BaseTableStorageRepository(string tableName,
         IAzureTableStorageContext tableContext)
     {
@@ -20,7 +18,7 @@ public abstract class BaseTableStorageRepository
         CreateIfNotExistsAsync().Wait();
     }
 
-    protected TableClient TableClient => _tableClient ??= _tableContext.GetTableClientAsync(_tableName).Result;
+    protected TableClient TableClient => field ??= _tableContext.GetTableClientAsync(_tableName).Result;
 
     private async Task CreateIfNotExistsAsync()
     {
