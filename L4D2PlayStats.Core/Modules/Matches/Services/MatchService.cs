@@ -58,7 +58,7 @@ public class MatchService(
         return matches;
     }
 
-    public async Task<List<Match>> GetMatchesBetweenAsync(string serverId, string start, string end)
+    public async Task<List<Match>> GetMatchesAsync(string serverId, string start, string end)
     {
         var server = serverService.GetServer(serverId);
         if (server == null)

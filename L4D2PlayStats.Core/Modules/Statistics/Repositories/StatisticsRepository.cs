@@ -30,6 +30,19 @@ public class StatisticsRepository(IAzureTableStorageContext tableContext) : Base
 
     public IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string serverId, string start, string end)
     {
+        var startTicks = long.MaxValue - long.Parse(start);
+        var startDateTime = new DateTime(startTicks);
+
+        var endTicks = long.MaxValue - long.Parse(end);
+        var endDateTime = new DateTime(endTicks);
+
+        if (endDateTime > startDateTime)
+            throw new InvalidOperationException($"Start must be earlier than end date. Start: {startDateTime}, End: {endDateTime}");
+
+        var interval = startDateTime - endDateTime;
+        if (interval.TotalDays > 400)
+            throw new InvalidOperationException($"Interval between start date {startDateTime} and end date {endDateTime} exceeds 400 days.");
+
         var filter = $"PartitionKey eq '{serverId}' and RowKey ge '{start}' and RowKey le '{end}'";
 
         return TableClient.QueryAsync<Statistics>(filter);
