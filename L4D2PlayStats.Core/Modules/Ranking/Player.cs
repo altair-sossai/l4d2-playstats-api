@@ -59,7 +59,12 @@ public class Player
         set => field = Math.Max(0, value);
     }
 
-    public decimal? PreviousExperience { get; set; }
+    public decimal? PreviousExperience
+    {
+        get;
+        set => field = value == null ? null : Math.Max(0, value.Value);
+    }
+
     public decimal? ExperienceDifference => PreviousExperience == null ? null : Experience - PreviousExperience;
     public int Wins { get; set; }
     public int Loss { get; set; }

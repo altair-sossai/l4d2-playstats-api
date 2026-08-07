@@ -42,7 +42,7 @@ public class RankingService(
         return players;
     }
 
-    public async Task SaveRankingAsync(string serverId, DateTime reference)
+    public async Task<bool> SaveRankingAsync(string serverId, DateTime reference)
     {
         var containerName = $"{serverId}-ranking-history".ToLower();
 
@@ -54,13 +54,13 @@ public class RankingService(
         var blobClient = blobStorageContext.GetBlobClient(containerName, fileName);
 
         if (await blobClient.ExistsAsync())
-            return;
+            return false;
 
         var players = await RankingAsync(serverId, 100, reference);
 
         await blobStorageContext.UploadAsync(containerName, fileName, players);
 
-        await punishmentsRepository.DeleteAllAsync(serverId);
+        return true;
     }
 
     public async Task SaveAnnualRankingAsync(string serverId, int year)

@@ -141,8 +141,12 @@ public class RankingFunction(
 
         foreach (var server in serverService.GetServers())
         {
-            await rankingService.SaveRankingAsync(server.Id, previousPeriod.Start);
+            var savedRanking = await rankingService.SaveRankingAsync(server.Id, previousPeriod.Start);
+
             await rankingService.SaveAnnualRankingAsync(server.Id, DateTime.UtcNow.Year - 1);
+
+            if (savedRanking)
+                await punishmentsRepository.DeleteAllAsync(server.Id);
         }
     }
 }
