@@ -100,21 +100,22 @@ public static class MatchExtensions
             }
         }
 
-        foreach (var (key, value) in punishments)
-        {
-            if (!players.TryGetValue(key, out var player))
-                continue;
-
-            player.Punishment = value;
-            player.Experience -= value;
-        }
-
         foreach (var (communityId, experience) in previousExperience)
         {
             if (!players.TryGetValue(communityId, out var player))
                 continue;
 
             player.PreviousExperience = experience;
+        }
+
+        foreach (var (key, punishment) in punishments)
+        {
+            if (!players.TryGetValue(key, out var player))
+                continue;
+
+            player.Punishment = punishment;
+            player.Experience -= punishment;
+            player.PreviousExperience -= punishment;
         }
 
         return players.Values.RankPlayers();
