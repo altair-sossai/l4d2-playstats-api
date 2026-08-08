@@ -4,86 +4,92 @@ namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
 
 public static class PlayerExtensions
 {
-    public static Player? TryAdd(this Dictionary<string, Player> players, PlayerName playerName)
+    extension(Dictionary<string, Player> players)
     {
-        var communityId = playerName.CommunityId;
-
-        if (string.IsNullOrEmpty(communityId))
-            return null;
-
-        if (players.TryGetValue(communityId, out var player))
+        public Player? TryAdd(PlayerName playerName)
         {
-            player.Name = playerName.Name;
+            var communityId = playerName.CommunityId;
 
-            return player;
+            if (string.IsNullOrEmpty(communityId))
+                return null;
+
+            if (players.TryGetValue(communityId, out var player))
+            {
+                player.Name = playerName.Name;
+
+                return player;
+            }
+
+            players.Add(communityId, new Player
+            {
+                CommunityId = long.Parse(communityId),
+                Name = playerName.Name
+            });
+
+            return players[communityId];
         }
 
-        players.Add(communityId, new Player
+        public Player? TryAdd(Match.Player matchPlayer)
         {
-            CommunityId = long.Parse(communityId),
-            Name = playerName.Name
-        });
+            var communityId = matchPlayer.CommunityId;
 
-        return players[communityId];
+            if (string.IsNullOrEmpty(communityId))
+                return null;
+
+            if (players.TryGetValue(communityId, out var player))
+                return player;
+
+            players.Add(communityId, new Player
+            {
+                CommunityId = long.Parse(communityId),
+                Name = matchPlayer.Name
+            });
+
+            return players[communityId];
+        }
+
+        public Player? TryAdd(L4D2PlayStats.Player statsPlayer)
+        {
+            var communityId = statsPlayer.CommunityId;
+
+            if (string.IsNullOrEmpty(communityId))
+                return null;
+
+            if (players.TryGetValue(communityId, out var player))
+                return player;
+
+            players.Add(communityId, new Player
+            {
+                CommunityId = long.Parse(communityId),
+                Name = statsPlayer.PlayerName
+            });
+
+            return players[communityId];
+        }
     }
 
-    public static Player? TryAdd(this Dictionary<string, Player> players, Match.Player matchPlayer)
+    extension(IEnumerable<Player> players)
     {
-        var communityId = matchPlayer.CommunityId;
-
-        if (string.IsNullOrEmpty(communityId))
-            return null;
-
-        if (players.TryGetValue(communityId, out var player))
-            return player;
-
-        players.Add(communityId, new Player
+        public IEnumerable<Player> RankPlayers()
         {
-            CommunityId = long.Parse(communityId),
-            Name = matchPlayer.Name
-        });
+            return players
+                .OrderByDescending(o => o.Experience)
+                .ThenByDescending(o => o.Wins)
+                .ThenBy(o => o.Loss)
+                .ThenByDescending(o => o.MvpSiDamage)
+                .ThenByDescending(o => o.MvpCommon)
+                .UpdatePosition();
+        }
 
-        return players[communityId];
-    }
-
-    public static Player? TryAdd(this Dictionary<string, Player> players, L4D2PlayStats.Player statsPlayer)
-    {
-        var communityId = statsPlayer.CommunityId;
-
-        if (string.IsNullOrEmpty(communityId))
-            return null;
-
-        if (players.TryGetValue(communityId, out var player))
-            return player;
-
-        players.Add(communityId, new Player
+        private IEnumerable<Player> UpdatePosition()
         {
-            CommunityId = long.Parse(communityId),
-            Name = statsPlayer.PlayerName
-        });
+            var position = 1;
 
-        return players[communityId];
-    }
-
-    public static IEnumerable<Player> RankPlayers(this IEnumerable<Player> players)
-    {
-        return players
-            .OrderByDescending(o => o.Experience)
-            .ThenByDescending(o => o.Wins)
-            .ThenBy(o => o.Loss)
-            .ThenByDescending(o => o.MvpSiDamage)
-            .ThenByDescending(o => o.MvpCommon)
-            .UpdatePosition();
-    }
-
-    private static IEnumerable<Player> UpdatePosition(this IEnumerable<Player> players)
-    {
-        var position = 1;
-
-        foreach (var player in players)
-        {
-            player.Position = position++;
-            yield return player;
+            foreach (var player in players)
+            {
+                player.Position = position++;
+                yield return player;
+            }
         }
     }
 }

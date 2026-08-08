@@ -53,6 +53,8 @@ public class Player
 
     public List<PreviousName> PreviousNames { get; } = [];
 
+    public Dictionary<string, PlayerRelation> Relations { get; } = [];
+
     public decimal Experience
     {
         get;
@@ -99,6 +101,20 @@ public class Player
     public int MvpSiDamage { get; set; }
     public int MvpCommon { get; set; }
     public int LvpFfGiven { get; set; }
+
+    public PlayerRelation Relation(long communityId)
+    {
+        var key = communityId.ToString();
+
+        if (Relations.TryGetValue(key, out var relation))
+            return relation;
+
+        relation = new PlayerRelation(communityId);
+
+        Relations.Add(key, relation);
+
+        return relation;
+    }
 
     public void AppendInfo(Match.Player player)
     {
