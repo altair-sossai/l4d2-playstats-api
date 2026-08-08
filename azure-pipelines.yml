@@ -1,49 +1,49 @@
 ﻿trigger:
-- main
+  - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 variables:
-  buildConfiguration: 'Release'
-  outputDir: '$(Build.ArtifactStagingDirectory)/function'
+  buildConfiguration: "Release"
+  outputDir: "$(Build.ArtifactStagingDirectory)/function"
 
 steps:
-- task: UseDotNet@2
-  displayName: '📦 Install .NET 10 SDK'
-  inputs:
-    packageType: 'sdk'
-    version: '10.x'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+  - task: UseDotNet@2
+    displayName: "📦 Install .NET 10 SDK"
+    inputs:
+      packageType: "sdk"
+      version: "10.x"
+      installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- task: DotNetCoreCLI@2
-  displayName: '🔄 Restore NuGet Packages'
-  inputs:
-    command: 'restore'
-    projects: 'L4D2PlayStats.FunctionApp/L4D2PlayStats.FunctionApp.csproj'
+  - task: DotNetCoreCLI@2
+    displayName: "🔄 Restore NuGet Packages"
+    inputs:
+      command: "restore"
+      projects: "L4D2PlayStats.FunctionApp/L4D2PlayStats.FunctionApp.csproj"
 
-- task: DotNetCoreCLI@2
-  displayName: '🏗️ Build Project'
-  inputs:
-    command: 'build'
-    projects: 'L4D2PlayStats.FunctionApp/L4D2PlayStats.FunctionApp.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: "🏗️ Build Project"
+    inputs:
+      command: "build"
+      projects: "L4D2PlayStats.FunctionApp/L4D2PlayStats.FunctionApp.csproj"
+      arguments: "--configuration $(buildConfiguration)"
 
-- task: DotNetCoreCLI@2
-  displayName: '🧪 Run Tests'
-  inputs:
-    command: 'test'
+  - task: DotNetCoreCLI@2
+    displayName: "🧪 Run Tests"
+    inputs:
+      command: "test"
 
-- task: DotNetCoreCLI@2
-  displayName: '🚀 Publish Project'
-  inputs:
-    command: 'publish'
-    projects: 'L4D2PlayStats.FunctionApp/L4D2PlayStats.FunctionApp.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(outputDir)'
-    publishWebProjects: false
+  - task: DotNetCoreCLI@2
+    displayName: "🚀 Publish Project"
+    inputs:
+      command: "publish"
+      projects: "L4D2PlayStats.FunctionApp/L4D2PlayStats.FunctionApp.csproj"
+      arguments: "--configuration $(buildConfiguration) --output $(outputDir)"
+      publishWebProjects: false
 
-- task: PublishBuildArtifacts@1
-  displayName: '📤 Publish Build Artifacts'
-  inputs:
-    PathtoPublish: '$(outputDir)'
-    ArtifactName: 'function'
+  - task: PublishBuildArtifacts@1
+    displayName: "📤 Publish Build Artifacts"
+    inputs:
+      PathtoPublish: "$(outputDir)"
+      ArtifactName: "function"
