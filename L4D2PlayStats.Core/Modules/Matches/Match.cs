@@ -28,7 +28,7 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
     [JsonIgnore]
     public IEnumerable<L4D2PlayStats.Player>? LastRoundPlayers => MapsStatistics.FirstOrDefault()?.Statistic?.Halves.SelectMany(half => half.Players);
 
-    public bool Competitive => MapsStatistics.Count >= 3 && TeamSize == 4;
+    public bool Competitive => MapsStatistics.Count >= 2 && TeamSize == 4;
 
     public void Add(Statistics.Statistics statistic)
     {
