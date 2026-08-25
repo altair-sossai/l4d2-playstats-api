@@ -3,7 +3,7 @@
 public class Campaign
 {
     public string? Name { get; set; }
-    public List<string> Maps { get; set; } = new();
+    public List<string> Maps { get; set; } = [];
 
     public bool SequentialMaps(string current, string next)
     {

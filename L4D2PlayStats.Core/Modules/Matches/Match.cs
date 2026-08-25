@@ -60,7 +60,7 @@ public class Match(Campaign campaign, Scoring.Team teamA, IEnumerable<PlayerName
         {
             Code = code;
             _team = team;
-            Players = players.Select(playerName => new Player(playerName, this)).ToList();
+            Players = [.. players.Select(playerName => new Player(playerName, this))];
         }
 
         public char Code { get; }

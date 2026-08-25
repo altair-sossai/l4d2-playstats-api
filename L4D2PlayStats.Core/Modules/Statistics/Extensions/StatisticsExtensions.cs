@@ -68,8 +68,6 @@ public static class StatisticsExtensions
             lastMap = mapName;
         }
 
-        return matches
-            .Where(w => w.Competitive)
-            .ToList();
+        return [.. matches.Where(w => w.Competitive)];
     }
 }
