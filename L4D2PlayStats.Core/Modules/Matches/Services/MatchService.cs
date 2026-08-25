@@ -28,7 +28,7 @@ public class MatchService(
         return match;
     }
 
-    public async Task<List<Match>> GetMatchesAsync(string serverId, DateTime? reference = null)
+    public async Task<List<Match>> GetMatchesAsync(string serverId, DateTime? reference = null, bool competitiveOnly = true)
     {
         var server = serverService.GetServer(serverId);
         if (server == null)
@@ -38,12 +38,12 @@ public class MatchService(
         var matches = await statisticsRepository
             .GetStatisticsAsync(serverId, reference)
             .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
-            .ToMatchesAsync(campaigns);
+            .ToMatchesAsync(campaigns, competitiveOnly);
 
         return matches;
     }
 
-    public async Task<List<Match>> GetMatchesAsync(string serverId, DateTime start, DateTime end)
+    public async Task<List<Match>> GetMatchesAsync(string serverId, DateTime start, DateTime end, bool competitiveOnly = true)
     {
         var server = serverService.GetServer(serverId);
         if (server == null)
@@ -53,12 +53,12 @@ public class MatchService(
         var matches = await statisticsRepository
             .GetStatisticsAsync(serverId, start, end)
             .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
-            .ToMatchesAsync(campaigns);
+            .ToMatchesAsync(campaigns, competitiveOnly);
 
         return matches;
     }
 
-    public async Task<List<Match>> GetMatchesAsync(string serverId, string start, string end)
+    public async Task<List<Match>> GetMatchesAsync(string serverId, string start, string end, bool competitiveOnly = true)
     {
         var server = serverService.GetServer(serverId);
         if (server == null)
@@ -68,7 +68,7 @@ public class MatchService(
         var matches = await statisticsRepository
             .GetStatisticsBetweenAsync(serverId, start, end)
             .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
-            .ToMatchesAsync(campaigns);
+            .ToMatchesAsync(campaigns, competitiveOnly);
 
         return matches;
     }

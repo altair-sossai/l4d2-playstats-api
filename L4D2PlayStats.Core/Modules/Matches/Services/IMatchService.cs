@@ -3,7 +3,7 @@
 public interface IMatchService
 {
     Task<Match?> LastMatchAsync(string serverId);
-    Task<List<Match>> GetMatchesAsync(string serverId, DateTime? reference = null);
-    Task<List<Match>> GetMatchesAsync(string serverId, DateTime start, DateTime end);
-    Task<List<Match>> GetMatchesAsync(string serverId, string start, string end);
+    Task<List<Match>> GetMatchesAsync(string serverId, DateTime? reference = null, bool competitiveOnly = true);
+    Task<List<Match>> GetMatchesAsync(string serverId, DateTime start, DateTime end, bool competitiveOnly = true);
+    Task<List<Match>> GetMatchesAsync(string serverId, string start, string end, bool competitiveOnly = true);
 }

@@ -18,7 +18,7 @@ public class MatchesFunction(IMatchService matchService)
     {
         try
         {
-            var matches = await matchService.GetMatchesAsync(serverId);
+            var matches = await matchService.GetMatchesAsync(serverId, competitiveOnly: false);
             var result = matches.Take(count).ToList();
 
             return new JsonResult(result);
@@ -37,7 +37,7 @@ public class MatchesFunction(IMatchService matchService)
         {
             var start = new DateTime(year, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(year, 12, 31, 23, 59, 59, DateTimeKind.Utc);
-            var matches = await matchService.GetMatchesAsync(serverId, start, end);
+            var matches = await matchService.GetMatchesAsync(serverId, start, end, false);
             var result = matches.ToList();
 
             return new JsonResult(result);
@@ -54,7 +54,7 @@ public class MatchesFunction(IMatchService matchService)
     {
         try
         {
-            var matches = await matchService.GetMatchesAsync(serverId, start, end);
+            var matches = await matchService.GetMatchesAsync(serverId, start, end, false);
 
             return new JsonResult(matches);
         }

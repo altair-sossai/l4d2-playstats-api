@@ -6,7 +6,7 @@ namespace L4D2PlayStats.Core.Modules.Statistics.Extensions;
 
 public static class StatisticsExtensions
 {
-    public static async Task<List<Match>> ToMatchesAsync(this IAsyncEnumerable<Statistics> statistics, List<Campaign> campaigns)
+    public static async Task<List<Match>> ToMatchesAsync(this IAsyncEnumerable<Statistics> statistics, List<Campaign> campaigns, bool competitiveOnly = true)
     {
         var matches = new List<Match>();
         var maps = campaigns.SelectMany(c => c.Maps).ToHashSet();
@@ -68,6 +68,6 @@ public static class StatisticsExtensions
             lastMap = mapName;
         }
 
-        return [.. matches.Where(w => w.Competitive)];
+        return competitiveOnly ? [.. matches.Where(w => w.Competitive)] : matches;
     }
 }
