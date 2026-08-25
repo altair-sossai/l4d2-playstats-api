@@ -35,10 +35,12 @@ public class MatchService(
             return [];
 
         var campaigns = campaignRepository.GetCampaigns();
-        var matches = await statisticsRepository
-            .GetStatisticsAsync(serverId, reference)
-            .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
-            .ToMatchesAsync(campaigns, competitiveOnly);
+        var statistics = statisticsRepository.GetStatisticsAsync(serverId, reference);
+
+        if (competitiveOnly)
+            statistics = statistics.Where(s => server.RankingConfiguration(s.ConfigurationName));
+
+        var matches = await statistics.ToMatchesAsync(campaigns, competitiveOnly);
 
         return matches;
     }
@@ -50,10 +52,12 @@ public class MatchService(
             return [];
 
         var campaigns = campaignRepository.GetCampaigns();
-        var matches = await statisticsRepository
-            .GetStatisticsAsync(serverId, start, end)
-            .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
-            .ToMatchesAsync(campaigns, competitiveOnly);
+        var statistics = statisticsRepository.GetStatisticsAsync(serverId, start, end);
+
+        if (competitiveOnly)
+            statistics = statistics.Where(s => server.RankingConfiguration(s.ConfigurationName));
+
+        var matches = await statistics.ToMatchesAsync(campaigns, competitiveOnly);
 
         return matches;
     }
@@ -65,10 +69,12 @@ public class MatchService(
             return [];
 
         var campaigns = campaignRepository.GetCampaigns();
-        var matches = await statisticsRepository
-            .GetStatisticsBetweenAsync(serverId, start, end)
-            .Where(statistics => server.RankingConfiguration(statistics.ConfigurationName))
-            .ToMatchesAsync(campaigns, competitiveOnly);
+        var statistics = statisticsRepository.GetStatisticsBetweenAsync(serverId, start, end);
+
+        if (competitiveOnly)
+            statistics = statistics.Where(s => server.RankingConfiguration(s.ConfigurationName));
+
+        var matches = await statistics.ToMatchesAsync(campaigns, competitiveOnly);
 
         return matches;
     }
