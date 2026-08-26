@@ -1,5 +1,6 @@
 ﻿using L4D2PlayStats.Core.Infrastructure.Structures;
 using L4D2PlayStats.Core.Modules.Matches;
+using L4D2PlayStats.Core.Modules.Ranking.Enums;
 using L4D2PlayStats.Core.Modules.Ranking.Structures;
 
 namespace L4D2PlayStats.Core.Modules.Ranking;
@@ -70,7 +71,9 @@ public class Player
     public decimal? ExperienceDifference => PreviousExperience == null ? null : Experience - PreviousExperience;
     public int Wins { get; set; }
     public int Loss { get; set; }
+    public int Draws { get; set; }
     public int RageQuit { get; set; }
+    public List<MatchResult> Results { get; set; } = [];
     public int Punishment { get; set; }
     public int Games => Wins + Loss;
     public decimal WinRate => Games == 0 ? 0 : Wins / (decimal)Games;

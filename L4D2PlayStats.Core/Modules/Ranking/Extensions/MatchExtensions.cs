@@ -1,5 +1,6 @@
 ﻿using L4D2PlayStats.Core.Modules.Matches;
 using L4D2PlayStats.Core.Modules.Ranking.Configs;
+using L4D2PlayStats.Core.Modules.Ranking.Enums;
 using L4D2PlayStats.Core.Modules.Ranking.Structures;
 
 namespace L4D2PlayStats.Core.Modules.Ranking.Extensions;
@@ -22,7 +23,10 @@ public static class MatchExtensions
             {
                 var player = players.TryAdd(playerName);
                 if (player != null)
+                {
                     player.Wins++;
+                    player.Results.Add(MatchResult.Win);
+                }
 
                 playersExperience.Win(playerName.CommunityId, config);
             }
@@ -31,9 +35,22 @@ public static class MatchExtensions
             {
                 var player = players.TryAdd(playerName);
                 if (player != null)
+                {
                     player.Loss++;
+                    player.Results.Add(MatchResult.Loss);
+                }
 
                 playersExperience.Loss(playerName.CommunityId, config);
+            }
+
+            foreach (var playerName in match.Draws())
+            {
+                var player = players.TryAdd(playerName);
+                if (player != null)
+                {
+                    player.Draws++;
+                    player.Results.Add(MatchResult.Draw);
+                }
             }
 
             players.BuildRelations(winners, losers);
@@ -45,6 +62,7 @@ public static class MatchExtensions
                 {
                     player.Loss++;
                     player.RageQuit++;
+                    player.Results.Add(MatchResult.Loss);
                 }
 
                 playersExperience.RageQuit(statsPlayer.CommunityId, config);
@@ -220,6 +238,27 @@ public static class MatchExtensions
 
             foreach (var playerName in losers.Where(w => firstRoundPlayers.Contains(w.CommunityId)))
                 yield return playerName;
+        }
+
+        private IEnumerable<L4D2PlayStats.Player> Draws()
+        {
+            var firstRoundPlayers = match.FirstRoundPlayers?.ToList();
+            if (firstRoundPlayers == null)
+                yield break;
+
+            var lastRoundPlayers = match.LastRoundPlayers?.ToList();
+            if (lastRoundPlayers == null)
+                yield break;
+
+            var lastMap = match.MapsStatistics.Select(m => m.Statistic).FirstOrDefault();
+
+            if (lastMap?.Scoring?.TeamA == null
+                || lastMap.Scoring?.TeamB == null
+                || lastMap.Scoring.TeamA.Score != lastMap.Scoring.TeamB.Score)
+                yield break;
+
+            foreach (var firstRoundPlayer in firstRoundPlayers.Where(frp => lastRoundPlayers.Any(lrp => lrp.CommunityId == frp.CommunityId)))
+                yield return firstRoundPlayer;
         }
 
         private IEnumerable<L4D2PlayStats.Player> RageQuit()
