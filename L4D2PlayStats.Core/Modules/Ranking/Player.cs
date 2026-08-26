@@ -74,6 +74,9 @@ public class Player
     public int Draws { get; set; }
     public int RageQuit { get; set; }
     public List<MatchResult> Results { get; set; } = [];
+    public int MaxWinStreak => MaxStreak(MatchResult.Win);
+    public int MaxLossStreak => MaxStreak(MatchResult.Loss);
+    public int MaxDrawStreak => MaxStreak(MatchResult.Draw);
     public int Punishment { get; set; }
     public int Games => Wins + Loss;
     public decimal WinRate => Games == 0 ? 0 : Wins / (decimal)Games;
@@ -104,6 +107,20 @@ public class Player
     public int MvpSiDamage { get; set; }
     public int MvpCommon { get; set; }
     public int LvpFfGiven { get; set; }
+
+    private int MaxStreak(MatchResult result)
+    {
+        var max = 0;
+        var length = 0;
+
+        foreach (var current in Results)
+        {
+            length = current == result ? length + 1 : 0;
+            max = Math.Max(max, length);
+        }
+
+        return max;
+    }
 
     public PlayerRelation Relation(long communityId)
     {
