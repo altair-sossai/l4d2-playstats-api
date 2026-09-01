@@ -29,19 +29,6 @@ public class RankingService(
         return players;
     }
 
-    public async Task<List<Player>> RankingAsync(string serverId, int count, DateTime start, DateTime end)
-    {
-        var matches = await matchService.GetMatchesAsync(serverId, start, end);
-
-        var punishments = await punishmentsRepository
-            .GetPunishmentsAsync(serverId)
-            .ToDictionaryAsync(k => k.CommunityId, v => v.LostExperiencePoints);
-
-        var players = matches.Ranking(punishments, experienceConfig).Take(count).ToList();
-
-        return players;
-    }
-
     public async Task<bool> SaveRankingAsync(string serverId, DateTime reference)
     {
         var containerName = $"{serverId}-ranking-history".ToLower();
@@ -78,9 +65,32 @@ public class RankingService(
         if (await blobClient.ExistsAsync())
             return;
 
-        var players = await RankingAsync(serverId, 100, start, end);
+        var matches = await matchService.GetMatchesAsync(serverId, start, end);
+
+        var punishments = await punishmentsRepository
+            .GetPunishmentsAsync(serverId)
+            .ToDictionaryAsync(k => k.CommunityId, v => v.LostExperiencePoints);
+
+        var players = matches.Ranking(punishments, experienceConfig).Take(100).ToList();
 
         await blobStorageContext.UploadAsync(containerName, fileName, players);
+    }
+
+    public async Task SaveAllTimeRankingAsync(string serverId)
+    {
+        var containerName = $"{serverId}-ranking-history".ToLower();
+
+        await blobStorageContext.CreateContainerIfNotExistsAsync(containerName, PublicAccessType.Blob);
+
+        var matches = await matchService.GetAllMatchesAsync(serverId);
+
+        var punishments = await punishmentsRepository
+            .GetPunishmentsAsync(serverId)
+            .ToDictionaryAsync(k => k.CommunityId, v => v.LostExperiencePoints);
+
+        var players = matches.Ranking(punishments, experienceConfig).Take(100).ToList();
+
+        await blobStorageContext.UploadAsync(containerName, "ranking_all_time.json", players);
     }
 
     public async IAsyncEnumerable<HistoryModel> AllHistoryAsync(string serverId)

@@ -78,4 +78,21 @@ public class MatchService(
 
         return matches;
     }
+
+    public async Task<List<Match>> GetAllMatchesAsync(string serverId, bool competitiveOnly = true)
+    {
+        var server = serverService.GetServer(serverId);
+        if (server == null)
+            return [];
+
+        var campaigns = campaignRepository.GetCampaigns();
+        var statistics = statisticsRepository.GetAllStatisticsAsync(serverId);
+
+        if (competitiveOnly)
+            statistics = statistics.Where(s => server.RankingConfiguration(s.ConfigurationName));
+
+        var matches = await statistics.ToMatchesAsync(campaigns, competitiveOnly);
+
+        return matches;
+    }
 }

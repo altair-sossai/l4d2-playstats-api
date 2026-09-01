@@ -15,7 +15,18 @@ public class HistoryModel
         FileName = fileName;
     }
 
-    public string Id => IsAnnual ? $"{StartYear:0000}" : $"{StartYear:0000}{StartMonth:00}{EndYear:0000}{EndMonth:00}";
+    public string Id
+    {
+        get
+        {
+            if (IsAllTime)
+                return "all_time";
+
+            return IsAnnual
+                ? $"{StartYear:0000}"
+                : $"{StartYear:0000}{StartMonth:00}{EndYear:0000}{EndMonth:00}";
+        }
+    }
 
     public string FileName
     {
@@ -43,6 +54,14 @@ public class HistoryModel
                 EndYear = StartYear;
                 EndMonth = 12;
             }
+
+            if (IsAllTime)
+            {
+                StartYear = 2009;
+                StartMonth = 1;
+                EndYear = DateTime.UtcNow.Year;
+                EndMonth = 12;
+            }
         }
     }
 
@@ -53,9 +72,14 @@ public class HistoryModel
 
     public bool IsBimonthly => BimonthlyRegex.IsMatch(FileName);
     public bool IsAnnual => AnnualRegex.IsMatch(FileName);
+    public bool IsAllTime => FileName == "ranking_all_time.json";
 
     public static HistoryModel? Parse(string fileName)
     {
-        return BimonthlyRegex.IsMatch(fileName) || AnnualRegex.IsMatch(fileName) ? new HistoryModel(fileName) : null;
+        return BimonthlyRegex.IsMatch(fileName)
+               || AnnualRegex.IsMatch(fileName)
+               || fileName == "ranking_all_time.json"
+            ? new HistoryModel(fileName)
+            : null;
     }
 }

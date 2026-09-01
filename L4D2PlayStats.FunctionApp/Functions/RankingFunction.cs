@@ -146,7 +146,10 @@ public class RankingFunction(
             await rankingService.SaveAnnualRankingAsync(server.Id, DateTime.UtcNow.Year - 1);
 
             if (savedRanking)
+            {
+                await rankingService.SaveAllTimeRankingAsync(server.Id);
                 await punishmentsRepository.DeleteAllAsync(server.Id);
+            }
         }
     }
 }
