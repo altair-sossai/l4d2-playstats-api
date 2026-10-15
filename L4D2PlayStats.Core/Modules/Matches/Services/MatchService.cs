@@ -95,4 +95,21 @@ public class MatchService(
 
         return matches;
     }
+
+    public async Task<List<Match>> GetMatchesBeforeAsync(string serverId, DateTime end, bool competitiveOnly = true)
+    {
+        var server = serverService.GetServer(serverId);
+        if (server == null)
+            return [];
+
+        var campaigns = campaignRepository.GetCampaigns();
+        var statistics = statisticsRepository.GetStatisticsBeforeAsync(serverId, end);
+
+        if (competitiveOnly)
+            statistics = statistics.Where(s => server.RankingConfiguration(s.ConfigurationName));
+
+        var matches = await statistics.ToMatchesAsync(campaigns, competitiveOnly);
+
+        return matches;
+    }
 }

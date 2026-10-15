@@ -35,6 +35,13 @@ public class StatisticsRepository(IAzureTableStorageContext tableContext) : Base
         return TableClient.QueryAsync<Statistics>(filter);
     }
 
+    public IAsyncEnumerable<Statistics> GetStatisticsBeforeAsync(string serverId, DateTime end)
+    {
+        var filter = $"PartitionKey eq '{serverId}' and RowKey gt '{long.MaxValue - end.Ticks}'";
+
+        return TableClient.QueryAsync<Statistics>(filter);
+    }
+
     public IAsyncEnumerable<Statistics> GetStatisticsBetweenAsync(string serverId, string start, string end)
     {
         var startTicks = long.MaxValue - long.Parse(start);

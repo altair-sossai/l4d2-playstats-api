@@ -7,4 +7,5 @@ public interface IMatchService
     Task<List<Match>> GetMatchesAsync(string serverId, DateTime start, DateTime end, bool competitiveOnly = true);
     Task<List<Match>> GetMatchesAsync(string serverId, string start, string end, bool competitiveOnly = true);
     Task<List<Match>> GetAllMatchesAsync(string serverId, bool competitiveOnly = true);
+    Task<List<Match>> GetMatchesBeforeAsync(string serverId, DateTime end, bool competitiveOnly = true);
 }
