@@ -279,7 +279,7 @@ The plugins live in [l4d2-zone-server](https://github.com/altair-sossai/l4d2-zon
 | `playstats_url` | Base URL of the API, without `/api` and without a trailing slash, e.g. `https://<FunctionAppName>.azurewebsites.net` | A versioned cfg, e.g. `cfg/cfgogl/zonemod/shared_cvars.cfg` |
 | `playstats_access_token` | `<serverId>:<secret>` of your `Servers` row | `cfg/server_secrets.cfg` (git-ignored), e.g. `sm_cvar playstats_access_token "<serverId>:<secret>"` |
 
-Ten seconds after each round starts, the plugin sends every l4d2_playstats file in `addons/sourcemod/logs/` to `POST /api/statistics` and deletes the ones the API marks with `mustBeDeleted`. After each upload it also calls `{ranking_url}/api/cache/clear` on the web site (`ranking_url` belongs to the `l4d2_ranking` plugin, not to this API).
+Ten seconds after each round starts, the plugin sends every l4d2_playstats file in `addons/sourcemod/logs/` to `POST /api/statistics` and deletes the ones the API marks with `mustBeDeleted`. After each upload it also calls `{l4d2_web_url}/api/cache/clear` on the web site with the site's secret (`l4d2_web_url` and `l4d2_web_secret` belong to the site plugins, not to this API).
 
 ## Connecting the web site
 
