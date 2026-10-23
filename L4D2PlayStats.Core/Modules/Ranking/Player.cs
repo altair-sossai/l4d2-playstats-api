@@ -56,6 +56,8 @@ public class Player
 
     public Dictionary<string, PlayerRelation> Relations { get; } = [];
 
+    public Dictionary<string, PlayerCampaign> Campaigns { get; init; } = [];
+
     public decimal Experience
     {
         get;
@@ -134,6 +136,20 @@ public class Player
         Relations.Add(key, relation);
 
         return relation;
+    }
+
+    public PlayerCampaign Campaign(string? name)
+    {
+        var key = name ?? string.Empty;
+
+        if (Campaigns.TryGetValue(key, out var campaign))
+            return campaign;
+
+        campaign = new PlayerCampaign();
+
+        Campaigns.Add(key, campaign);
+
+        return campaign;
     }
 
     public void AppendInfo(Match.Player player)

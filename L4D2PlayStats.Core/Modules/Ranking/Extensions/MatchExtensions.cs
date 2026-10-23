@@ -24,7 +24,10 @@ public static class MatchExtensions
                 var player = players.TryAdd(playerName);
                 if (player != null)
                 {
+                    var campaign = player.Campaign(match.Campaign);
+
                     player.Wins++;
+                    campaign.Wins++;
                     player.Results.Add(MatchResult.Win);
                 }
 
@@ -36,7 +39,10 @@ public static class MatchExtensions
                 var player = players.TryAdd(playerName);
                 if (player != null)
                 {
+                    var campaign = player.Campaign(match.Campaign);
+
                     player.Loss++;
+                    campaign.Loss++;
                     player.Results.Add(MatchResult.Loss);
                 }
 
@@ -48,7 +54,10 @@ public static class MatchExtensions
                 var player = players.TryAdd(playerName);
                 if (player != null)
                 {
+                    var campaign = player.Campaign(match.Campaign);
+
                     player.Draws++;
+                    campaign.Draws++;
                     player.Results.Add(MatchResult.Draw);
                 }
             }
@@ -60,8 +69,12 @@ public static class MatchExtensions
                 var player = players.TryAdd(statsPlayer);
                 if (player != null)
                 {
+                    var campaign = player.Campaign(match.Campaign);
+
                     player.Loss++;
                     player.RageQuit++;
+                    campaign.Loss++;
+                    campaign.RageQuit++;
                     player.Results.Add(MatchResult.Loss);
                 }
 
